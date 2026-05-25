@@ -1,11 +1,373 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Innovation-Xlab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Fibula | Innovation XLab</title>
+    <meta name="description" content="Project Fibula presents how natural-language reconciliation requirements become stateful workflows through evidence-based design and industrial user research.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="stylesheet" href="assets/styles.css">
 </head>
-<body>
-    <h1>Innovation-Xlab</h1>
-    <p>Innovation-Xlab</p>
+<body class="bg-white text-slate-900">
+    <header id="site-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="h-16 flex items-center justify-between gap-4">
+                <a href="#before" class="text-[15px] font-semibold tracking-[0.04em] text-[rgb(1,61,124)] no-underline">Project Fibula</a>
+                <nav class="desktop-nav items-center gap-2" aria-label="Primary navigation">
+                    <a class="nav-link" href="#before">Problem</a>
+                    <a class="nav-link" href="#workflow">Workflow</a>
+                    <a class="nav-link" href="#methodology">Method</a>
+                    <a class="nav-link" href="#risk-map">Risk Map</a>
+                    <a class="nav-link" href="#findings">Fixes</a>
+                    <a class="nav-link" href="#impact">Impact</a>
+                    <a class="nav-link" href="documents.html">Documents</a>
+                    <a class="nav-link" href="#team">Team</a>
+                    <a class="nav-cta" href="#cta">Try Fibula</a>
+                </nav>
+                <div class="mobile-nav">
+                    <button type="button" class="mobile-menu-button inline-flex items-center justify-center rounded-md border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700" aria-expanded="false" aria-controls="mobile-menu">Menu</button>
+                    <div id="mobile-menu" class="mobile-menu" hidden>
+                        <a class="mobile-nav-link" href="#before">Problem</a>
+                        <a class="mobile-nav-link" href="#workflow">Workflow</a>
+                        <a class="mobile-nav-link" href="#methodology">Method</a>
+                        <a class="mobile-nav-link" href="#risk-map">Risk Map</a>
+                        <a class="mobile-nav-link" href="#findings">Fixes</a>
+                        <a class="mobile-nav-link" href="#impact">Impact</a>
+                        <a class="mobile-nav-link" href="documents.html">Documents</a>
+                        <a class="mobile-nav-link" href="#team">Team</a>
+                        <a class="mobile-nav-cta" href="#cta">Try Fibula</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section id="before" class="section-white relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-12 lg:pt-24 lg:pb-20">
+                <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-10 items-center lg:min-h-[calc(100vh-6rem)]">
+                    <div class="relative z-10">
+                        <p class="text-[12px] sm:text-[13px] uppercase tracking-[0.18em] text-slate-500 mb-4">Industrial reconciliation | evidence-based design | stateful workflows</p>
+                        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-semibold leading-tight text-slate-900 max-w-4xl">Industrial reconciliation breaks when documents stop agreeing.</h1>
+                        <p class="mt-5 text-[16px] sm:text-[18px] leading-7 sm:leading-8 text-slate-600 max-w-2xl">Accounts Payable 3-Way Matching and production BOM checks depend on fragmented invoices, purchase orders, receipt notes, and manufacturing records. Traditional extraction tools can pull data, but they lose context when exceptions appear, forcing teams back into manual investigation.</p>
+                        <div class="mt-8 flex flex-col sm:flex-row gap-3 sm:items-center">
+                            <a class="btn-primary mobile-full-button" href="#workflow">Explore the Workflow</a>
+                            <a class="btn-secondary mobile-full-button" href="assets/fibula-research-poster.pdf">Download Research Poster</a>
+                            <a class="btn-secondary mobile-full-button" href="documents.html">View Documents</a>
+                        </div>
+                        <div class="mt-10 flex flex-wrap items-center gap-4 text-sm text-slate-500">
+                            <span class="metric-chip">Variance visibility</span>
+                            <span class="metric-chip">Exception handling</span>
+                            <span class="metric-chip">Operational trust</span>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="glass-gray p-5 sm:p-6 lg:p-8">
+                            <div class="flex items-center justify-between mb-4 gap-4">
+                                <div>
+                                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Before-state document mess</p>
+                                    <h2 class="text-xl font-semibold text-slate-900 mt-2">Manual investigation begins where extraction stops.</h2>
+                                </div>
+                                <span class="inline-flex items-center rounded-full bg-[rgba(255,192,0,0.12)] px-3 py-1 text-xs font-semibold text-[rgb(1,61,124)]">High variance risk</span>
+                            </div>
+                            <div id="doc-field" aria-hidden="true">
+                                <div class="doc-card" data-doc style="top:8%;left:6%;transform:rotate(-10deg);"><span class="doc-type">INV</span><div class="doc-meta">Vendor ID: V-214<br>Qty: 420<br>Match: Pending</div></div>
+                                <div class="doc-card" data-doc style="top:5%;left:34%;transform:rotate(7deg);"><span class="doc-type">PO</span><div class="doc-meta">Unit price: 18.40<br>Approval: Routed<br>Variance: 4.7%</div></div>
+                                <div class="doc-card" data-doc style="top:18%;left:63%;transform:rotate(-6deg);"><span class="doc-type">GRN</span><div class="doc-meta">Delivery note: DN-402<br>Qty: 398<br>Status: Partial</div></div>
+                                <div class="doc-card" data-doc style="top:46%;left:14%;transform:rotate(9deg);"><span class="doc-type">BOM</span><div class="doc-meta">Component set: C-88<br>Revision: 04<br>Check: Drift</div></div>
+                                <div class="doc-card" data-doc style="top:54%;left:50%;transform:rotate(-8deg);"><span class="doc-type">WO</span><div class="doc-meta">Line: MX-12<br>Approval state: Hold<br>Output delta: 12</div></div>
+                                <div class="doc-card" data-doc style="top:33%;left:40%;transform:rotate(3deg);"><span class="doc-type">INV</span><div class="doc-meta">Vendor ID: V-328<br>Unit price: 21.20<br>Variance: Escalated</div></div>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-sm leading-6 text-slate-500">This visual simulates the fragmented document field that operators must reconcile before any structured workflow can begin.</p>
+                    </div>
+                </div>
+                <div class="flex justify-center pt-2 lg:pt-0">
+                    <a href="#workflow" class="scroll-cue inline-flex flex-col items-center gap-2 text-sm text-slate-500 no-underline">
+                        <span>Scroll to workflow synthesis</span>
+                        <span aria-hidden="true">v</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="workflow" class="section-gray">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+                <div class="max-w-3xl reveal-on-scroll">
+                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Solution reveal</p>
+                    <h2 class="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">Fibula turns reconciliation intent into stateful workflows.</h2>
+                    <p class="mt-5 text-lg leading-8 text-slate-600">Operators describe matching requirements in plain language. Fibula's agents synthesize node-based workflows that can be reviewed, validated, adjusted, and deployed without forcing non-technical users into brittle configuration paths.</p>
+                </div>
+                <div class="mt-10 grid lg:grid-cols-[1.4fr_0.9fr] gap-6 lg:gap-10 items-start">
+                    <div class="glass p-4 sm:p-6 lg:p-8">
+                        <div class="workflow-sequence flex flex-col lg:flex-row gap-4 lg:gap-3" aria-label="Fibula workflow stages">
+                            <div class="flex flex-col lg:flex-row lg:items-center gap-4 flex-1">
+                                <button type="button" class="stage-btn workflow-stage p-5 w-full active" data-stage-index="0" aria-selected="true" aria-controls="workflow-detail-panel">
+                                    <div class="flex items-center justify-between gap-4">
+                                        <div>
+                                            <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Stage 1</p>
+                                            <h3 class="mt-2 text-base sm:text-lg font-semibold text-slate-900">Natural Language Prompting</h3>
+                                        </div>
+                                        <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(98,188,241,0.12)] text-[rgb(1,61,124)] text-sm font-bold">1</span>
+                                    </div>
+                                    <p class="mt-4 text-sm leading-6 text-slate-600">Users describe document matching requirements, variance rules, and exception needs.</p>
+                                </button>
+                                <div class="workflow-connector hidden lg:block" data-connector-index="0"></div>
+                            </div>
+                            <div class="flex flex-col lg:flex-row lg:items-center gap-4 flex-1">
+                                <button type="button" class="stage-btn workflow-stage p-5 w-full" data-stage-index="1" aria-selected="false" aria-controls="workflow-detail-panel">
+                                    <div class="flex items-center justify-between gap-4">
+                                        <div>
+                                            <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Stage 2</p>
+                                            <h3 class="mt-2 text-base sm:text-lg font-semibold text-slate-900">Agentic Workflow Synthesis</h3>
+                                        </div>
+                                        <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(98,188,241,0.12)] text-[rgb(1,61,124)] text-sm font-bold">2</span>
+                                    </div>
+                                    <p class="mt-4 text-sm leading-6 text-slate-600">AI agents translate intent into workflow nodes and data relationships.</p>
+                                </button>
+                                <div class="workflow-connector hidden lg:block" data-connector-index="1"></div>
+                            </div>
+                            <div class="flex flex-col lg:flex-row lg:items-center gap-4 flex-1">
+                                <button type="button" class="stage-btn workflow-stage p-5 w-full" data-stage-index="2" aria-selected="false" aria-controls="workflow-detail-panel">
+                                    <div class="flex items-center justify-between gap-4">
+                                        <div>
+                                            <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Stage 3</p>
+                                            <h3 class="mt-2 text-base sm:text-lg font-semibold text-slate-900">Human-in-the-Loop Validation</h3>
+                                        </div>
+                                        <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(98,188,241,0.12)] text-[rgb(1,61,124)] text-sm font-bold">3</span>
+                                    </div>
+                                    <p class="mt-4 text-sm leading-6 text-slate-600">Teams test the generated process before trusting it in production.</p>
+                                </button>
+                                <div class="workflow-connector hidden lg:block" data-connector-index="2"></div>
+                            </div>
+                            <div class="flex flex-col lg:flex-row lg:items-center gap-4 flex-1">
+                                <button type="button" class="stage-btn workflow-stage p-5 w-full" data-stage-index="3" aria-selected="false" aria-controls="workflow-detail-panel">
+                                    <div class="flex items-center justify-between gap-4">
+                                        <div>
+                                            <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Stage 4</p>
+                                            <h3 class="mt-2 text-base sm:text-lg font-semibold text-slate-900">Stateful Live Deployment</h3>
+                                        </div>
+                                        <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[rgba(98,188,241,0.12)] text-[rgb(1,61,124)] text-sm font-bold">4</span>
+                                    </div>
+                                    <p class="mt-4 text-sm leading-6 text-slate-600">The workflow preserves context across document states, exceptions, and decisions.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="workflow-detail-panel" class="glass-gray p-6 lg:p-7 lg:sticky lg:top-24">
+                        <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Selected stage detail</p>
+                        <h3 class="mt-3 text-2xl font-semibold text-slate-900" data-workflow-title>Natural Language Prompting</h3>
+                        <p class="mt-4 text-base leading-7 text-slate-600" data-workflow-detail>Operators explain reconciliation intent in plain language, including matching requirements, variance thresholds, escalation rules, and exception handling expectations.</p>
+                        <dl class="mt-6 space-y-4 text-sm">
+                            <div><dt class="font-semibold text-[rgb(1,61,124)]">Operational contribution</dt><dd class="mt-1 text-slate-600" data-workflow-impact>Moves users away from brittle setup forms and into a more legible intent definition step.</dd></div>
+                            <div><dt class="font-semibold text-[rgb(1,61,124)]">Research implication</dt><dd class="mt-1 text-slate-600" data-workflow-research>Supports non-technical users who need immediate guidance rather than opaque configuration.</dd></div>
+                        </dl>
+                    </div>
+                </div>
+                <p class="mt-6 text-sm leading-6 text-slate-500">This section demonstrates how messy reconciliation intent is translated into a reviewable four-stage Fibula workflow.</p>
+            </div>
+        </section>
+
+        <section id="methodology" class="section-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+                <div class="max-w-3xl reveal-on-scroll">
+                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Credibility section</p>
+                    <h2 class="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">Every interface change was traced to observed user friction.</h2>
+                    <p class="mt-5 text-lg leading-8 text-slate-600">The design sprint used workflow mapping, unguided testing, and friction coding to identify where users lost trust, selected the wrong path, or could not recover from unclear system states.</p>
+                </div>
+                <div class="mt-10 grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+                    <article class="glass p-6 reveal-on-scroll"><p class="text-xs uppercase tracking-[0.18em] text-slate-500">Workflow Mapping</p><h3 class="mt-3 text-xl font-semibold text-slate-900">Map document logic before interface fixes.</h3><ul class="mt-5 space-y-3 text-sm leading-6 text-slate-600 list-disc list-inside"><li>Map document types across AP and BOM reconciliation flows.</li><li>Identify matching keys and trace variance decisions.</li><li>Capture exception paths where extraction alone fails.</li><li>Translate workflow ambiguity into product requirements.</li></ul></article>
+                    <article class="glass p-6 reveal-on-scroll"><p class="text-xs uppercase tracking-[0.18em] text-slate-500">Task-Based Testing</p><h3 class="mt-3 text-xl font-semibold text-slate-900">Observe users without steering their choices.</h3><div class="mt-5 grid grid-cols-3 gap-3"><div class="glass-gray p-4 text-center"><div class="metric-big">15+</div><div class="mt-2 text-xs text-slate-500 uppercase tracking-[0.12em]">Sessions</div></div><div class="glass-gray p-4 text-center"><div class="metric-big">11</div><div class="mt-2 text-xs text-slate-500 uppercase tracking-[0.12em]">Cohorts</div></div><div class="glass-gray p-4 text-center"><div class="metric-big">90%</div><div class="mt-2 text-xs text-slate-500 uppercase tracking-[0.12em]">No-help</div></div></div><ul class="mt-5 space-y-3 text-sm leading-6 text-slate-600 list-disc list-inside"><li>Run more than 15 unguided think-aloud sessions.</li><li>Record hesitation, misclicks, confusion, and abandonment.</li><li>Compare behavior across 11 participant cohorts.</li></ul></article>
+                    <article class="glass p-6 reveal-on-scroll md:col-span-2 xl:col-span-1"><p class="text-xs uppercase tracking-[0.18em] text-slate-500">Success Framework</p><h3 class="mt-3 text-xl font-semibold text-slate-900">Evidence-based coding prioritized repeated friction.</h3><ul class="mt-5 space-y-3 text-sm leading-6 text-slate-600 list-disc list-inside"><li>Apply the 90 percent No-Help Rule while keeping researchers passive.</li><li>Use evidence-based coding rather than subjective visual preference.</li><li>Prioritize repeated friction logs into concrete product fixes.</li><li>Keep core evidence visible without hover-only disclosure.</li></ul></article>
+                </div>
+                <p class="mt-6 text-sm leading-6 text-slate-500">This grid summarizes the research methods used to validate which interface changes mattered most.</p>
+            </div>
+        </section>
+
+        <section id="risk-map" class="section-gray">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+                <div class="max-w-3xl reveal-on-scroll">
+                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Human failure-point section</p>
+                    <h2 class="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">Journey failures became an operational risk map.</h2>
+                    <p class="mt-5 text-lg leading-8 text-slate-600">This journey map translates usability breakdowns into reconciliation risk: wrong workflows, missed variance signals, unclear system state, and weak automation trust.</p>
+                </div>
+                <div class="mt-10 grid lg:grid-cols-[1fr_1.1fr] gap-6 lg:gap-10 items-start">
+                    <div class="glass p-4 sm:p-6">
+                        <div class="grid gap-3">
+                            <button type="button" class="journey-stage-btn text-left px-4 py-4 bg-white active" data-risk-index="0" aria-controls="risk-detail-panel">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                    <div><p class="text-xs uppercase tracking-[0.16em] text-slate-500">Stage 1</p><h3 class="mt-1 text-lg font-semibold text-slate-900">Start</h3></div>
+                                    <span class="text-sm text-[rgb(1,61,124)] font-medium">Onboarding risk</span>
+                                </div>
+                                <p class="mt-3 text-sm leading-6 text-slate-600">Hidden entry points slowed onboarding.</p>
+                            </button>
+                            <button type="button" class="journey-stage-btn text-left px-4 py-4 bg-white" data-risk-index="1" aria-controls="risk-detail-panel">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                    <div><p class="text-xs uppercase tracking-[0.16em] text-slate-500">Stage 2</p><h3 class="mt-1 text-lg font-semibold text-slate-900">Template</h3></div>
+                                    <span class="text-sm text-[rgb(1,61,124)] font-medium">Workflow selection risk</span>
+                                </div>
+                                <p class="mt-3 text-sm leading-6 text-slate-600">Too many choices led users into wrong workflow paths.</p>
+                            </button>
+                            <button type="button" class="journey-stage-btn text-left px-4 py-4 bg-white" data-risk-index="2" aria-controls="risk-detail-panel">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                    <div><p class="text-xs uppercase tracking-[0.16em] text-slate-500">Stage 3</p><h3 class="mt-1 text-lg font-semibold text-slate-900">Configure</h3></div>
+                                    <span class="text-sm text-[rgb(1,61,124)] font-medium">Matching setup risk</span>
+                                </div>
+                                <p class="mt-3 text-sm leading-6 text-slate-600">Unclear fields and node expectations weakened matching setup.</p>
+                            </button>
+                            <button type="button" class="journey-stage-btn text-left px-4 py-4 bg-white" data-risk-index="3" aria-controls="risk-detail-panel">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                    <div><p class="text-xs uppercase tracking-[0.16em] text-slate-500">Stage 4</p><h3 class="mt-1 text-lg font-semibold text-slate-900">Test</h3></div>
+                                    <span class="text-sm text-[rgb(1,61,124)] font-medium">Trust risk</span>
+                                </div>
+                                <p class="mt-3 text-sm leading-6 text-slate-600">Unclear system states reduced trust.</p>
+                            </button>
+                            <button type="button" class="journey-stage-btn text-left px-4 py-4 bg-white" data-risk-index="4" aria-controls="risk-detail-panel">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                    <div><p class="text-xs uppercase tracking-[0.16em] text-slate-500">Stage 5</p><h3 class="mt-1 text-lg font-semibold text-slate-900">Output</h3></div>
+                                    <span class="text-sm text-[rgb(1,61,124)] font-medium">Exception visibility risk</span>
+                                </div>
+                                <p class="mt-3 text-sm leading-6 text-slate-600">Outputs and variance details were hard to find.</p>
+                            </button>
+                        </div>
+                    </div>
+                    <aside id="risk-detail-panel" class="glass-gray p-6 lg:p-7">
+                        <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Selected-stage panel</p>
+                        <dl class="mt-4 space-y-5 text-sm">
+                            <div><dt class="font-semibold text-[rgb(1,61,124)]">Stage</dt><dd class="mt-1 text-lg font-semibold text-slate-900" data-risk-stage>Start</dd></div>
+                            <div><dt class="font-semibold text-[rgb(1,61,124)]">Observed user problem</dt><dd class="mt-1 text-slate-600" data-risk-problem>Hidden entry points slowed onboarding.</dd></div>
+                            <div><dt class="font-semibold text-[rgb(1,61,124)]">Operational risk</dt><dd class="mt-1 text-slate-600" data-risk-detail>Users may not begin the correct workflow.</dd></div>
+                            <div><dt class="font-semibold text-[rgb(1,61,124)]">Example user quote</dt><dd class="mt-1 italic text-slate-600" data-risk-quote>I dragged my file in, but nothing is responding.</dd></div>
+                            <div><dt class="font-semibold text-[rgb(1,61,124)]">Product improvement direction</dt><dd class="mt-1 text-slate-600" data-risk-direction>Make system entry points clearer and provide immediate response cues.</dd></div>
+                        </dl>
+                    </aside>
+                </div>
+                <p class="mt-6 text-sm leading-6 text-slate-500">This map shows how specific usability failures were translated into operational risks and product response priorities.</p>
+            </div>
+        </section>
+
+        <section id="findings" class="section-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+                <div class="max-w-3xl reveal-on-scroll">
+                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Proof-of-evolution section</p>
+                    <h2 class="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">Research findings became concrete workflow fixes.</h2>
+                    <p class="mt-5 text-lg leading-8 text-slate-600">Each change below connects an observed user problem to a specific product response and a practical expected impact on trust, recovery, and workflow clarity.</p>
+                </div>
+                <div class="mt-10 glass overflow-hidden reveal-on-scroll">
+                    <div class="finding-row">
+                        <button type="button" class="finding-trigger active" aria-expanded="true" aria-controls="finding-1">
+                            <div><p class="text-xs uppercase tracking-[0.16em] text-slate-500">Finding 1</p><h3 class="mt-1 text-lg sm:text-xl font-semibold text-slate-900">Spatial Desynchronization</h3></div>
+                            <span class="finding-chevron rotated">v</span>
+                        </button>
+                        <div id="finding-1" class="finding-body open">
+                            <div class="px-5 pb-5 sm:px-6 sm:pb-6 grid md:grid-cols-3 gap-4 text-sm leading-6">
+                                <div><p class="font-semibold text-[rgb(1,61,124)]">Problem</p><p class="mt-2 text-slate-600">Users could not connect what they asked Fibula to do with what the system was building. Silent processing made the workflow feel disconnected from the user's mental model.</p></div>
+                                <div><p class="font-semibold text-[rgb(1,61,124)]">Fix</p><p class="mt-2 text-slate-600">Add live workflow canvas animation that draws nodes as the system synthesizes them.</p></div>
+                                <div><p class="font-semibold text-[rgb(1,61,124)]">Expected impact</p><p class="mt-2 text-slate-600">Users can see progress, understand system activity, and trust that the workflow is being constructed from their intent.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="finding-row">
+                        <button type="button" class="finding-trigger" aria-expanded="false" aria-controls="finding-2">
+                            <div><p class="text-xs uppercase tracking-[0.16em] text-slate-500">Finding 2</p><h3 class="mt-1 text-lg sm:text-xl font-semibold text-slate-900">Convenience Bias</h3></div>
+                            <span class="finding-chevron">v</span>
+                        </button>
+                        <div id="finding-2" class="finding-body">
+                            <div class="px-5 pb-5 sm:px-6 sm:pb-6 grid md:grid-cols-3 gap-4 text-sm leading-6">
+                                <div><p class="font-semibold text-[rgb(1,61,124)]">Problem</p><p class="mt-2 text-slate-600">Verbose option lists and too many visible choices caused users to pick the quickest path rather than the correct path.</p></div>
+                                <div><p class="font-semibold text-[rgb(1,61,124)]">Fix</p><p class="mt-2 text-slate-600">Reduce options into predictive chips, progressive disclosure, and fluid expanding tables.</p></div>
+                                <div><p class="font-semibold text-[rgb(1,61,124)]">Expected impact</p><p class="mt-2 text-slate-600">Users make faster choices with less cognitive burden while still preserving access to deeper configuration when needed.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="finding-row">
+                        <button type="button" class="finding-trigger" aria-expanded="false" aria-controls="finding-3">
+                            <div><p class="text-xs uppercase tracking-[0.16em] text-slate-500">Finding 3</p><h3 class="mt-1 text-lg sm:text-xl font-semibold text-slate-900">Operational Opacity</h3></div>
+                            <span class="finding-chevron">v</span>
+                        </button>
+                        <div id="finding-3" class="finding-body">
+                            <div class="px-5 pb-5 sm:px-6 sm:pb-6 grid md:grid-cols-3 gap-4 text-sm leading-6">
+                                <div><p class="font-semibold text-[rgb(1,61,124)]">Problem</p><p class="mt-2 text-slate-600">Silent errors and dead-end modals left users without a recovery path.</p></div>
+                                <div><p class="font-semibold text-[rgb(1,61,124)]">Fix</p><p class="mt-2 text-slate-600">Add natural-language advice cards, in-modal rerun shortcuts, and clearer next-step guidance.</p></div>
+                                <div><p class="font-semibold text-[rgb(1,61,124)]">Expected impact</p><p class="mt-2 text-slate-600">Users can recover from failure states without leaving the workflow or waiting for technical support.</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-6 text-sm leading-6 text-slate-500">This accordion demonstrates how each research finding was turned into a concrete interface or workflow improvement.</p>
+            </div>
+        </section>
+
+        <section id="impact" class="section-gray">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+                <div class="max-w-3xl reveal-on-scroll">
+                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Strategic analysis section</p>
+                    <h2 class="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">The redesign moves automation from hidden execution to visible trust.</h2>
+                    <p class="mt-5 text-lg leading-8 text-slate-600">Fibula reduces configuration ambiguity, increases exception visibility, and makes workflow state explicit so users can validate automation without losing decision control.</p>
+                </div>
+                <div class="mt-10 grid lg:grid-cols-2 gap-6">
+                    <article class="glass p-6 impact-panel reveal-on-scroll"><p class="text-xs uppercase tracking-[0.18em] text-slate-500">Panel 1 | Mental Model Gap</p><h3 class="mt-3 text-2xl font-semibold text-slate-900">Users needed visible system guidance, not silent synthesis.</h3><ul class="mt-5 space-y-3 text-sm leading-6 text-slate-600 list-disc list-inside"><li>Users expected immediate guidance from the first action.</li><li>Live feedback was needed while workflows were being synthesized.</li><li>The interface had to show how natural-language intent became executable structure.</li><li>Better state visibility reduced uncertainty and trust gaps.</li></ul></article>
+                    <article class="glass p-6 impact-panel reveal-on-scroll"><p class="text-xs uppercase tracking-[0.18em] text-slate-500">Panel 2 | Reconciliation Risk Mitigation</p><h3 class="mt-3 text-2xl font-semibold text-slate-900">Clear exception visibility protects industrial decisions.</h3><ul class="mt-5 space-y-3 text-sm leading-6 text-slate-600 list-disc list-inside"><li>Reconciliation risk comes from missed variance, unclear output, and untraceable decisions.</li><li>Fibula should turn outputs into clear decision matrices.</li><li>Exception states should be visible and recoverable.</li><li>Human validation remains part of the automation loop.</li></ul></article>
+                </div>
+                <div class="mt-8 flex flex-wrap gap-2"><span class="impact-theme-chip">Less configuration ambiguity</span><span class="impact-theme-chip">Faster trust formation</span><span class="impact-theme-chip">Better exception visibility</span><span class="impact-theme-chip">Clearer workflow state</span><span class="impact-theme-chip">Stronger AP and BOM reconciliation support</span></div>
+                <p class="mt-6 text-sm leading-6 text-slate-500">This comparison area synthesizes the strategic effect of the redesign on trust, visibility, and reconciliation safety.</p>
+            </div>
+        </section>
+
+        <section id="team" class="section-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+                <div class="max-w-3xl reveal-on-scroll">
+                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Credibility and attribution</p>
+                    <h2 class="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">Innovation XLab members first, supported by NUS and STAPLE.</h2>
+                    <p class="mt-5 text-lg leading-8 text-slate-600">Project Fibula was developed in the MSc Smart Industries and Digital Transformation context through Innovation XLab, with academic guidance from NUS and industry mentorship from STAPLE.</p>
+                    <p class="mt-4 text-sm leading-6 text-slate-500">Placeholder portraits, wordmark logos, and profile links remain in use until final content QA.</p>
+                </div>
+                <div class="mt-10 flex flex-wrap gap-3 reveal-on-scroll">
+                    <div class="logo-box">Innovation XLab<br><span class="text-[11px] font-medium text-slate-500">Wordmark placeholder</span></div>
+                    <div class="logo-box">NUS<br><span class="text-[11px] font-medium text-slate-500">Wordmark placeholder</span></div>
+                    <div class="logo-box">STAPLE AI<br><span class="text-[11px] font-medium text-slate-500">Wordmark placeholder</span></div>
+                </div>
+                <div class="mt-10">
+                    <p class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500 mb-4">Innovation XLab</p>
+                    <div class="grid sm:grid-cols-2 xl:grid-cols-5 gap-4">
+                        <article class="team-card reveal-on-scroll"><div class="avatar-ring">JC</div><div class="team-name">Jung-Lu Chen</div><div class="team-affil">Innovation XLab</div><div class="team-role">Project member | role pending content QA</div><div class="team-links"><span class="team-link opacity-60 cursor-not-allowed">LinkedIn pending</span></div></article>
+                        <article class="team-card reveal-on-scroll"><div class="avatar-ring">JH</div><div class="team-name">Jin Hongquan</div><div class="team-affil">Innovation XLab</div><div class="team-role">Project member | role pending content QA</div><div class="team-links"><span class="team-link opacity-60 cursor-not-allowed">LinkedIn pending</span></div></article>
+                        <article class="team-card reveal-on-scroll"><div class="avatar-ring">ZZ</div><div class="team-name">Zhang Zhiyuan</div><div class="team-affil">Innovation XLab</div><div class="team-role">Project member | role pending content QA</div><div class="team-links"><span class="team-link opacity-60 cursor-not-allowed">LinkedIn pending</span></div></article>
+                        <article class="team-card reveal-on-scroll"><div class="avatar-ring">MY</div><div class="team-name">Mo Yuyang</div><div class="team-affil">Innovation XLab</div><div class="team-role">Project member | role pending content QA</div><div class="team-links"><span class="team-link opacity-60 cursor-not-allowed">LinkedIn pending</span></div></article>
+                        <article class="team-card reveal-on-scroll"><div class="avatar-ring">YW</div><div class="team-name">Ye Wenrui</div><div class="team-affil">Innovation XLab</div><div class="team-role">Project member | role pending content QA</div><div class="team-links"><span class="team-link opacity-60 cursor-not-allowed">LinkedIn pending</span></div></article>
+                    </div>
+                </div>
+                <div class="mt-12">
+                    <p class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500 mb-4">Supervisor and STAPLE mentors</p>
+                    <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+                        <article class="team-card reveal-on-scroll"><div class="avatar-ring">JK</div><div class="team-name">Jussi Keppo</div><div class="team-affil">NUS Supervisor</div><div class="team-role">Academic supervisor | LinkedIn pending replacement</div><div class="team-links"><span class="team-link opacity-60 cursor-not-allowed">LinkedIn pending</span></div></article>
+                        <article class="team-card reveal-on-scroll"><div class="avatar-ring">JK</div><div class="team-name">Josh Kettlewell</div><div class="team-affil">STAPLE</div><div class="team-role">Industry mentor | LinkedIn pending replacement</div><div class="team-links"><span class="team-link opacity-60 cursor-not-allowed">LinkedIn pending</span></div></article>
+                        <article class="team-card reveal-on-scroll"><div class="avatar-ring">FK</div><div class="team-name">Faryz Khazid</div><div class="team-affil">STAPLE</div><div class="team-role">Industry mentor | LinkedIn pending replacement</div><div class="team-links"><span class="team-link opacity-60 cursor-not-allowed">LinkedIn pending</span></div></article>
+                    </div>
+                </div>
+                <div class="mt-10 glass-gray p-5 reveal-on-scroll"><p class="text-sm leading-7 text-slate-600">Special recognition to Josh Kettlewell and Faryz Khazid at Staple AI for platform access, guidance, and unpublished ecosystem support.</p></div>
+                <p class="mt-6 text-sm leading-6 text-slate-500">This section presents the project contributors, current placeholder identity assets, and the academic-industry context behind the work.</p>
+            </div>
+        </section>
+
+        <section id="cta" class="section-gray">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+                <div class="cta-block p-8 sm:p-10 lg:p-12 text-center reveal-on-scroll">
+                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Final call to action</p>
+                    <h2 class="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">Explore the live Fibula workflow ecosystem.</h2>
+                    <p class="mt-5 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Project Fibula shows how natural-language reconciliation requirements can become stateful, validated workflows for industrial teams.</p>
+                    <div class="mt-8 flex flex-col sm:flex-row justify-center gap-3"><a class="btn-primary mobile-full-button" href="https://fibula.ai" target="_blank" rel="noreferrer">Explore Live Site at Fibula.ai</a><a class="btn-secondary mobile-full-button" href="assets/fibula-research-poster.pdf">Download Full Research Poster</a><a class="btn-secondary mobile-full-button" href="documents.html">Open Documents Library</a></div>
+                </div>
+                <p class="mt-6 text-sm leading-6 text-center text-slate-500">This final block is the conversion area, directing visitors to the live product, poster, and supporting documents.</p>
+            </div>
+        </section>
+    </main>
+    <footer class="border-t border-slate-200 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between text-sm text-slate-500">
+            <div><p class="font-semibold text-slate-700">Project Fibula</p><p>MSc Smart Industries and Digital Transformation | Innovation XLab | NUS | STAPLE</p></div>
+            <div class="flex flex-wrap gap-4"><a href="https://fibula.ai" target="_blank" rel="noreferrer" class="text-[rgb(1,61,124)] no-underline">fibula.ai</a><a href="documents.html" class="text-[rgb(1,61,124)] no-underline">Documents</a></div>
+        </div>
+    </footer>
+    <script src="assets/app.js"></script>
 </body>
 </html>
