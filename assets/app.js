@@ -67,6 +67,9 @@ const riskStages = [
     document.documentElement.classList.add("js-enabled");
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let activeWorkflowIndex = -1;
+    let workflowSwitchTimer = null;
+    let workflowSettleTimer = null;
 
     function initDocCards() {
         const cards = document.querySelectorAll("[data-doc]");
@@ -92,21 +95,47 @@ const riskStages = [
     function setWorkflowDetail(index) {
         const stage = workflowStages[index];
         if (!stage) return;
+        if (activeWorkflowIndex === index) return;
+        const previousWorkflowIndex = activeWorkflowIndex;
+        activeWorkflowIndex = index;
 
         const title = document.querySelector("[data-workflow-title]");
         const detail = document.querySelector("[data-workflow-detail]");
         const impact = document.querySelector("[data-workflow-impact]");
         const research = document.querySelector("[data-workflow-research]");
+        const detailPanel = document.getElementById("workflow-detail-panel");
 
-        if (title) title.textContent = stage.title;
-        if (detail) detail.textContent = stage.detail;
-        if (impact) impact.textContent = stage.impact;
-        if (research) research.textContent = stage.research;
+        const updateContent = () => {
+            if (title) title.textContent = stage.title;
+            if (detail) detail.textContent = stage.detail;
+            if (impact) impact.textContent = stage.impact;
+            if (research) research.textContent = stage.research;
+        };
+
+        if (prefersReducedMotion || !detailPanel) {
+            updateContent();
+        } else {
+            window.clearTimeout(workflowSwitchTimer);
+            window.clearTimeout(workflowSettleTimer);
+            detailPanel.classList.add("is-switching");
+            detailPanel.classList.remove("is-switched");
+            workflowSwitchTimer = window.setTimeout(() => {
+                updateContent();
+                detailPanel.classList.remove("is-switching");
+                detailPanel.classList.add("is-switched");
+                workflowSettleTimer = window.setTimeout(() => detailPanel.classList.remove("is-switched"), 280);
+            }, 130);
+        }
 
         document.querySelectorAll(".workflow-stage").forEach((button, buttonIndex) => {
             const isActive = buttonIndex === index;
+            const isLeaving = buttonIndex === previousWorkflowIndex && previousWorkflowIndex !== index;
             button.classList.toggle("active", isActive);
+            button.classList.toggle("leaving-active", isLeaving);
             button.setAttribute("aria-selected", isActive ? "true" : "false");
+            if (isLeaving && !prefersReducedMotion) {
+                window.setTimeout(() => button.classList.remove("leaving-active"), 320);
+            }
         });
     }
 
@@ -215,25 +244,82 @@ const riskStages = [
     function initWorkflowObserver() {
         const stages = Array.from(document.querySelectorAll(".workflow-stage"));
         const connectors = Array.from(document.querySelectorAll(".workflow-connector"));
+        const workflowSection = document.getElementById("workflow");
         if (!stages.length) return;
+
+        const isDesktopWorkflow = window.matchMedia("(min-width: 768px)").matches;
+        if (!isDesktopWorkflow) {
+            stages.forEach((stage) => stage.classList.add("is-visible"));
+            connectors.forEach((connector) => connector.classList.add("is-visible"));
+            setWorkflowDetail(0);
+            return;
+        }
 
         if (prefersReducedMotion || !("IntersectionObserver" in window)) {
             stages.forEach((stage) => stage.classList.add("is-visible"));
             connectors.forEach((connector) => connector.classList.add("is-visible"));
+            setWorkflowDetail(0);
             return;
         }
 
-        const stageObserver = new IntersectionObserver((entries) => {
+        let hasRevealedWorkflow = false;
+        let ticking = false;
+
+        const revealWorkflow = () => {
+            if (hasRevealedWorkflow) return;
+            hasRevealedWorkflow = true;
+            stages.forEach((stage, index) => {
+                window.setTimeout(() => {
+                    stage.classList.add("is-visible");
+                    if (connectors[index - 1]) connectors[index - 1].classList.add("is-visible");
+                }, index * 170);
+            });
+            setWorkflowDetail(0);
+        };
+
+        const getWorkflowIndexFromScroll = () => {
+            if (!workflowSection) return 0;
+            const rect = workflowSection.getBoundingClientRect();
+            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+            const travel = Math.max(1, rect.height - viewportHeight);
+            const progress = Math.max(0, Math.min(1, -rect.top / travel));
+
+            if (progress >= 0.76) return 3;
+            if (progress >= 0.52) return 2;
+            if (progress >= 0.28) return 1;
+            return 0;
+        };
+
+        const syncWorkflowToScroll = () => {
+            ticking = false;
+            if (!workflowSection) return;
+            const rect = workflowSection.getBoundingClientRect();
+            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+            const isNearWorkflow = rect.top < viewportHeight * 0.72 && rect.bottom > viewportHeight * 0.16;
+            if (!isNearWorkflow) return;
+            setWorkflowDetail(getWorkflowIndexFromScroll());
+        };
+
+        const requestWorkflowSync = () => {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(syncWorkflowToScroll);
+        };
+
+        const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (!entry.isIntersecting) return;
-
-                const index = Number(entry.target.dataset.stageIndex || 0);
-                entry.target.classList.add("is-visible");
-                if (connectors[index]) connectors[index].classList.add("is-visible");
+                revealWorkflow();
+                requestWorkflowSync();
             });
-        }, { threshold: 0.45, rootMargin: "0px 0px -10% 0px" });
+        }, { threshold: 0.12, rootMargin: "0px 0px -20% 0px" });
 
-        stages.forEach((stage) => stageObserver.observe(stage));
+        if (workflowSection) sectionObserver.observe(workflowSection);
+
+        window.addEventListener("scroll", requestWorkflowSync, { passive: true });
+        window.addEventListener("resize", requestWorkflowSync);
+
+        requestWorkflowSync();
     }
 
     function initActiveNav() {

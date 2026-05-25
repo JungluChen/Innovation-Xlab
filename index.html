@@ -7,7 +7,7 @@
     <meta name="description" content="Project Fibula presents how natural-language reconciliation requirements become stateful workflows through evidence-based design and industrial user research.">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <link rel="stylesheet" href="assets/styles.css?v=20260525c">
+    <link rel="stylesheet" href="assets/styles.css?v=20260526k">
 </head>
 <body class="bg-white text-slate-900">
     <header id="site-nav">
@@ -79,7 +79,6 @@
                                 <div class="doc-card" data-doc style="top:33%;left:40%;transform:rotate(3deg);"><span class="doc-type">INV</span><div class="doc-meta">Vendor ID: V-328<br>Unit price: 21.20<br>Variance: Escalated</div></div>
                             </div>
                         </div>
-                        <p class="mt-4 text-sm leading-6 text-slate-500">This visual simulates the fragmented document field that operators must reconcile before any structured workflow can begin.</p>
                     </div>
                 </div>
                 <div class="flex justify-center pt-2 lg:pt-0">
@@ -91,15 +90,15 @@
             </div>
         </section>
 
-        <section id="workflow" class="section-gray">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <section id="workflow" class="section-gray workflow-scroll-section">
+            <div class="workflow-sticky-panel max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
                 <div class="max-w-3xl reveal-on-scroll">
                     <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Solution reveal</p>
                     <h2 class="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">Fibula turns reconciliation intent into stateful workflows.</h2>
                     <p class="mt-5 text-lg leading-8 text-slate-600">Operators describe matching requirements in plain language. Fibula's agents synthesize node-based workflows that can be reviewed, validated, adjusted, and deployed without forcing non-technical users into brittle configuration paths.</p>
                 </div>
-                <div class="mt-10 space-y-6">
-                    <div class="glass p-4 sm:p-6 lg:p-8">
+                <div class="workflow-scroll-content mt-10 space-y-6">
+                    <div class="glass p-4 sm:p-6 lg:p-6">
                         <div class="workflow-sequence flex flex-col lg:flex-row gap-4 lg:gap-3" aria-label="Fibula workflow stages">
                             <div class="flex flex-col lg:flex-row lg:items-center gap-4 flex-1">
                                 <button type="button" class="stage-btn workflow-stage p-5 w-full active" data-stage-index="0" aria-selected="true" aria-controls="workflow-detail-panel">
@@ -174,8 +173,7 @@
                         </div>
                     </div>
                 </div>
-                <p class="mt-6 text-sm leading-6 text-slate-500">This section demonstrates how messy reconciliation intent is translated into a reviewable four-stage Fibula workflow.</p>
-                <div class="submission-grid mt-6">
+                <div class="workflow-after-cards submission-grid mt-6">
                     <article class="submission-card">
                         <p class="submission-label">Input</p>
                         <h3 class="submission-title">Operator intent stays readable.</h3>
@@ -207,7 +205,6 @@
                     <article class="glass p-6 reveal-on-scroll"><p class="text-xs uppercase tracking-[0.18em] text-slate-500">Task-Based Testing</p><h3 class="mt-3 text-xl font-semibold text-slate-900">Observe users without steering their choices.</h3><div class="mt-5 grid grid-cols-3 gap-3"><div class="metric-panel text-center"><div class="metric-big">15+</div><div class="mt-2 text-xs text-slate-500 uppercase tracking-[0.12em]">Sessions</div></div><div class="metric-panel text-center"><div class="metric-big">11</div><div class="mt-2 text-xs text-slate-500 uppercase tracking-[0.12em]">Cohorts</div></div><div class="metric-panel text-center"><div class="metric-big">90%</div><div class="mt-2 text-xs text-slate-500 uppercase tracking-[0.12em]">No-help</div></div></div><ul class="mt-5 space-y-3 text-sm leading-6 text-slate-600 list-disc list-inside"><li>Run more than 15 unguided think-aloud sessions.</li><li>Record hesitation, misclicks, confusion, and abandonment.</li><li>Compare behavior across 11 participant cohorts.</li></ul></article>
                     <article class="glass p-6 reveal-on-scroll md:col-span-2 xl:col-span-1"><p class="text-xs uppercase tracking-[0.18em] text-slate-500">Success Framework</p><h3 class="mt-3 text-xl font-semibold text-slate-900">Evidence-based coding prioritized repeated friction.</h3><ul class="mt-5 space-y-3 text-sm leading-6 text-slate-600 list-disc list-inside"><li>Apply the 90 percent No-Help Rule while keeping researchers passive.</li><li>Use evidence-based coding rather than subjective visual preference.</li><li>Prioritize repeated friction logs into concrete product fixes.</li><li>Keep core evidence visible without hover-only disclosure.</li></ul></article>
                 </div>
-                <p class="mt-6 text-sm leading-6 text-slate-500">This grid summarizes the research methods used to validate which interface changes mattered most.</p>
                 <div class="submission-grid mt-6">
                     <article class="submission-card submission-card--compact">
                         <p class="submission-label">Research asset</p>
@@ -286,7 +283,6 @@
                         </dl>
                     </aside>
                 </div>
-                <p class="mt-6 text-sm leading-6 text-slate-500">This map shows how specific usability failures were translated into operational risks and product response priorities.</p>
                 <div class="submission-grid submission-grid--two mt-6">
                     <article class="submission-card submission-card--compact">
                         <p class="submission-label">Risk translation</p>
@@ -350,7 +346,6 @@
                         </div>
                     </div>
                 </div>
-                <p class="mt-6 text-sm leading-6 text-slate-500">This accordion demonstrates how each research finding was turned into a concrete interface or workflow improvement.</p>
             </div>
         </section>
 
@@ -366,7 +361,6 @@
                     <article class="glass p-6 impact-panel reveal-on-scroll"><p class="text-xs uppercase tracking-[0.18em] text-slate-500">Panel 2 | Reconciliation Risk Mitigation</p><h3 class="mt-3 text-2xl font-semibold text-slate-900">Clear exception visibility protects industrial decisions.</h3><ul class="mt-5 space-y-3 text-sm leading-6 text-slate-600 list-disc list-inside"><li>Reconciliation risk comes from missed variance, unclear output, and untraceable decisions.</li><li>Fibula should turn outputs into clear decision matrices.</li><li>Exception states should be visible and recoverable.</li><li>Human validation remains part of the automation loop.</li></ul></article>
                 </div>
                 <div class="mt-8 flex flex-wrap gap-2"><span class="impact-theme-chip">Less configuration ambiguity</span><span class="impact-theme-chip">Faster trust formation</span><span class="impact-theme-chip">Better exception visibility</span><span class="impact-theme-chip">Clearer workflow state</span><span class="impact-theme-chip">Stronger AP and BOM reconciliation support</span></div>
-                <p class="mt-6 text-sm leading-6 text-slate-500">This comparison area synthesizes the strategic effect of the redesign on trust, visibility, and reconciliation safety.</p>
                 <div class="mt-6 flex flex-col sm:flex-row gap-3">
                     <a href="#cta" class="btn-secondary mobile-full-button">Review Final Deliverables</a>
                     <a href="documents.html" class="btn-secondary mobile-full-button">Open Submission Documents</a>
@@ -407,7 +401,6 @@
                 </div>
                 <div class="mt-10 glass-gray p-5 reveal-on-scroll"><p class="text-sm leading-7 text-slate-600">Special recognition to Josh Kettlewell and Faryz Khazid at Staple AI for platform access, guidance, and unpublished ecosystem support.</p></div>
                 <p id="team-placeholder-note" class="mt-4 text-sm leading-6 text-slate-500">Profile links currently point to this placeholder note until official LinkedIn URLs are approved for final content QA.</p>
-                <p class="mt-6 text-sm leading-6 text-slate-500">This section presents the project contributors, current placeholder identity assets, and the academic-industry context behind the work.</p>
                 <div class="submission-grid mt-6">
                     <article class="submission-card submission-card--compact">
                         <p class="submission-label">Current placeholder policy</p>
@@ -436,7 +429,6 @@
                     <p class="mt-5 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Project Fibula shows how natural-language reconciliation requirements can become stateful, validated workflows for industrial teams.</p>
                     <div class="mt-8 flex flex-col sm:flex-row justify-center gap-3"><a class="btn-primary mobile-full-button" href="https://fibula.ai" target="_blank" rel="noreferrer">Explore Live Site at Fibula.ai</a><a class="btn-secondary mobile-full-button" href="assets/fibula-research-poster.pdf">Download Full Research Poster</a><a class="btn-secondary mobile-full-button" href="documents.html">Open Documents Library</a></div>
                 </div>
-                <p class="mt-6 text-sm leading-6 text-center text-slate-500">This final block is the conversion area, directing visitors to the live product, poster, and supporting documents.</p>
             </div>
         </section>
     </main>
@@ -446,6 +438,6 @@
             <div class="flex flex-wrap gap-4"><a href="https://fibula.ai" target="_blank" rel="noreferrer" class="text-[rgb(1,61,124)] no-underline">fibula.ai</a><a href="documents.html" class="text-[rgb(1,61,124)] no-underline">Documents</a></div>
         </div>
     </footer>
-    <script src="assets/app.js?v=20260525c"></script>
+    <script src="assets/app.js?v=20260526k"></script>
 </body>
 </html>
