@@ -143,6 +143,10 @@ const riskStages = [
         });
     }
 
+    function resetWorkflowDefault() {
+        setWorkflowDetail(0);
+    }
+
     function initRiskSelection() {
         const buttons = document.querySelectorAll(".journey-stage-btn");
         if (!buttons.length) return;
@@ -226,7 +230,6 @@ const riskStages = [
                 const index = Number(entry.target.dataset.stageIndex || 0);
                 entry.target.classList.add("is-visible");
                 if (connectors[index]) connectors[index].classList.add("is-visible");
-                setWorkflowDetail(index);
             });
         }, { threshold: 0.45, rootMargin: "0px 0px -10% 0px" });
 
@@ -280,6 +283,7 @@ const riskStages = [
 
     document.addEventListener("DOMContentLoaded", () => {
         initDocCards();
+        resetWorkflowDefault();
         initRevealObserver();
         initWorkflowSelection();
         initWorkflowObserver();
@@ -287,7 +291,9 @@ const riskStages = [
         initFindingsAccordion();
         initActiveNav();
         initMobileMenu();
-        setWorkflowDetail(0);
+        resetWorkflowDefault();
         setRiskDetail(0);
     });
+
+    window.addEventListener("pageshow", resetWorkflowDefault);
 })();
