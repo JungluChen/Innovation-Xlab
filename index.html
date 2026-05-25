@@ -7,7 +7,7 @@
     <meta name="description" content="Project Fibula presents how natural-language reconciliation requirements become stateful workflows through evidence-based design and industrial user research.">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/styles.css?v=20260525b">
 </head>
 <body class="bg-white text-slate-900">
     <header id="site-nav">
@@ -98,7 +98,7 @@
                     <h2 class="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">Fibula turns reconciliation intent into stateful workflows.</h2>
                     <p class="mt-5 text-lg leading-8 text-slate-600">Operators describe matching requirements in plain language. Fibula's agents synthesize node-based workflows that can be reviewed, validated, adjusted, and deployed without forcing non-technical users into brittle configuration paths.</p>
                 </div>
-                <div class="mt-10 grid lg:grid-cols-[1.4fr_0.9fr] gap-6 lg:gap-10 items-start">
+                <div class="mt-10 space-y-6">
                     <div class="glass p-4 sm:p-6 lg:p-8">
                         <div class="workflow-sequence flex flex-col lg:flex-row gap-4 lg:gap-3" aria-label="Fibula workflow stages">
                             <div class="flex flex-col lg:flex-row lg:items-center gap-4 flex-1">
@@ -154,14 +154,24 @@
                             </div>
                         </div>
                     </div>
-                    <div id="workflow-detail-panel" class="glass-gray p-6 lg:p-7 lg:sticky lg:top-24">
-                        <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Selected stage detail</p>
-                        <h3 class="mt-3 text-2xl font-semibold text-slate-900" data-workflow-title>Natural Language Prompting</h3>
-                        <p class="mt-4 text-base leading-7 text-slate-600" data-workflow-detail>Operators explain reconciliation intent in plain language, including matching requirements, variance thresholds, escalation rules, and exception handling expectations.</p>
-                        <dl class="mt-6 space-y-4 text-sm">
-                            <div><dt class="font-semibold text-[rgb(1,61,124)]">Operational contribution</dt><dd class="mt-1 text-slate-600" data-workflow-impact>Moves users away from brittle setup forms and into a more legible intent definition step.</dd></div>
-                            <div><dt class="font-semibold text-[rgb(1,61,124)]">Research implication</dt><dd class="mt-1 text-slate-600" data-workflow-research>Supports non-technical users who need immediate guidance rather than opaque configuration.</dd></div>
-                        </dl>
+                    <div id="workflow-detail-panel" class="glass-gray p-6 lg:p-7">
+                        <div class="grid gap-5 xl:grid-cols-[1.15fr_0.85fr] xl:items-start">
+                            <div>
+                                <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Selected stage detail</p>
+                                <h3 class="mt-3 text-2xl font-semibold text-slate-900" data-workflow-title>Natural Language Prompting</h3>
+                                <p class="mt-4 text-base leading-7 text-slate-600" data-workflow-detail>Operators explain reconciliation intent in plain language, including matching requirements, variance thresholds, escalation rules, and exception handling expectations.</p>
+                            </div>
+                            <dl class="grid gap-4 text-sm">
+                                <div class="rounded-[8px] border border-slate-200 bg-white/70 px-4 py-4">
+                                    <dt class="font-semibold text-[rgb(1,61,124)]">Operational contribution</dt>
+                                    <dd class="mt-1 text-slate-600" data-workflow-impact>Moves users away from brittle setup forms and into a more legible intent definition step.</dd>
+                                </div>
+                                <div class="rounded-[8px] border border-slate-200 bg-white/70 px-4 py-4">
+                                    <dt class="font-semibold text-[rgb(1,61,124)]">Research implication</dt>
+                                    <dd class="mt-1 text-slate-600" data-workflow-research>Supports non-technical users who need immediate guidance rather than opaque configuration.</dd>
+                                </div>
+                            </dl>
+                        </div>
                     </div>
                 </div>
                 <p class="mt-6 text-sm leading-6 text-slate-500">This section demonstrates how messy reconciliation intent is translated into a reviewable four-stage Fibula workflow.</p>
@@ -436,6 +446,6 @@
             <div class="flex flex-wrap gap-4"><a href="https://fibula.ai" target="_blank" rel="noreferrer" class="text-[rgb(1,61,124)] no-underline">fibula.ai</a><a href="documents.html" class="text-[rgb(1,61,124)] no-underline">Documents</a></div>
         </div>
     </footer>
-    <script src="assets/app.js"></script>
+    <script src="assets/app.js?v=20260525b"></script>
 </body>
 </html>
