@@ -232,6 +232,7 @@ const risk2Stages = [
 
         let risk2ActiveIndex = -1;
         let risk2Ticking = false;
+        const risk2MobileQuery = window.matchMedia("(max-width: 767px)");
 
         function risk2Clamp(value, min, max) {
             return Math.min(Math.max(value, min), max);
@@ -277,6 +278,10 @@ const risk2Stages = [
 
         function updateRisk2ByScroll() {
             if (!risk2Track) return;
+            if (risk2MobileQuery.matches) {
+                risk2Ticking = false;
+                return;
+            }
 
             const rect = risk2Track.getBoundingClientRect();
             const viewportHeight = window.innerHeight;
@@ -305,6 +310,10 @@ const risk2Stages = [
 
         window.addEventListener("scroll", onRisk2Scroll, { passive: true });
         window.addEventListener("resize", updateRisk2ByScroll);
+        risk2MobileQuery.addEventListener("change", () => {
+            setRisk2Stage(0);
+            updateRisk2ByScroll();
+        });
 
         risk2StagesEls.forEach((stage) => {
             stage.addEventListener("click", () => {

@@ -61,6 +61,12 @@ section[id]{scroll-margin-top:88px;}
 @-webkit-keyframes workflow-stage-sheen{0%{-webkit-transform:translate3d(-55%,0,0) rotate(8deg);}100%{-webkit-transform:translate3d(55%,0,0) rotate(8deg);}}
 @keyframes workflow-connector-flow{0%{transform:translate3d(-55%,0,0);}100%{transform:translate3d(55%,0,0);}}
 @-webkit-keyframes workflow-connector-flow{0%{-webkit-transform:translate3d(-55%,0,0);}100%{-webkit-transform:translate3d(55%,0,0);}}
+@keyframes focus-title-swap{0%{opacity:.35;transform:translate3d(0,8px,0) scale(.98);filter:blur(2px);}62%{opacity:1;transform:translate3d(0,-1px,0) scale(1.015);filter:blur(0);}100%{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0);}}
+@-webkit-keyframes focus-title-swap{0%{opacity:.35;-webkit-transform:translate3d(0,8px,0) scale(.98);filter:blur(2px);}62%{opacity:1;-webkit-transform:translate3d(0,-1px,0) scale(1.015);filter:blur(0);}100%{opacity:1;-webkit-transform:translate3d(0,0,0) scale(1);filter:blur(0);}}
+.workflow-stage.active .stage-title,
+.stage-detail-panel.active [data-workflow-title]{
+  animation:focus-title-swap .44s cubic-bezier(.22,1,.36,1) both;
+}
 .stage-card{cursor:pointer;border-left:3px solid transparent;border-radius:0 6px 6px 0;transition:background .18s,border-color .18s;}
 .stage-card:hover{background:rgba(1,61,124,0.04);}
 .stage-card.active{border-left-color:var(--gold);background:rgba(255,192,0,0.07);}
@@ -745,7 +751,7 @@ section[id]{scroll-margin-top:88px;}
 #team .avatar-photo-jin { object-position: 50% 6%; }
 #team .avatar-photo-zhang,
 #team .avatar-photo-mo,
-#team .avatar-photo-ye { object-position:  50% 6%; }
+#team .avatar-photo-ye { object-position: 50% 50%; }
 #team .avatar-photo-jussi { object-position: 50% 54%; }
 #team .avatar-photo-josh {
   transform: scale(1.6);
@@ -893,7 +899,7 @@ section[id]{scroll-margin-top:88px;}
 
 .risk2-container {
   width: 100%;
-  padding: clamp(28px, 4vw, 72px);
+  padding: clamp(22px, 3.2vw, 52px);
 }
 
 .risk2-heading {
@@ -911,19 +917,19 @@ section[id]{scroll-margin-top:88px;}
 }
 
 .risk2-heading h2 {
-  margin: 14px 0 0;
-  font-size: clamp(40px, 5.2vw, 82px);
-  line-height: 0.98;
+  margin: 10px 0 0;
+  font-size: clamp(36px, 4.55vw, 70px);
+  line-height: 0.96;
   letter-spacing: -0.055em;
   font-weight: 760;
   color: #0f172a;
 }
 
 .risk2-heading p:last-child {
-  margin-top: 22px;
+  margin-top: 16px;
   max-width: 980px;
-  font-size: clamp(16px, 1.25vw, 21px);
-  line-height: 1.75;
+  font-size: clamp(15px, 1.08vw, 18px);
+  line-height: 1.6;
   color: #475569;
 }
 
@@ -931,7 +937,7 @@ section[id]{scroll-margin-top:88px;}
 .risk2-stage-rail {
   width: 100%;
   max-width: none;
-  margin: clamp(34px, 5vh, 58px) auto 0;
+  margin: clamp(22px, 3.2vh, 36px) auto 0;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: clamp(12px, 1.2vw, 20px);
@@ -941,8 +947,8 @@ section[id]{scroll-margin-top:88px;}
 .risk2-stage {
   position: relative;
   min-width: 0;
-  min-height: clamp(126px, 14vh, 170px);
-  padding: clamp(20px, 2vw, 30px);
+  min-height: clamp(98px, 11vh, 132px);
+  padding: clamp(16px, 1.45vw, 23px);
   border: 1px solid transparent;
   border-radius: clamp(26px, 2.2vw, 36px);
   background: rgba(255, 255, 255, 0.34);
@@ -981,21 +987,22 @@ section[id]{scroll-margin-top:88px;}
     linear-gradient(135deg, rgba(255, 248, 226, 0.98), rgba(255, 255, 255, 0.92));
   border-color: rgba(245, 183, 0, 0.7);
   box-shadow:
-    0 28px 80px rgba(245, 183, 0, 0.22),
+    0 18px 56px rgba(245, 183, 0, 0.18),
     0 10px 28px rgba(15, 23, 42, 0.08),
     inset 0 0 0 1px rgba(255, 255, 255, 0.8);
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-5px) scale(1.015);
 }
 
 .risk2-stage.is-active::before {
   content: "";
   position: absolute;
-  left: 18px;
-  top: 24px;
-  bottom: 24px;
-  width: 4px;
+  left: clamp(18px, 1.6vw, 28px);
+  right: clamp(18px, 1.6vw, 28px);
+  top: 16px;
+  width: auto;
+  height: 4px;
   border-radius: 999px;
-  background: #f5b700;
+  background: linear-gradient(90deg, #f5b700, rgba(245, 183, 0, 0.16));
   box-shadow: 0 0 22px rgba(245, 183, 0, 0.4);
 }
 
@@ -1019,8 +1026,8 @@ section[id]{scroll-margin-top:88px;}
 }
 
 .risk2-stage-title {
-  margin-top: clamp(16px, 2vh, 24px);
-  font-size: clamp(22px, 1.75vw, 32px);
+  margin-top: clamp(10px, 1.35vh, 16px);
+  font-size: clamp(20px, 1.52vw, 28px);
   line-height: 1.05;
   letter-spacing: -0.045em;
   color: #0f172a;
@@ -1028,8 +1035,8 @@ section[id]{scroll-margin-top:88px;}
 }
 
 .risk2-stage-risk {
-  margin-top: clamp(16px, 1.7vh, 22px);
-  font-size: clamp(14px, 1.05vw, 18px);
+  margin-top: clamp(9px, 1.15vh, 14px);
+  font-size: clamp(13px, 0.95vw, 16px);
   line-height: 1.35;
   color: rgb(1, 61, 124);
   font-weight: 680;
@@ -1038,10 +1045,10 @@ section[id]{scroll-margin-top:88px;}
 /* 下方資訊與影片 */
 .risk2-body {
   width: 100%;
-  margin-top: clamp(30px, 5vh, 60px);
+  margin-top: clamp(22px, 3vh, 36px);
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-  gap: clamp(24px, 3vw, 56px);
+  gap: clamp(20px, 2.4vw, 42px);
   align-items: start;
 }
 
@@ -1065,13 +1072,13 @@ section[id]{scroll-margin-top:88px;}
   align-self: start;
   height: auto;
   min-height: 0;
-  padding: clamp(30px, 3.2vw, 56px);
+  padding: clamp(24px, 2.35vw, 40px);
 }
 
 .risk2-panel-label {
-  margin: 0 0 26px;
-  font-size: 12px;
-  letter-spacing: 0.24em;
+  margin: 0 0 16px;
+  font-size: 11px;
+  letter-spacing: 0.21em;
   text-transform: uppercase;
   color: #64748b;
   font-weight: 700;
@@ -1079,7 +1086,7 @@ section[id]{scroll-margin-top:88px;}
 
 .risk2-copy-card h3 {
   margin: 0;
-  font-size: clamp(38px, 3.4vw, 56px);
+  font-size: clamp(32px, 2.75vw, 46px);
   line-height: 1.02;
   letter-spacing: -0.055em;
   font-weight: 760;
@@ -1087,23 +1094,23 @@ section[id]{scroll-margin-top:88px;}
 }
 
 .risk2-info-grid {
-  margin-top: clamp(28px, 3vh, 42px);
+  margin-top: clamp(18px, 2.05vh, 26px);
   display: grid;
-  gap: clamp(18px, 2.4vh, 30px);
+  gap: clamp(12px, 1.55vh, 20px);
 }
 
 .risk2-info-label {
   margin: 0;
-  font-size: clamp(15px, 1.05vw, 18px);
+  font-size: clamp(14px, 0.96vw, 16px);
   line-height: 1.35;
   color: rgb(1, 61, 124);
   font-weight: 760;
 }
 
 .risk2-info-grid p:not(.risk2-info-label) {
-  margin: 8px 0 0;
-  font-size: clamp(16px, 1.25vw, 21px);
-  line-height: 1.65;
+  margin: 6px 0 0;
+  font-size: clamp(14px, 1.02vw, 17px);
+  line-height: 1.5;
   color: #475569;
 }
 
@@ -1114,7 +1121,7 @@ section[id]{scroll-margin-top:88px;}
 /* 右邊影片區 */
 .risk2-video-card {
   align-self: start;
-  padding: clamp(24px, 2.8vw, 44px);
+  padding: clamp(20px, 2.15vw, 34px);
 }
 
 .risk2-video-header {
@@ -1145,7 +1152,7 @@ section[id]{scroll-margin-top:88px;}
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
-  max-height: 46vh;
+  max-height: 34vh;
   border-radius: clamp(18px, 1.6vw, 28px);
   object-fit: cover;
   background: #111827;
@@ -1196,33 +1203,43 @@ section[id]{scroll-margin-top:88px;}
 
 @media (max-width: 767px) {
   .risk2-section {
-    overflow: hidden;
+    overflow: visible;
   }
 
   .risk2-container {
-    padding: 48px 18px 56px;
+    padding: 42px 16px 48px;
   }
 
   .risk2-heading h2 {
-    font-size: clamp(34px, 11vw, 48px);
-    line-height: 1.02;
+    font-size: clamp(30px, 9.6vw, 42px);
+    line-height: 1.04;
     letter-spacing: -0.04em;
   }
 
   .risk2-heading p:last-child {
-    margin-top: 16px;
-    font-size: 16px;
-    line-height: 1.68;
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 1.58;
+  }
+
+  .risk2-scroll-track {
+    height: auto;
+  }
+
+  .risk2-sticky {
+    position: relative;
+    min-height: auto;
+    align-items: stretch;
   }
 
   .risk2-stage-rail {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
     overflow-x: visible;
     scroll-snap-type: none;
     padding-bottom: 0;
-    margin-top: 28px;
+    margin-top: 22px;
   }
 
   .risk2-stage {
@@ -1230,51 +1247,76 @@ section[id]{scroll-margin-top:88px;}
     width: 100%;
     min-height: 0;
     scroll-snap-align: none;
-    padding: 16px 18px 16px 20px;
-    border-radius: 18px;
+    padding: 12px 14px;
+    border-radius: 16px;
     display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: 14px;
-    row-gap: 4px;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 10px;
+    row-gap: 3px;
     align-items: center;
+    background: rgba(255, 255, 255, 0.66);
   }
 
   .risk2-stage.is-active {
+    grid-column: 1 / -1;
+    padding: 15px 16px 15px 18px;
+    grid-template-columns: auto minmax(0, 1fr);
     transform: none;
     box-shadow:
       0 0 0 2px rgba(245, 183, 0, 0.22),
-      0 14px 32px rgba(15, 23, 42, 0.08);
+      0 10px 22px rgba(15, 23, 42, 0.07);
   }
 
   .risk2-stage.is-active::before {
-    left: 0;
-    top: 12px;
-    bottom: 12px;
-    width: 4px;
+    left: 18px;
+    right: 18px;
+    top: 10px;
+    bottom: auto;
+    width: auto;
+    height: 3px;
   }
 
   .risk2-stage-number {
-    grid-row: 1 / span 2;
-    font-size: 12px;
-    letter-spacing: 0.16em;
+    grid-row: auto;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
   }
 
   .risk2-stage-title {
     margin-top: 0;
-    font-size: 22px;
-    line-height: 1.08;
+    font-size: 17px;
+    line-height: 1.24;
     letter-spacing: -0.03em;
+    padding-block: 2px;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .risk2-stage.is-active .risk2-stage-title {
+    font-size: 24px;
+    line-height: 1.2;
+    animation: focus-title-swap .44s cubic-bezier(.22,1,.36,1) both;
   }
 
   .risk2-stage-risk {
+    display: none;
+  }
+
+  .risk2-stage.is-active .risk2-stage-risk {
+    display: block;
+    grid-column: 2;
     margin-top: 2px;
     font-size: 14px;
     line-height: 1.35;
+    animation: focus-title-swap .5s cubic-bezier(.22,1,.36,1) both;
   }
 
   .risk2-body {
-    margin-top: 24px;
-    gap: 18px;
+    margin-top: 18px;
+    gap: 14px;
   }
 
   .risk2-copy-card,
@@ -1283,30 +1325,54 @@ section[id]{scroll-margin-top:88px;}
   }
 
   .risk2-copy-card {
-    padding: 24px 22px;
+    padding: 20px 18px;
   }
 
   .risk2-copy-card h3 {
-    font-size: 36px;
+    font-size: 31px;
     letter-spacing: -0.04em;
+    animation: focus-title-swap .44s cubic-bezier(.22,1,.36,1) both;
   }
 
   .risk2-panel-label {
-    margin-bottom: 18px;
-    letter-spacing: 0.18em;
+    margin-bottom: 12px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
   }
 
   .risk2-info-grid {
-    margin-top: 24px;
-    gap: 18px;
+    margin-top: 17px;
+    gap: 12px;
   }
 
   .risk2-info-label {
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .risk2-info-grid p:not(.risk2-info-label) {
-    font-size: 16px;
-    line-height: 1.62;
+    margin-top: 5px;
+    font-size: 14px;
+    line-height: 1.48;
+  }
+
+  .risk2-video-card {
+    padding: 16px;
+  }
+
+  .risk2-video-header {
+    margin-bottom: 10px;
+  }
+
+  .risk2-video-header p {
+    font-size: 14px;
+  }
+
+  .risk2-video-header span {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+
+  .risk2-video-card video {
+    border-radius: 16px;
   }
 }
