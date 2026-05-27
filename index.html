@@ -7,7 +7,9 @@
     <meta name="description" content="Project Fibula presents how natural-language reconciliation requirements become stateful workflows through evidence-based design and industrial user research.">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <link rel="stylesheet" href="assets/styles.css?v=20260527g">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <link rel="stylesheet" href="assets/styles.css?v=20260528g">
 </head>
 <body class="bg-white text-slate-900">
     <header id="site-nav">
@@ -43,49 +45,80 @@
         </div>
     </header>
     <main>
-        <section id="before" class="section-white relative overflow-hidden">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-12 lg:pt-24 lg:pb-20">
-                <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-10 items-center lg:min-h-[calc(82vh-6rem)]">
-                    <div class="relative z-10">
-                        <p class="text-[12px] sm:text-[13px] uppercase tracking-[0.18em] text-slate-500 mb-4">Industrial reconciliation | evidence-based design | stateful workflows</p>
-                        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-semibold leading-tight text-slate-900 max-w-4xl">Industrial reconciliation breaks when documents stop agreeing.</h1>
-                        <p class="mt-5 text-[16px] sm:text-[18px] leading-7 sm:leading-8 text-slate-600 max-w-2xl">Accounts Payable 3-Way Matching and production BOM checks depend on fragmented invoices, purchase orders, receipt notes, and manufacturing records. Traditional extraction tools can pull data, but they lose context when exceptions appear, forcing teams back into manual investigation.</p>
-                        <div class="mt-8 flex flex-col sm:flex-row gap-3 sm:items-center">
-                            <a class="btn-primary mobile-full-button" href="#workflow">Explore the Workflow</a>
-                            <a class="btn-secondary mobile-full-button" href="assets/fibula-research-poster.pdf">Download Research Poster</a>
-                            <a class="btn-secondary mobile-full-button" href="documents.html">View Documents</a>
-                        </div>
-                        <div class="mt-10 flex flex-wrap items-center gap-4 text-sm text-slate-500">
-                            <span class="metric-chip">Variance visibility</span>
-                            <span class="metric-chip">Exception handling</span>
-                            <span class="metric-chip">Operational trust</span>
+        <section id="before" class="fibula-intro-section" data-fibula-intro>
+            <div class="fibula-intro-pin" data-fibula-intro-pin>
+                <div class="fibula-intro-shell">
+                    <div class="fibula-intro-copy">
+                        <p class="fibula-intro-kicker">Industrial reconciliation | evidence-based design | stateful workflows</p>
+                        <h1>Industrial reconciliation breaks when documents stop agreeing.</h1>
+                        <p>Accounts Payable 3-Way Matching and production BOM checks depend on fragmented invoices, purchase orders, receipt notes, and manufacturing records. Traditional extraction tools can pull data, but they lose context when exceptions appear, forcing teams back into manual investigation.</p>
+                    </div>
+                    <div id="doc-field" class="fibula-demo-stage fibula-demo-stage--intro" data-fibula-demo aria-hidden="true">
+                        <div class="fibula-demo-grid"></div>
+
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="intent" data-target-offset-x="-54" data-target-offset-y="-42" style="top:6%;left:5%;transform:rotate(-16deg);"><span class="doc-type">INV</span><div class="doc-meta">Vendor ID: V-214<br>Qty: 420<br>Match: Pending</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="synthesis" data-target-offset-x="46" data-target-offset-y="-38" style="top:4%;left:28%;transform:rotate(11deg);"><span class="doc-type">PO</span><div class="doc-meta">Unit price: 18.40<br>Approval: Routed<br>Variance: 4.7%</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="validation" data-target-offset-x="-42" data-target-offset-y="46" style="top:9%;left:58%;transform:rotate(-9deg);"><span class="doc-type">GRN</span><div class="doc-meta">Delivery note: DN-402<br>Qty: 398<br>Status: Partial</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="deployment" data-target-offset-x="50" data-target-offset-y="40" style="top:5%;left:82%;transform:rotate(14deg);"><span class="doc-type">WO</span><div class="doc-meta">Line: MX-12<br>Approval state: Hold<br>Output delta: 12</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="intent" data-target-offset-x="38" data-target-offset-y="46" style="top:23%;left:14%;transform:rotate(8deg);"><span class="doc-type">BOM</span><div class="doc-meta">Component set: C-88<br>Revision: 04<br>Check: Drift</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="synthesis" data-target-offset-x="-42" data-target-offset-y="48" style="top:26%;left:42%;transform:rotate(-4deg);"><span class="doc-type">INV</span><div class="doc-meta">Vendor ID: V-328<br>Unit price: 21.20<br>Variance: Escalated</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="validation" data-target-offset-x="42" data-target-offset-y="-44" style="top:24%;left:71%;transform:rotate(6deg);"><span class="doc-type">CN</span><div class="doc-meta">Credit note: CN-09<br>Tax delta: 1.8%<br>Status: Review</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="deployment" data-target-offset-x="-48" data-target-offset-y="-46" style="top:38%;left:2%;transform:rotate(18deg);"><span class="doc-type">SO</span><div class="doc-meta">Sales order: S-771<br>Batch: West<br>Ship: Split</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="intent" data-target-offset-x="-18" data-target-offset-y="64" style="top:43%;left:24%;transform:rotate(-13deg);"><span class="doc-type">QC</span><div class="doc-meta">Inspection: Q-19<br>Sample: Fail<br>Action: Hold</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="synthesis" data-target-offset-x="18" data-target-offset-y="62" style="top:43%;left:54%;transform:rotate(15deg);"><span class="doc-type">ASN</span><div class="doc-meta">Notice: ASN-44<br>ETA: Revised<br>Dock: B</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="validation" data-target-offset-x="-64" data-target-offset-y="-10" style="top:41%;left:83%;transform:rotate(-11deg);"><span class="doc-type">RMA</span><div class="doc-meta">Return: R-118<br>Cause: Damage<br>Qty: 12</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="deployment" data-target-offset-x="64" data-target-offset-y="-8" style="top:58%;left:10%;transform:rotate(5deg);"><span class="doc-type">LOT</span><div class="doc-meta">Lot: L-502<br>Expiry: 08/26<br>Trace: Weak</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="intent" data-target-offset-x="0" data-target-offset-y="-66" style="top:62%;left:36%;transform:rotate(-7deg);"><span class="doc-type">COST</span><div class="doc-meta">Overhead: 7.2<br>Currency: SGD<br>Flag: Delta</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="synthesis" data-target-offset-x="0" data-target-offset-y="-66" style="top:60%;left:67%;transform:rotate(10deg);"><span class="doc-type">MFG</span><div class="doc-meta">Line: A3<br>Cycle: 42m<br>Yield: 91%</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="validation" data-target-offset-x="-70" data-target-offset-y="18" style="top:76%;left:1%;transform:rotate(-8deg);"><span class="doc-type">PACK</span><div class="doc-meta">Pallet: P-20<br>Weight: 188kg<br>Seal: Open</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="deployment" data-target-offset-x="70" data-target-offset-y="18" style="top:78%;left:26%;transform:rotate(13deg);"><span class="doc-type">TAX</span><div class="doc-meta">GST: 8%<br>Code: SR<br>Rounding: Off</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="intent" data-target-offset-x="-28" data-target-offset-y="-72" style="top:74%;left:55%;transform:rotate(-15deg);"><span class="doc-type">SHIP</span><div class="doc-meta">Carrier: C-12<br>Route: SG-02<br>Status: Delay</div></div>
+                        <div class="doc-card fibula-demo-doc" data-demo-doc data-target-node="synthesis" data-target-offset-x="30" data-target-offset-y="-72" style="top:75%;left:82%;transform:rotate(7deg);"><span class="doc-type">AP</span><div class="doc-meta">Voucher: AP-631<br>Owner: Finance<br>State: Open</div></div>
+
+                        <div class="fibula-demo-workflow" data-demo-workflow>
+                            <svg class="fibula-demo-lines" viewBox="0 0 420 220" preserveAspectRatio="none" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="fibulaFlowStroke" x1="0%" y1="50%" x2="100%" y2="50%">
+                                        <stop offset="0%" stop-color="rgb(1,61,124)" stop-opacity="0.72"></stop>
+                                        <stop offset="48%" stop-color="rgb(98,188,241)" stop-opacity="0.8"></stop>
+                                        <stop offset="100%" stop-color="rgb(255,192,0)" stop-opacity="0.88"></stop>
+                                    </linearGradient>
+                                    <filter id="fibulaFlowGlow" x="-18%" y="-34%" width="136%" height="168%">
+                                        <feGaussianBlur stdDeviation="2.1" result="blur"></feGaussianBlur>
+                                        <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.0039 0 0 0 0 0.239 0 0 0 0 0.486 0 0 0 0.16 0" result="glow"></feColorMatrix>
+                                        <feMerge>
+                                            <feMergeNode in="glow"></feMergeNode>
+                                            <feMergeNode in="SourceGraphic"></feMergeNode>
+                                        </feMerge>
+                                    </filter>
+                                </defs>
+                                <path data-demo-line data-flow-from="intent" data-flow-to="synthesis" stroke="url(#fibulaFlowStroke)" filter="url(#fibulaFlowGlow)" d="M70 110 C118 52 171 50 224 84"></path>
+                                <path data-demo-line data-flow-from="intent" data-flow-to="validation" stroke="url(#fibulaFlowStroke)" filter="url(#fibulaFlowGlow)" d="M70 110 C116 170 171 172 224 136"></path>
+                                <path data-demo-line data-flow-from="synthesis" data-flow-to="deployment" stroke="url(#fibulaFlowStroke)" filter="url(#fibulaFlowGlow)" d="M224 84 C274 82 324 82 368 110"></path>
+                                <path data-demo-line data-flow-from="validation" data-flow-to="deployment" stroke="url(#fibulaFlowStroke)" filter="url(#fibulaFlowGlow)" d="M224 136 C274 138 324 138 368 110"></path>
+                            </svg>
+                            <div class="fibula-demo-node node-intent" data-demo-node="intent">
+                                <span>01</span>
+                                <strong>Prompt</strong>
+                                <small>intent intake</small>
+                            </div>
+                            <div class="fibula-demo-node node-synthesis" data-demo-node="synthesis">
+                                <span>02</span>
+                                <strong>Synthesize</strong>
+                                <small>agent logic</small>
+                            </div>
+                            <div class="fibula-demo-node node-validation" data-demo-node="validation">
+                                <span>03</span>
+                                <strong>Validate</strong>
+                                <small>human review</small>
+                            </div>
+                            <div class="fibula-demo-node node-deployment" data-demo-node="deployment">
+                                <span>04</span>
+                                <strong>Deploy</strong>
+                                <small>stateful run</small>
+                            </div>
                         </div>
                     </div>
-                    <div class="relative">
-                        <div class="glass-gray p-5 sm:p-6 lg:p-8">
-                            <div class="flex items-center justify-between mb-4 gap-4">
-                                <div>
-                                    <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Before-state document mess</p>
-                                    <h2 class="text-xl font-semibold text-slate-900 mt-2">Manual investigation begins where extraction stops.</h2>
-                                </div>
-                                <span class="inline-flex items-center rounded-full bg-[rgba(255,192,0,0.12)] px-3 py-1 text-xs font-semibold text-[rgb(1,61,124)]">High variance risk</span>
-                            </div>
-                            <div id="doc-field" aria-hidden="true">
-                                <div class="doc-card" data-doc style="top:8%;left:6%;transform:rotate(-10deg);"><span class="doc-type">INV</span><div class="doc-meta">Vendor ID: V-214<br>Qty: 420<br>Match: Pending</div></div>
-                                <div class="doc-card" data-doc style="top:5%;left:34%;transform:rotate(7deg);"><span class="doc-type">PO</span><div class="doc-meta">Unit price: 18.40<br>Approval: Routed<br>Variance: 4.7%</div></div>
-                                <div class="doc-card" data-doc style="top:18%;left:63%;transform:rotate(-6deg);"><span class="doc-type">GRN</span><div class="doc-meta">Delivery note: DN-402<br>Qty: 398<br>Status: Partial</div></div>
-                                <div class="doc-card" data-doc style="top:46%;left:14%;transform:rotate(9deg);"><span class="doc-type">BOM</span><div class="doc-meta">Component set: C-88<br>Revision: 04<br>Check: Drift</div></div>
-                                <div class="doc-card" data-doc style="top:54%;left:50%;transform:rotate(-8deg);"><span class="doc-type">WO</span><div class="doc-meta">Line: MX-12<br>Approval state: Hold<br>Output delta: 12</div></div>
-                                <div class="doc-card" data-doc style="top:33%;left:40%;transform:rotate(3deg);"><span class="doc-type">INV</span><div class="doc-meta">Vendor ID: V-328<br>Unit price: 21.20<br>Variance: Escalated</div></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex justify-center pt-2 lg:pt-0">
-                    <a href="#workflow" class="scroll-cue inline-flex flex-col items-center gap-2 text-sm text-slate-500 no-underline">
-                        <span>Scroll to workflow synthesis</span>
-                        <span aria-hidden="true">v</span>
-                    </a>
                 </div>
             </div>
         </section>
@@ -750,6 +783,6 @@
             <div class="flex flex-wrap gap-4"><a href="https://fibula.ai" target="_blank" rel="noreferrer" class="text-[rgb(1,61,124)] no-underline">fibula.ai</a><a href="documents.html" class="text-[rgb(1,61,124)] no-underline">Documents</a></div>
         </div>
     </footer>
-    <script src="assets/app.js?v=20260527g"></script>
+    <script src="assets/app.js?v=20260528g"></script>
 </body>
 </html>

@@ -121,6 +121,350 @@ const risk2Stages = [
         });
     }
 
+    function initFibulaGsapDemo() {
+        const demo = document.querySelector("[data-fibula-demo]");
+        if (!demo) return;
+
+        const docs = Array.from(demo.querySelectorAll("[data-demo-doc]"));
+        const nodes = Array.from(demo.querySelectorAll("[data-demo-node]"));
+        const lines = Array.from(demo.querySelectorAll("[data-demo-line]"));
+        const workflow = demo.querySelector("[data-demo-workflow]");
+        const flowSvg = demo.querySelector(".fibula-demo-lines");
+        const statusLabel = demo.querySelector("[data-fibula-demo-status]");
+        const introSection = demo.closest("[data-fibula-intro]");
+        const introPin = introSection ? introSection.querySelector("[data-fibula-intro-pin]") : null;
+        if (!docs.length || !nodes.length || !workflow) return;
+
+        const nodeMap = new Map(nodes.map((node) => [node.dataset.demoNode, node]));
+        const mobileDemoQuery = window.matchMedia("(max-width: 767px)");
+        const getArchivedScale = () => mobileDemoQuery.matches ? 0.16 : introSection ? 0.18 : 0.42;
+        const getArchivedAlpha = () => introSection ? 0 : 0.42;
+
+        const getNodeBox = (nodeName) => {
+            const node = nodeMap.get(nodeName);
+            if (!node || !flowSvg) return { x: 0, y: 0 };
+
+            const viewBoxWidth = 420;
+            const viewBoxHeight = 220;
+            const xScale = viewBoxWidth / Math.max(workflow.offsetWidth, 1);
+            const yScale = viewBoxHeight / Math.max(workflow.offsetHeight, 1);
+            const left = node.offsetLeft * xScale;
+            const top = node.offsetTop * yScale;
+            const width = node.offsetWidth * xScale;
+            const height = node.offsetHeight * yScale;
+
+            return {
+                left,
+                right: left + width,
+                top,
+                bottom: top + height,
+                centerX: left + width / 2,
+                centerY: top + height / 2,
+                halfWidth: width / 2,
+                halfHeight: height / 2
+            };
+        };
+
+        const getRectIntersection = (box, target) => {
+            const dx = target.centerX - box.centerX;
+            const dy = target.centerY - box.centerY;
+            if (dx === 0 && dy === 0) return { x: box.centerX, y: box.centerY };
+
+            const scale = Math.min(
+                box.halfWidth / Math.max(Math.abs(dx), 0.001),
+                box.halfHeight / Math.max(Math.abs(dy), 0.001)
+            );
+
+            return {
+                x: box.centerX + dx * scale,
+                y: box.centerY + dy * scale
+            };
+        };
+
+        const buildFlowPath = (fromName, toName) => {
+            const fromBox = getNodeBox(fromName);
+            const toBox = getNodeBox(toName);
+            const start = getRectIntersection(fromBox, toBox);
+            const end = getRectIntersection(toBox, fromBox);
+            const distance = Math.max(Math.abs(end.x - start.x), 48);
+            const c1 = { x: start.x + distance * 0.42, y: start.y };
+            const c2 = { x: end.x - distance * 0.42, y: end.y };
+
+            return `M${start.x.toFixed(1)} ${start.y.toFixed(1)} C${c1.x.toFixed(1)} ${c1.y.toFixed(1)} ${c2.x.toFixed(1)} ${c2.y.toFixed(1)} ${end.x.toFixed(1)} ${end.y.toFixed(1)}`;
+        };
+
+        const updateWorkflowLines = () => {
+            lines.forEach((line) => {
+                const fromName = line.dataset.flowFrom;
+                const toName = line.dataset.flowTo;
+                if (!fromName || !toName) return;
+                line.setAttribute("d", buildFlowPath(fromName, toName));
+                line.style.strokeDasharray = "";
+                line.style.strokeDashoffset = "";
+            });
+        };
+
+        const getDocTravel = (doc, index) => {
+            const targetNode = nodeMap.get(doc.dataset.targetNode) || nodes[index % nodes.length];
+            if (!targetNode) return { x: 0, y: 0 };
+
+            const demoRect = demo.getBoundingClientRect();
+            const docRect = doc.getBoundingClientRect();
+            const nodeRect = targetNode.getBoundingClientRect();
+            const offsetX = Number(doc.dataset.targetOffsetX || 0);
+            const offsetY = Number(doc.dataset.targetOffsetY || 0);
+
+            const docCenterX = docRect.left - demoRect.left + docRect.width / 2;
+            const docCenterY = docRect.top - demoRect.top + docRect.height / 2;
+            const targetCenterX = nodeRect.left - demoRect.left + nodeRect.width / 2 + offsetX;
+            const targetCenterY = nodeRect.top - demoRect.top + nodeRect.height / 2 + offsetY;
+
+            return {
+                x: targetCenterX - docCenterX,
+                y: targetCenterY - docCenterY
+            };
+        };
+
+        const applyStaticWorkflow = () => {
+            demo.classList.add("demo-static");
+            window.requestAnimationFrame(() => {
+                updateWorkflowLines();
+                if (statusLabel) statusLabel.textContent = "Archived workflow";
+                docs.forEach((doc, index) => {
+                    const travel = getDocTravel(doc, index);
+                    doc.style.opacity = String(getArchivedAlpha());
+                    doc.style.transform = `translate3d(${travel.x}px, ${travel.y}px, 0) rotate(0deg) scale(${getArchivedScale()})`;
+                });
+
+                nodes.forEach((node) => {
+                    node.style.opacity = "1";
+                    node.style.visibility = "visible";
+                    node.style.transform = "translate3d(0, 0, 0) scale(1)";
+                });
+
+                lines.forEach((line) => {
+                    line.style.opacity = "1";
+                    line.style.visibility = "visible";
+                    line.style.strokeDasharray = "";
+                    line.style.strokeDashoffset = "";
+                });
+            });
+        };
+
+        if (prefersReducedMotion || typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
+            applyStaticWorkflow();
+            return;
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+        demo.classList.add("motion-ready");
+
+        const setStartState = () => {
+            updateWorkflowLines();
+            gsap.set(docs, { x: 0, y: 0, scale: 1, autoAlpha: 1 });
+            gsap.set(nodes, { autoAlpha: introSection ? 0 : 0.35, scale: 0.9, y: 6 });
+            gsap.set(lines, { autoAlpha: introSection ? 0 : 0.4 });
+            gsap.set(workflow, { autoAlpha: introSection ? 0.08 : 0.92 });
+            if (statusLabel) statusLabel.textContent = "Scattered documents";
+        };
+
+        const updateStatus = (progress) => {
+            if (!statusLabel) return;
+            if (progress > 0.74) {
+                statusLabel.textContent = "Archived workflow";
+            } else if (progress > 0.36) {
+                statusLabel.textContent = "Classifying evidence";
+            } else {
+                statusLabel.textContent = "Scattered documents";
+            }
+        };
+
+        setStartState();
+
+        const mm = gsap.matchMedia();
+
+        mm.add("(min-width: 768px)", () => {
+            setStartState();
+
+            const triggerTarget = introSection || demo;
+            const timelineConfig = {
+                trigger: triggerTarget,
+                start: introSection ? 0 : "top 72%",
+                scrub: introSection ? true : 0.85,
+                invalidateOnRefresh: true,
+                refreshPriority: introSection ? -20 : 0,
+                onRefresh: updateWorkflowLines,
+                onUpdate: (self) => updateStatus(self.progress)
+            };
+
+            if (introSection && introPin) {
+                timelineConfig.end = "+=115%";
+                timelineConfig.pin = introPin;
+                timelineConfig.anticipatePin = 1;
+            } else {
+                timelineConfig.endTrigger = "#workflow";
+                timelineConfig.end = "top 40%";
+            }
+
+            const timeline = gsap.timeline({
+                scrollTrigger: timelineConfig
+            });
+
+            timeline
+                .to(workflow, {
+                    autoAlpha: 1,
+                    duration: 0.48,
+                    ease: "power2.out"
+                }, 0.06)
+                .to(docs, {
+                    x: (index, doc) => getDocTravel(doc, index).x,
+                    y: (index, doc) => getDocTravel(doc, index).y,
+                    rotation: 0,
+                    scale: getArchivedScale,
+                    autoAlpha: getArchivedAlpha,
+                    duration: 1,
+                    ease: "power2.inOut",
+                    stagger: { each: 0.035, from: "random" }
+                }, 0)
+                .to(nodes, {
+                    autoAlpha: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.5,
+                    ease: "back.out(1.8)",
+                    stagger: 0.07
+                }, 0.18)
+                .to(lines, {
+                    autoAlpha: 1,
+                    duration: 0.78,
+                    ease: "none",
+                    stagger: 0.08
+                }, 0.32);
+
+            return () => {
+                timeline.kill();
+            };
+        });
+
+        mm.add("(max-width: 767px)", () => {
+            setStartState();
+
+            if (introSection) {
+                const timeline = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: introSection,
+                        start: 0,
+                        end: "bottom top",
+                        scrub: true,
+                        invalidateOnRefresh: true,
+                        refreshPriority: -20,
+                        onRefresh: updateWorkflowLines,
+                        onUpdate: (self) => updateStatus(self.progress)
+                    }
+                });
+
+                timeline
+                    .to(workflow, {
+                        autoAlpha: 1,
+                        duration: 0.35,
+                        ease: "power2.out"
+                    }, 0.08)
+                    .to(docs, {
+                        x: (index, doc) => getDocTravel(doc, index).x,
+                        y: (index, doc) => getDocTravel(doc, index).y,
+                        rotation: 0,
+                        scale: getArchivedScale,
+                        autoAlpha: getArchivedAlpha,
+                        duration: 0.9,
+                        ease: "power2.inOut",
+                        stagger: { each: 0.035, from: "random" }
+                    }, 0)
+                    .to(nodes, {
+                        autoAlpha: 1,
+                        scale: 1,
+                        y: 0,
+                        duration: 0.55,
+                        ease: "back.out(1.55)",
+                        stagger: 0.055
+                    }, 0.25)
+                    .to(lines, {
+                        autoAlpha: 1,
+                        duration: 0.7,
+                        ease: "none",
+                        stagger: 0.05
+                    }, 0.4);
+
+                return () => {
+                    timeline.kill();
+                };
+            }
+
+            const playMobileSequence = () => {
+                const timeline = gsap.timeline({ defaults: { overwrite: "auto" } });
+
+                timeline
+                    .to(workflow, {
+                        autoAlpha: 1,
+                        duration: 0.38,
+                        ease: "power2.out",
+                        onStart: () => updateStatus(0.38)
+                    }, 0.18)
+                    .fromTo(docs,
+                        { autoAlpha: 0, y: 12, scale: 0.96 },
+                        { autoAlpha: 1, y: 0, scale: 1, duration: 0.38, ease: "back.out(1.8)", stagger: 0.045 }
+                    )
+                    .to(docs, {
+                        x: (index, doc) => getDocTravel(doc, index).x,
+                        y: (index, doc) => getDocTravel(doc, index).y,
+                        rotation: 0,
+                        scale: getArchivedScale,
+                        autoAlpha: getArchivedAlpha,
+                        duration: 0.85,
+                        ease: "power3.inOut",
+                        stagger: { each: 0.035, from: "random" },
+                        onComplete: () => updateStatus(1)
+                    }, 0.42)
+                    .to(nodes, {
+                        autoAlpha: 1,
+                        scale: 1,
+                        y: 0,
+                        duration: 0.5,
+                        ease: "back.out(1.7)",
+                        stagger: 0.06
+                    }, 0.54)
+                    .to(lines, {
+                        autoAlpha: 1,
+                        duration: 0.65,
+                        ease: "none",
+                        stagger: 0.05
+                    }, 0.68);
+
+                return timeline;
+            };
+
+            if (!("IntersectionObserver" in window)) {
+                const timeline = playMobileSequence();
+                return () => timeline.kill();
+            }
+
+            let mobileTimeline = null;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting || mobileTimeline) return;
+                    mobileTimeline = playMobileSequence();
+                    observer.unobserve(demo);
+                });
+            }, { threshold: 0.35 });
+
+            observer.observe(demo);
+
+            return () => {
+                observer.disconnect();
+                if (mobileTimeline) mobileTimeline.kill();
+            };
+        });
+    }
+
     function updateActiveWorkflowPanelOrigin() {
         if (activeWorkflowIndex < 0) return;
         const index = activeWorkflowIndex;
@@ -479,23 +823,95 @@ const risk2Stages = [
         sections.forEach((section) => observer.observe(section));
     }
 
+    function initSpringFeedback() {
+        if (prefersReducedMotion || typeof gsap === "undefined") return;
+
+        const targets = document.querySelectorAll(".nav-link, .nav-cta, .btn-primary, .btn-secondary, .mobile-menu-button");
+        targets.forEach((target) => {
+            if (target.dataset.springReady === "true") return;
+            target.dataset.springReady = "true";
+
+            target.addEventListener("pointerenter", (event) => {
+                if (event.pointerType === "touch") return;
+                gsap.to(target, { y: -2, scale: 1.025, duration: 0.32, ease: "back.out(2)", overwrite: "auto" });
+            });
+
+            target.addEventListener("pointerleave", () => {
+                gsap.to(target, { y: 0, scale: 1, duration: 0.28, ease: "power2.out", overwrite: "auto" });
+            });
+
+            target.addEventListener("pointerdown", () => {
+                gsap.to(target, { scale: 0.96, duration: 0.12, ease: "power2.out", overwrite: "auto" });
+            });
+
+            target.addEventListener("pointerup", () => {
+                gsap.to(target, { scale: 1.025, duration: 0.2, ease: "back.out(2)", overwrite: "auto" });
+            });
+        });
+    }
+
     function initMobileMenu() {
         const button = document.querySelector(".mobile-menu-button");
         const menu = document.getElementById("mobile-menu");
         if (!button || !menu) return;
+        const menuItems = Array.from(menu.querySelectorAll("a"));
+        const canAnimateMenu = !prefersReducedMotion && typeof gsap !== "undefined";
 
         const closeMenu = () => {
             button.setAttribute("aria-expanded", "false");
-            menu.hidden = true;
+            if (menu.hidden) return;
+
+            if (!canAnimateMenu) {
+                menu.hidden = true;
+                return;
+            }
+
+            gsap.killTweensOf([menu, ...menuItems]);
+            gsap.to(menu, {
+                autoAlpha: 0,
+                y: -8,
+                scale: 0.98,
+                duration: 0.18,
+                ease: "power2.in",
+                onComplete: () => {
+                    menu.hidden = true;
+                    gsap.set([menu, ...menuItems], { clearProps: "opacity,visibility,transform" });
+                }
+            });
+        };
+
+        const openMenu = () => {
+            button.setAttribute("aria-expanded", "true");
+            menu.hidden = false;
+
+            if (!canAnimateMenu) return;
+
+            gsap.killTweensOf([menu, ...menuItems]);
+            gsap.set(menu, { autoAlpha: 0, y: -10, scale: 0.96, transformOrigin: "top right" });
+            gsap.set(menuItems, { autoAlpha: 0, y: 12, scale: 0.98 });
+
+            gsap.timeline()
+                .to(menu, { autoAlpha: 1, y: 0, scale: 1, duration: 0.28, ease: "back.out(1.6)" })
+                .to(menuItems, {
+                    autoAlpha: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 0.34,
+                    ease: "back.out(1.8)",
+                    stagger: 0.045
+                }, "-=0.15");
         };
 
         button.addEventListener("click", () => {
             const isOpen = button.getAttribute("aria-expanded") === "true";
-            button.setAttribute("aria-expanded", isOpen ? "false" : "true");
-            menu.hidden = isOpen;
+            if (isOpen) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
         });
 
-        menu.querySelectorAll("a").forEach((link) => {
+        menuItems.forEach((link) => {
             link.addEventListener("click", closeMenu);
         });
 
@@ -698,6 +1114,7 @@ const risk2Stages = [
 
     document.addEventListener("DOMContentLoaded", () => {
         initDocCards();
+        initFibulaGsapDemo();
         resetWorkflowDefault();
         initRevealObserver();
         initWorkflowSelection();
@@ -707,6 +1124,7 @@ const risk2Stages = [
         initRiskSelectionV2();
         initFindingsAccordion();
         initActiveNav();
+        initSpringFeedback();
         initMobileMenu();
         initMethodReveal();
         initTeamSloganAnimation();
