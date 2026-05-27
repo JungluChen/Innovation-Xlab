@@ -93,12 +93,230 @@ const risk2Stages = [
   }
 ];
 
+const showcaseItems = [
+  {
+    group: "workflow",
+    section: "Workflow",
+    eyebrow: "Stage 1 / Intent intake",
+    title: workflowStages[0].title,
+    body: workflowStages[0].detail,
+    points: workflowStages[0].extended,
+    node: "intent",
+    theme: "workflow"
+  },
+  {
+    group: "workflow",
+    section: "Workflow",
+    eyebrow: "Stage 2 / Agent logic",
+    title: workflowStages[1].title,
+    body: workflowStages[1].detail,
+    points: workflowStages[1].extended,
+    node: "synthesis",
+    theme: "workflow"
+  },
+  {
+    group: "workflow",
+    section: "Workflow",
+    eyebrow: "Stage 3 / Human review",
+    title: workflowStages[2].title,
+    body: workflowStages[2].detail,
+    points: workflowStages[2].extended,
+    node: "validation",
+    theme: "workflow"
+  },
+  {
+    group: "workflow",
+    section: "Workflow",
+    eyebrow: "Stage 4 / Stateful run",
+    title: workflowStages[3].title,
+    body: workflowStages[3].detail,
+    points: workflowStages[3].extended,
+    node: "deploy",
+    theme: "workflow"
+  },
+  {
+    group: "method",
+    section: "Method",
+    eyebrow: "Evidence card 1 / Workflow mapping",
+    title: "Map document logic before interface fixes.",
+    body: "Document types, matching keys, variance decisions, and exception paths were mapped before visual fixes were proposed.",
+    points: ["Map document types across AP and BOM reconciliation flows", "Identify matching keys and trace variance decisions", "Translate workflow ambiguity into product requirements"],
+    node: "intent",
+    theme: "method"
+  },
+  {
+    group: "method",
+    section: "Method",
+    eyebrow: "Evidence card 2 / Task-based testing",
+    title: "Observe users without steering their choices.",
+    body: "More than 15 unguided think-aloud sessions captured hesitation, misclicks, confusion, and abandonment across participant cohorts.",
+    points: ["Run more than 15 unguided think-aloud sessions", "Record hesitation, misclicks, confusion, and abandonment", "Compare behavior across 11 participant cohorts"],
+    node: "validation",
+    theme: "method"
+  },
+  {
+    group: "method",
+    section: "Method",
+    eyebrow: "Evidence card 3 / Success framework",
+    title: "Evidence-based coding prioritized repeated friction.",
+    body: "The 90 percent No-Help Rule kept testing consistent and translated repeated friction logs into concrete product fixes.",
+    points: ["Apply the 90 percent No-Help Rule", "Use evidence-based coding rather than subjective preference", "Keep core evidence visible without hover-only disclosure"],
+    node: "synthesis",
+    theme: "method"
+  },
+  ...risk2Stages.map((stage, index) => ({
+    group: "risk",
+    section: "Risk Map",
+    eyebrow: `Risk stage ${index + 1} / ${stage.title}`,
+    title: stage.title,
+    body: stage.direction,
+    points: [stage.problem, stage.risk, stage.quote],
+    node: index === 0 ? "intent" : index < 3 ? "synthesis" : index === 3 ? "validation" : "deploy",
+    theme: "risk"
+  })),
+  {
+    group: "fixes",
+    section: "Fixes",
+    eyebrow: "Finding 1 / Spatial desynchronization",
+    title: "Users needed visible workflow construction.",
+    body: "Silent processing made the workflow feel disconnected from the user's mental model.",
+    points: ["Problem: users could not connect intent to system output", "Fix: draw workflow nodes as synthesis happens", "Impact: users can see progress and system activity"],
+    node: "synthesis",
+    theme: "fixes"
+  },
+  {
+    group: "fixes",
+    section: "Fixes",
+    eyebrow: "Finding 2 / Convenience bias",
+    title: "Choice overload pushed users toward the quickest path.",
+    body: "Verbose option lists caused users to select convenient paths rather than correct reconciliation flows.",
+    points: ["Problem: too many visible choices", "Fix: predictive chips and progressive disclosure", "Impact: faster choices with less cognitive burden"],
+    node: "intent",
+    theme: "fixes"
+  },
+  {
+    group: "fixes",
+    section: "Fixes",
+    eyebrow: "Finding 3 / Operational opacity",
+    title: "Failure states needed visible recovery paths.",
+    body: "Silent errors and dead-end modals left users without a clear way to recover inside the workflow.",
+    points: ["Problem: unclear error recovery", "Fix: advice cards, rerun shortcuts, next-step guidance", "Impact: users recover without leaving the workflow"],
+    node: "validation",
+    theme: "fixes"
+  },
+  {
+    group: "impact",
+    section: "Impact",
+    eyebrow: "Impact panel 1 / Mental model gap",
+    title: "Users needed visible system guidance, not silent synthesis.",
+    body: "The redesign makes natural-language intent visible as executable structure and reduces uncertainty during automation.",
+    points: ["Immediate guidance from the first action", "Live feedback while workflows are synthesized", "Visible bridge from intent to structure"],
+    node: "deploy",
+    theme: "impact"
+  },
+  {
+    group: "impact",
+    section: "Impact",
+    eyebrow: "Impact panel 2 / Reconciliation risk mitigation",
+    title: "Clear exception visibility protects industrial decisions.",
+    body: "Fibula turns outputs into clearer decision surfaces where variance, exception states, and human validation remain visible.",
+    points: ["Expose missed variance and unclear output risk", "Make exception states visible and recoverable", "Keep human validation in the automation loop"],
+    node: "deploy",
+    theme: "impact"
+  }
+];
+
+const showcaseGroups = {
+    workflow: {
+        section: "Workflow",
+        eyebrow: "Solution reveal",
+        title: "Fibula turns reconciliation intent into stateful workflows.",
+        body: "Operators describe matching requirements in plain language, then watch Fibula turn that intent into reviewable workflow structure.",
+        contentSide: "left"
+    },
+    method: {
+        section: "Method",
+        eyebrow: "Credibility section",
+        title: "Research evidence moves through the same product workflow.",
+        body: "Document logic, think-aloud behavior, and repeated friction were treated as evidence files before interface changes were made.",
+        contentSide: "right"
+    },
+    risk: {
+        section: "Risk Map",
+        eyebrow: "Human failure-point section",
+        title: "Observed user failures become operational risk signals.",
+        body: "Each journey risk is filed into the workflow so the product can reveal where trust, setup, and output review break down.",
+        contentSide: "left"
+    },
+    fixes: {
+        section: "Fixes",
+        eyebrow: "Proof-of-evolution section",
+        title: "Findings archive into concrete product corrections.",
+        body: "The redesign is shown as a sequence of files moving from observed friction to specific workflow fixes.",
+        contentSide: "right"
+    },
+    impact: {
+        section: "Impact",
+        eyebrow: "Strategic analysis section",
+        title: "The workflow ends as visible, auditable reconciliation confidence.",
+        body: "Fibula reduces hidden automation risk by keeping intent, exception handling, and human validation visible from start to deployment.",
+        contentSide: "left"
+    }
+};
+
 (function () {
     document.documentElement.classList.add("js-enabled");
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let activeWorkflowIndex = -1;
     let workflowManualOverrideUntil = 0;
+
+    function clampValue(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+    }
+
+    function normalizeWorkflowNodeName(name) {
+        return name === "deployment" ? "deploy" : name;
+    }
+
+    function configureSharedWorkflowElement(workflow) {
+        if (!workflow) return null;
+        if (workflow.dataset.sharedWorkflowReady === "true") return workflow;
+
+        workflow.dataset.sharedWorkflowReady = "true";
+        workflow.dataset.sharedWorkflow = "true";
+        workflow.classList.add("shared-workflow-model", "product-showcase-workflow");
+        workflow.setAttribute("aria-hidden", "true");
+
+        if (workflow.parentElement !== document.body) {
+            document.body.appendChild(workflow);
+        }
+
+        const svg = workflow.querySelector(".fibula-demo-lines");
+        if (svg) svg.classList.add("product-showcase-lines");
+
+        workflow.querySelectorAll("[data-demo-line]").forEach((line) => {
+            const fromName = normalizeWorkflowNodeName(line.dataset.flowFrom || "");
+            const toName = normalizeWorkflowNodeName(line.dataset.flowTo || "");
+            if (fromName && toName) line.dataset.showcaseLine = `${fromName}-${toName}`;
+            line.classList.add("product-line");
+        });
+
+        workflow.querySelectorAll("[data-demo-node]").forEach((node) => {
+            const nodeName = normalizeWorkflowNodeName(node.dataset.demoNode || "");
+            if (!nodeName) return;
+            node.dataset.showcaseNode = nodeName;
+            node.classList.add("product-node", `product-node-${nodeName}`);
+            if (!node.querySelector("[data-node-count]")) {
+                const count = document.createElement("em");
+                count.dataset.nodeCount = nodeName;
+                count.textContent = "0";
+                node.appendChild(count);
+            }
+        });
+
+        return workflow;
+    }
 
     function initDocCards() {
         const cards = document.querySelectorAll("[data-doc]");
@@ -133,12 +351,23 @@ const risk2Stages = [
         const statusLabel = demo.querySelector("[data-fibula-demo-status]");
         const introSection = demo.closest("[data-fibula-intro]");
         const introPin = introSection ? introSection.querySelector("[data-fibula-intro-pin]") : null;
+        const introCopy = introSection ? introSection.querySelector(".fibula-intro-copy") : null;
         if (!docs.length || !nodes.length || !workflow) return;
+        configureSharedWorkflowElement(workflow);
 
         const nodeMap = new Map(nodes.map((node) => [node.dataset.demoNode, node]));
         const mobileDemoQuery = window.matchMedia("(max-width: 767px)");
         const getArchivedScale = () => mobileDemoQuery.matches ? 0.16 : introSection ? 0.18 : 0.42;
         const getArchivedAlpha = () => introSection ? 0 : 0.42;
+        const getIntroHandoffX = () => {
+            if (!introSection || mobileDemoQuery.matches) return 0;
+            return clampValue(window.innerWidth * 0.28, 245, 405);
+        };
+        const getIntroHandoffY = () => {
+            if (!introSection) return 0;
+            if (mobileDemoQuery.matches) return clampValue(window.innerHeight * 0.08, 28, 64);
+            return -clampValue(window.innerHeight * 0.06, 44, 68);
+        };
 
         const getNodeBox = (nodeName) => {
             const node = nodeMap.get(nodeName);
@@ -230,6 +459,12 @@ const risk2Stages = [
             window.requestAnimationFrame(() => {
                 updateWorkflowLines();
                 if (statusLabel) statusLabel.textContent = "Archived workflow";
+                if (introCopy) {
+                    introCopy.style.opacity = "1";
+                    introCopy.style.visibility = "visible";
+                    introCopy.style.transform = "translate3d(0,0,0)";
+                    introCopy.style.filter = "blur(0)";
+                }
                 docs.forEach((doc, index) => {
                     const travel = getDocTravel(doc, index);
                     doc.style.opacity = String(getArchivedAlpha());
@@ -262,9 +497,10 @@ const risk2Stages = [
         const setStartState = () => {
             updateWorkflowLines();
             gsap.set(docs, { x: 0, y: 0, scale: 1, autoAlpha: 1 });
-            gsap.set(nodes, { autoAlpha: introSection ? 0 : 0.35, scale: 0.9, y: 6 });
+            gsap.set(nodes, { autoAlpha: introSection ? 0 : 0.35, scale: 0.9, y: 6, rotation: 0 });
             gsap.set(lines, { autoAlpha: introSection ? 0 : 0.4 });
-            gsap.set(workflow, { autoAlpha: introSection ? 0.08 : 0.92 });
+            gsap.set(workflow, { autoAlpha: introSection ? 0.08 : 0.92, xPercent: -50, yPercent: -50, x: 0, y: 0, scale: 1, scaleX: 1, scaleY: 1, rotation: 0 });
+            if (introCopy) gsap.set(introCopy, { autoAlpha: 0, y: 18, filter: "blur(6px)" });
             if (statusLabel) statusLabel.textContent = "Scattered documents";
         };
 
@@ -298,7 +534,7 @@ const risk2Stages = [
             };
 
             if (introSection && introPin) {
-                timelineConfig.end = "+=115%";
+                timelineConfig.end = "+=175%";
                 timelineConfig.pin = introPin;
                 timelineConfig.anticipatePin = 1;
             } else {
@@ -313,33 +549,69 @@ const risk2Stages = [
             timeline
                 .to(workflow, {
                     autoAlpha: 1,
-                    duration: 0.48,
+                    duration: 0.18,
                     ease: "power2.out"
-                }, 0.06)
+                }, 0.04)
                 .to(docs, {
                     x: (index, doc) => getDocTravel(doc, index).x,
                     y: (index, doc) => getDocTravel(doc, index).y,
                     rotation: 0,
                     scale: getArchivedScale,
                     autoAlpha: getArchivedAlpha,
-                    duration: 1,
-                    ease: "power2.inOut",
-                    stagger: { each: 0.035, from: "random" }
-                }, 0)
+                    duration: 0.48,
+                    ease: "power3.inOut",
+                    stagger: { amount: 0.24, from: "random" }
+                }, 0.02)
                 .to(nodes, {
                     autoAlpha: 1,
                     scale: 1,
                     y: 0,
-                    duration: 0.5,
+                    duration: 0.28,
                     ease: "back.out(1.8)",
                     stagger: 0.07
-                }, 0.18)
+                }, 0.3)
                 .to(lines, {
                     autoAlpha: 1,
-                    duration: 0.78,
+                    duration: 0.24,
                     ease: "none",
                     stagger: 0.08
-                }, 0.32);
+                }, 0.46)
+                .to(workflow, {
+                    x: getIntroHandoffX,
+                    y: getIntroHandoffY,
+                    scaleX: 0.97,
+                    scaleY: 1.02,
+                    rotation: 1.2,
+                    duration: 0.24,
+                    ease: "power3.out"
+                }, 0.7);
+
+            if (introCopy) {
+                timeline
+                    .to(introCopy, {
+                        autoAlpha: 1,
+                        y: 0,
+                        filter: "blur(0px)",
+                        duration: 0.16,
+                        ease: "power2.out"
+                    }, 0.84)
+                    .to(introCopy, {
+                        autoAlpha: 0,
+                        y: -16,
+                        filter: "blur(4px)",
+                        duration: 0.1,
+                        ease: "power3.inOut"
+                    }, 1.36)
+                    .to(workflow, {
+                        x: getIntroHandoffX,
+                        y: getIntroHandoffY,
+                        scaleX: 1,
+                        scaleY: 1,
+                        rotation: 0,
+                        duration: 0.16,
+                        ease: "back.out(1.7)"
+                    }, 1.42);
+            }
 
             return () => {
                 timeline.kill();
@@ -393,6 +665,33 @@ const risk2Stages = [
                         ease: "none",
                         stagger: 0.05
                     }, 0.4);
+
+                if (introCopy) {
+                    timeline
+                        .to(introCopy, {
+                            autoAlpha: 1,
+                            y: 0,
+                            filter: "blur(0px)",
+                            duration: 0.34,
+                            ease: "power2.out"
+                        }, 0.58)
+                        .to(introCopy, {
+                            autoAlpha: 0,
+                            y: -18,
+                            filter: "blur(5px)",
+                            duration: 0.24,
+                            ease: "power2.inOut"
+                        }, 0.88);
+                }
+
+                timeline.to(workflow, {
+                    x: getIntroHandoffX,
+                    y: getIntroHandoffY,
+                    scale: 0.9,
+                    rotation: 0,
+                    duration: 0.28,
+                    ease: "power3.inOut"
+                }, 0.78);
 
                 return () => {
                     timeline.kill();
@@ -805,7 +1104,396 @@ const risk2Stages = [
         requestWorkflowSync();
     }
 
+    function initProductShowcase() {
+        const root = document.querySelector("[data-product-showcase]");
+        const track = root ? root.querySelector("[data-showcase-track]") : null;
+        const stage = root ? root.querySelector("[data-showcase-stage]") : null;
+        const card = root ? root.querySelector("[data-showcase-card]") : null;
+        const titleCard = root ? root.querySelector("[data-showcase-title-card]") : null;
+        const workflow = configureSharedWorkflowElement(document.querySelector("[data-demo-workflow]"));
+        if (!root || !track || !stage || !card || !workflow || !showcaseItems.length) return;
+
+        const sectionLabel = root.querySelector("[data-showcase-section]");
+        const indexLabel = root.querySelector("[data-showcase-index]");
+        const eyebrow = root.querySelector("[data-showcase-eyebrow]");
+        const title = root.querySelector("[data-showcase-title]");
+        const body = root.querySelector("[data-showcase-body]");
+        const points = root.querySelector("[data-showcase-points]");
+        const titleSection = root.querySelector("[data-showcase-title-section]");
+        const titleEyebrow = root.querySelector("[data-showcase-title-eyebrow]");
+        const groupTitle = root.querySelector("[data-showcase-group-title]");
+        const groupBody = root.querySelector("[data-showcase-group-body]");
+        const mobileList = root.querySelector("[data-showcase-mobile-list]");
+        const nodes = Array.from(workflow.querySelectorAll("[data-showcase-node]"));
+        const lines = Array.from(workflow.querySelectorAll("[data-showcase-line]"));
+        const counters = Array.from(workflow.querySelectorAll("[data-node-count]"));
+        const nodeMap = new Map(nodes.map((node) => [node.dataset.showcaseNode, node]));
+        const groupOrder = Object.keys(showcaseGroups);
+        const groupFirstIndex = showcaseItems.reduce((map, item, index) => {
+            if (typeof map[item.group] === "undefined") map[item.group] = index;
+            return map;
+        }, {});
+
+        const groupLastIndex = showcaseItems.reduce((map, item, index) => {
+            map[item.group] = index;
+            return map;
+        }, {});
+
+        const entryRoutes = [
+            { x: -460, y: -120, rotation: -12 },
+            { x: 420, y: -150, rotation: 10 },
+            { x: -390, y: 170, rotation: 9 },
+            { x: 440, y: 130, rotation: -8 },
+            { x: 0, y: -260, rotation: 6 }
+        ];
+
+        let activeIndex = -1;
+        let activeGroup = "";
+        let contentTimer = null;
+        let contentReveal = 0;
+        let workflowMotion = null;
+
+        const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+        const formatIndex = (index) => `${String(index + 1).padStart(2, "0")} / ${String(showcaseItems.length).padStart(2, "0")}`;
+        const getGroup = (groupName) => showcaseGroups[groupName] || showcaseGroups.workflow;
+        const getSide = (item) => getGroup(item.group).contentSide || (groupOrder.indexOf(item.group) % 2 === 0 ? "left" : "right");
+        const getGroupProgress = (item, index, localProgress) => {
+            const first = groupFirstIndex[item.group] ?? index;
+            const last = groupLastIndex[item.group] ?? index;
+            return clamp((index - first + localProgress) / Math.max(last - first + 1, 1), 0, 1);
+        };
+
+        const getWorkflowOffset = (item, index, localProgress) => {
+            const stageWidth = Math.max(stage.clientWidth, 1);
+            const base = clamp(stageWidth * 0.27, 245, 405);
+            const side = getSide(item);
+            const groupIndex = Math.max(groupOrder.indexOf(item.group), 0);
+            const groupProgress = getGroupProgress(item, index, localProgress);
+            return {
+                x: side === "left" ? base : -base,
+                y: -64 + groupProgress * 20 + Math.sin((groupIndex + 1) * 0.9) * 6,
+                side
+            };
+        };
+
+        const getCardBaseX = (item) => {
+            const side = getSide(item);
+            const stageWidth = Math.max(stage.clientWidth, 1);
+            const cardWidth = Math.max(card.offsetWidth, 1);
+            const margin = clamp(stageWidth * 0.055, 34, 78);
+            const targetLeft = side === "left" ? margin : stageWidth - cardWidth - margin;
+            return targetLeft - card.offsetLeft;
+        };
+
+        const getNodeArchiveOffset = (item, workflowOffset) => {
+            const nodeOrder = { intent: -120, synthesis: -18, validation: 18, deploy: 124 };
+            const sideNudge = workflowOffset.side === "left" ? 1 : -1;
+            return {
+                x: workflowOffset.x + (nodeOrder[item.node] || 0) * sideNudge,
+                y: workflowOffset.y + (item.node === "synthesis" ? -74 : item.node === "validation" ? 52 : 0)
+            };
+        };
+
+        const getWorkflowMotion = () => {
+            if (typeof gsap === "undefined") return null;
+            if (!workflowMotion) {
+                gsap.set(workflow, { xPercent: -50, yPercent: -50 });
+                workflowMotion = {
+                    x: gsap.quickTo(workflow, "x", { duration: 0.5, ease: "power3.out" }),
+                    y: gsap.quickTo(workflow, "y", { duration: 0.5, ease: "power3.out" }),
+                    scaleX: gsap.quickTo(workflow, "scaleX", { duration: 0.46, ease: "elastic.out(1,0.62)" }),
+                    scaleY: gsap.quickTo(workflow, "scaleY", { duration: 0.46, ease: "elastic.out(1,0.62)" }),
+                    rotation: gsap.quickTo(workflow, "rotation", { duration: 0.5, ease: "power3.out" })
+                };
+            }
+            return workflowMotion;
+        };
+
+        const getShowcaseProgress = () => {
+            const anchors = Array.from(root.querySelectorAll(".product-showcase-anchor"));
+            const firstAnchor = anchors[0];
+            const lastAnchor = anchors[anchors.length - 1];
+            if (!firstAnchor || !lastAnchor) return 0;
+
+            const probe = 92;
+            const firstRect = firstAnchor.getBoundingClientRect();
+            const lastRect = lastAnchor.getBoundingClientRect();
+            const travel = Math.max(1, lastRect.bottom - firstRect.top - window.innerHeight * 0.18);
+            return clamp((probe - firstRect.top) / travel, 0, 0.999999);
+        };
+
+        const renderMobileCards = () => {
+            if (!mobileList) return;
+            let previousGroup = "";
+            mobileList.innerHTML = showcaseItems.map((item, index) => {
+                const group = getGroup(item.group);
+                const groupMarkup = item.group !== previousGroup ? `
+                    <article class="product-mobile-section-card">
+                        <div class="product-mobile-meta"><span>${group.section}</span><span>Section</span></div>
+                        <p class="product-showcase-file-eyebrow">${group.eyebrow}</p>
+                        <h3>${group.title}</h3>
+                        <p>${group.body}</p>
+                    </article>` : "";
+                previousGroup = item.group;
+                const pointMarkup = item.points.slice(0, 3).map((point) => `<li>${point}</li>`).join("");
+                return `${groupMarkup}
+                    <article class="product-mobile-card">
+                        <div class="product-mobile-meta"><span>${item.section}</span><span>${formatIndex(index)}</span></div>
+                        <p class="product-showcase-file-eyebrow">${item.eyebrow}</p>
+                        <h3>${item.title}</h3>
+                        <p class="product-mobile-body">${item.body}</p>
+                        <ul>${pointMarkup}</ul>
+                    </article>`;
+            }).join("");
+        };
+
+        const renderGroup = (item) => {
+            const group = getGroup(item.group);
+            if (titleSection) titleSection.textContent = group.section;
+            if (titleEyebrow) titleEyebrow.textContent = group.eyebrow;
+            if (groupTitle) groupTitle.textContent = group.title;
+            if (groupBody) groupBody.textContent = group.body;
+            root.classList.add("is-group-switching");
+            workflow.classList.add("is-group-switching");
+            window.setTimeout(() => {
+                root.classList.remove("is-group-switching");
+                workflow.classList.remove("is-group-switching");
+            }, 620);
+        };
+
+        const renderCard = (item, index) => {
+            if (sectionLabel) sectionLabel.textContent = item.section;
+            if (indexLabel) indexLabel.textContent = formatIndex(index);
+            if (eyebrow) eyebrow.textContent = item.eyebrow;
+            if (title) title.textContent = item.title;
+            if (body) body.textContent = item.body;
+            if (points) points.innerHTML = item.points.slice(0, 3).map((point) => `<li>${point}</li>`).join("");
+            root.dataset.showcaseTheme = item.theme;
+            root.dataset.showcaseGroup = item.group;
+            root.dataset.showcaseSide = getSide(item);
+        };
+
+        const hideContent = () => {
+            contentReveal = 0;
+            window.clearTimeout(contentTimer);
+            contentTimer = null;
+            if (typeof gsap !== "undefined") {
+                gsap.killTweensOf([card, titleCard].filter(Boolean));
+                gsap.set([card, titleCard].filter(Boolean), { autoAlpha: 0 });
+            }
+        };
+
+        const scheduleContentReveal = () => {
+            if (contentReveal) return;
+            if (contentTimer) return;
+            contentTimer = window.setTimeout(() => {
+                contentTimer = null;
+                contentReveal = 1;
+                updateShowcase();
+                if (typeof gsap === "undefined") return;
+                gsap.fromTo(titleCard, { autoAlpha: 0, y: 18, filter: "blur(6px)" }, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.32, ease: "power3.out", overwrite: "auto" });
+                gsap.fromTo(card, { autoAlpha: 0, y: 28, scale: 0.965 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.36, delay: 0.1, ease: "back.out(1.45)", overwrite: "auto" });
+            }, 420);
+        };
+
+        const updateNodeState = (item, index, localProgress) => {
+            const archivedThrough = index + (localProgress > 0.74 ? 1 : 0);
+            const counts = { intent: 0, synthesis: 0, validation: 0, deploy: 0 };
+            showcaseItems.slice(0, archivedThrough).forEach((archivedItem) => {
+                if (counts[archivedItem.node] !== undefined) counts[archivedItem.node] += 1;
+            });
+
+            counters.forEach((counter) => {
+                counter.textContent = String(counts[counter.dataset.nodeCount] || 0);
+            });
+
+            nodes.forEach((node) => {
+                node.classList.toggle("is-active", node.dataset.showcaseNode === item.node);
+            });
+
+            const activeLines = {
+                intent: [],
+                synthesis: ["intent-synthesis"],
+                validation: ["intent-validation"],
+                deploy: ["synthesis-deploy", "validation-deploy"]
+            }[item.node] || [];
+
+            lines.forEach((line) => {
+                line.classList.toggle("is-active", activeLines.includes(line.dataset.showcaseLine));
+            });
+        };
+
+        const updateWorkflowMotion = (item, index, localProgress) => {
+            workflow.dataset.showcaseTheme = item.theme;
+            const offset = getWorkflowOffset(item, index, localProgress);
+            const groupIndex = Math.max(groupOrder.indexOf(item.group), 0);
+            const morph = Math.sin(localProgress * Math.PI);
+            if (typeof gsap === "undefined") {
+                workflow.style.opacity = "1";
+                return offset;
+            }
+            const motion = getWorkflowMotion();
+            motion.x(offset.x + morph * (offset.side === "left" ? 18 : -18));
+            motion.y(offset.y + morph * 10);
+            motion.scaleX(1 + morph * 0.035);
+            motion.scaleY(1 - morph * 0.025);
+            motion.rotation((offset.side === "left" ? 1 : -1) * (1.4 + morph * 1.2) + groupIndex * 0.12);
+            return offset;
+        };
+
+        const updateCardMotion = (item, index, localProgress, workflowOffset) => {
+            const baseX = getCardBaseX(item);
+            const route = entryRoutes[index % entryRoutes.length];
+            const enter = contentReveal ? 1 : clamp(localProgress / 0.22, 0, 1);
+            const archive = clamp((localProgress - 0.68) / 0.24, 0, 1);
+            const nodeOffset = getNodeArchiveOffset(item, workflowOffset);
+            const startX = baseX + route.x * (1 - enter);
+            const startY = route.y * (1 - enter);
+            const x = startX + (nodeOffset.x - baseX) * archive;
+            const y = startY + nodeOffset.y * archive;
+            const scale = 0.94 + 0.06 * enter - 0.66 * archive;
+            const rotation = route.rotation * (1 - enter) + (workflowOffset.side === "left" ? 5 : -5) * archive;
+            const alpha = contentReveal ? Math.max(0, 1 - archive * 1.25) : 0;
+
+            if (typeof gsap !== "undefined") {
+                gsap.set(card, { x, y, scale, rotation, autoAlpha: alpha });
+            } else {
+                card.style.opacity = String(alpha);
+            }
+        };
+
+        const updateShowcase = () => {
+            const progress = getShowcaseProgress();
+            const scaled = progress * showcaseItems.length;
+            const index = Math.min(showcaseItems.length - 1, Math.floor(scaled));
+            const localProgress = scaled - index;
+            const item = showcaseItems[index];
+            const groupChanged = item.group !== activeGroup;
+
+            if (index !== activeIndex) {
+                activeIndex = index;
+                renderCard(item, index);
+                hideContent();
+            }
+
+            if (groupChanged) {
+                activeGroup = item.group;
+                renderGroup(item);
+                hideContent();
+            }
+
+            workflow.classList.add("is-showcase-controlled");
+            if (typeof gsap !== "undefined") gsap.set(workflow, { autoAlpha: 1 });
+            const workflowOffset = updateWorkflowMotion(item, index, localProgress);
+            updateNodeState(item, index, localProgress);
+            updateCardMotion(item, index, localProgress, workflowOffset);
+            scheduleContentReveal();
+        };
+
+        const releaseWorkflow = (hideWorkflow) => {
+            workflow.classList.remove("is-showcase-controlled", "is-group-switching");
+            hideContent();
+            if (hideWorkflow && typeof gsap !== "undefined") {
+                gsap.to(workflow, {
+                    autoAlpha: 0,
+                    duration: 0.12,
+                    ease: "power2.out",
+                    overwrite: "auto",
+                    onComplete: () => gsap.set(workflow, { autoAlpha: 0 })
+                });
+            }
+        };
+
+        renderMobileCards();
+
+        if (window.matchMedia("(max-width: 767px)").matches) {
+            const syncMobileWorkflowVisibility = () => {
+                const rect = root.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.82) {
+                    if (typeof gsap !== "undefined") {
+                        gsap.set(workflow, { autoAlpha: 0 });
+                    } else {
+                        workflow.style.opacity = "0";
+                        workflow.style.visibility = "hidden";
+                    }
+                }
+            };
+
+            syncMobileWorkflowVisibility();
+            window.setTimeout(syncMobileWorkflowVisibility, 250);
+            window.setTimeout(syncMobileWorkflowVisibility, 900);
+            window.setTimeout(syncMobileWorkflowVisibility, 1500);
+            window.addEventListener("scroll", () => window.requestAnimationFrame(syncMobileWorkflowVisibility), { passive: true });
+            return;
+        }
+
+        renderGroup(showcaseItems[0]);
+        renderCard(showcaseItems[0], 0);
+
+        if (prefersReducedMotion || typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
+            root.classList.add("showcase-reduced-motion");
+            if (titleCard) titleCard.style.opacity = "1";
+            card.style.opacity = "1";
+            return;
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.set([card, titleCard].filter(Boolean), { autoAlpha: 0 });
+
+        ScrollTrigger.create({
+            trigger: track,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true,
+            invalidateOnRefresh: true,
+            refreshPriority: -8,
+            onEnter: updateShowcase,
+            onEnterBack: updateShowcase,
+            onUpdate: updateShowcase,
+            onLeave: () => releaseWorkflow(true),
+            onLeaveBack: () => releaseWorkflow(false)
+        });
+    }
+
+    function initNavProgress() {
+        const nav = document.getElementById("site-nav");
+        if (!nav) return;
+        const navLinks = Array.from(document.querySelectorAll(".nav-link[href^='#']"));
+        const sectionIds = ["before", "workflow", "methodology", "risk-map", "findings", "impact", "team", "cta"];
+        const sectionLinks = new Map(navLinks.map((link) => [link.getAttribute("href").slice(1), link]));
+
+        const updateActiveLink = () => {
+            const probeY = window.scrollY + 120;
+            let activeId = sectionIds[0];
+
+            sectionIds.forEach((id) => {
+                const section = document.getElementById(id);
+                if (!section) return;
+                const top = section.offsetTop;
+                const bottom = top + Math.max(section.offsetHeight, window.innerHeight * 0.55);
+                if (probeY >= top && probeY < bottom) activeId = id;
+            });
+
+            navLinks.forEach((link) => link.classList.remove("active"));
+            const activeLink = sectionLinks.get(activeId);
+            if (activeLink) activeLink.classList.add("active");
+        };
+
+        const updateProgress = () => {
+            const doc = document.documentElement;
+            const maxScroll = Math.max(1, doc.scrollHeight - window.innerHeight);
+            const progress = clampValue(window.scrollY / maxScroll, 0, 1);
+            nav.style.setProperty("--page-progress", `${(progress * 100).toFixed(2)}%`);
+            updateActiveLink();
+        };
+
+        updateProgress();
+        window.addEventListener("scroll", () => window.requestAnimationFrame(updateProgress), { passive: true });
+        window.addEventListener("resize", updateProgress);
+    }
+
     function initActiveNav() {
+        if (document.querySelector("[data-product-showcase]")) return;
         const sections = Array.from(document.querySelectorAll("main section[id]"));
         const links = Array.from(document.querySelectorAll(".nav-link[href^='#']"));
         if (!sections.length || !links.length || !("IntersectionObserver" in window)) return;
@@ -1115,6 +1803,7 @@ const risk2Stages = [
     document.addEventListener("DOMContentLoaded", () => {
         initDocCards();
         initFibulaGsapDemo();
+        initProductShowcase();
         resetWorkflowDefault();
         initRevealObserver();
         initWorkflowSelection();
@@ -1124,6 +1813,7 @@ const risk2Stages = [
         initRiskSelectionV2();
         initFindingsAccordion();
         initActiveNav();
+        initNavProgress();
         initSpringFeedback();
         initMobileMenu();
         initMethodReveal();

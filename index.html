@@ -9,7 +9,7 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <link rel="stylesheet" href="assets/styles.css?v=20260528g">
+    <link rel="stylesheet" href="assets/styles.css?v=20260528single">
 </head>
 <body class="bg-white text-slate-900">
     <header id="site-nav">
@@ -123,7 +123,55 @@
             </div>
         </section>
 
-        <section id="workflow" class="section-gray workflow-scroll-section">
+        <section id="product-showcase" class="product-showcase" data-product-showcase aria-label="Project Fibula workflow product showcase">
+            <div class="product-showcase-track" data-showcase-track>
+                <div class="product-showcase-sticky">
+                    <div class="product-showcase-shell">
+                        <div class="product-showcase-header">
+                            <div class="product-section-title" data-showcase-title-card aria-live="polite">
+                                <p class="product-section-kicker"><span data-showcase-title-section>Workflow</span><span data-showcase-title-eyebrow>Solution reveal</span></p>
+                                <h2 data-showcase-group-title>Fibula turns reconciliation intent into stateful workflows.</h2>
+                                <p data-showcase-group-body>Files move through one central workflow, showing how research evidence becomes product logic.</p>
+                            </div>
+                        </div>
+
+                        <div class="product-showcase-stage" data-showcase-stage>
+                            <div class="product-showcase-orbit" aria-hidden="true">
+                                <span></span><span></span><span></span>
+                            </div>
+
+                            <article class="product-showcase-file" data-showcase-card aria-live="polite">
+                                <div class="product-showcase-file-topline">
+                                    <span data-showcase-section>Workflow</span>
+                                    <span data-showcase-index>01 / 17</span>
+                                </div>
+                                <p class="product-showcase-file-eyebrow" data-showcase-eyebrow>Stage 1 / Intent intake</p>
+                                <h3 data-showcase-title>Natural Language Prompting</h3>
+                                <p data-showcase-body>Operators explain reconciliation intent in plain language.</p>
+                                <ul data-showcase-points></ul>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+                <section id="workflow" class="product-showcase-anchor" data-showcase-anchor="workflow"></section>
+                <section id="methodology" class="product-showcase-anchor" data-showcase-anchor="method"></section>
+                <section id="risk-map" class="product-showcase-anchor" data-showcase-anchor="risk"></section>
+                <section id="findings" class="product-showcase-anchor" data-showcase-anchor="fixes"></section>
+                <section id="impact" class="product-showcase-anchor" data-showcase-anchor="impact"></section>
+            </div>
+
+            <div class="product-showcase-mobile" data-showcase-mobile>
+                <div class="product-showcase-mobile-heading">
+                    <p class="product-showcase-kicker">Product workflow showcase</p>
+                    <h2>Files move through Fibula's workflow.</h2>
+                    <p>Mobile uses a readable card sequence instead of long pinned scroll, so QR viewing stays stable.</p>
+                </div>
+                <div class="product-showcase-mobile-list" data-showcase-mobile-list></div>
+            </div>
+        </section>
+
+        <section id="legacy-workflow" class="section-gray workflow-scroll-section" hidden aria-hidden="true" data-legacy-section>
             <div class="workflow-sticky-panel max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
                 <div class="max-w-3xl reveal-on-scroll">
                     <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Solution reveal</p>
@@ -343,7 +391,7 @@
             </div>
         </section>
 
-        <section id="methodology" class="section-white">
+        <section id="legacy-methodology" class="section-white" hidden aria-hidden="true" data-legacy-section>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
                 <div class="max-w-3xl reveal-on-scroll">
                     <div class="flex items-center gap-3 mb-5">
@@ -463,7 +511,7 @@
             </div>
         </section>
 
-        <section id="risk-map" class="risk2-section">
+        <section id="legacy-risk-map" class="risk2-section" hidden aria-hidden="true" data-legacy-section>
   <div class="risk2-scroll-track">
     <div class="risk2-sticky">
       <div class="risk2-container">
@@ -561,7 +609,7 @@
   </div>
 </section>
 
-        <section class="section-gray risk-tail-section">
+        <section class="section-gray risk-tail-section" hidden aria-hidden="true" data-legacy-section>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
                 <div class="submission-grid submission-grid--two">
                     <article class="submission-card submission-card--compact">
@@ -578,7 +626,7 @@
             </div>
         </section>
 
-        <section id="findings" class="section-white">
+        <section id="legacy-findings" class="section-white" hidden aria-hidden="true" data-legacy-section>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
                 <div class="max-w-3xl reveal-on-scroll">
                     <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Proof-of-evolution section</p>
@@ -629,7 +677,7 @@
             </div>
         </section>
 
-        <section id="impact" class="section-gray">
+        <section id="legacy-impact" class="section-gray" hidden aria-hidden="true" data-legacy-section>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
                 <div class="max-w-3xl reveal-on-scroll">
                     <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Strategic analysis section</p>
@@ -783,6 +831,6 @@
             <div class="flex flex-wrap gap-4"><a href="https://fibula.ai" target="_blank" rel="noreferrer" class="text-[rgb(1,61,124)] no-underline">fibula.ai</a><a href="documents.html" class="text-[rgb(1,61,124)] no-underline">Documents</a></div>
         </div>
     </footer>
-    <script src="assets/app.js?v=20260528g"></script>
+    <script src="assets/app.js?v=20260528single"></script>
 </body>
 </html>
