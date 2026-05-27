@@ -592,25 +592,25 @@ const showcaseGroups = {
                         autoAlpha: 1,
                         y: 0,
                         filter: "blur(0px)",
-                        duration: 0.16,
-                        ease: "power2.out"
-                    }, 0.84)
+                        duration: 0.24,
+                        ease: "power3.out"
+                    }, 0.88)
                     .to(introCopy, {
                         autoAlpha: 0,
-                        y: -16,
-                        filter: "blur(4px)",
-                        duration: 0.1,
-                        ease: "power3.inOut"
-                    }, 1.36)
+                        y: -22,
+                        filter: "blur(7px)",
+                        duration: 0.32,
+                        ease: "power2.inOut"
+                    }, 1.42)
                     .to(workflow, {
                         x: getIntroHandoffX,
                         y: getIntroHandoffY,
                         scaleX: 1,
                         scaleY: 1,
                         rotation: 0,
-                        duration: 0.16,
+                        duration: 0.2,
                         ease: "back.out(1.7)"
-                    }, 1.42);
+                    }, 1.56);
             }
 
             return () => {
@@ -672,16 +672,16 @@ const showcaseGroups = {
                             autoAlpha: 1,
                             y: 0,
                             filter: "blur(0px)",
-                            duration: 0.34,
-                            ease: "power2.out"
-                        }, 0.58)
+                            duration: 0.38,
+                            ease: "power3.out"
+                        }, 0.62)
                         .to(introCopy, {
                             autoAlpha: 0,
-                            y: -18,
-                            filter: "blur(5px)",
-                            duration: 0.24,
+                            y: -22,
+                            filter: "blur(7px)",
+                            duration: 0.34,
                             ease: "power2.inOut"
-                        }, 0.88);
+                        }, 0.94);
                 }
 
                 timeline.to(workflow, {
@@ -691,7 +691,7 @@ const showcaseGroups = {
                     rotation: 0,
                     duration: 0.28,
                     ease: "power3.inOut"
-                }, 0.78);
+                }, 0.86);
 
                 return () => {
                     timeline.kill();
@@ -1149,11 +1149,14 @@ const showcaseGroups = {
 
         let activeIndex = -1;
         let activeGroup = "";
-        let contentTimer = null;
-        let contentReveal = 0;
+        let groupSwitchTimer = null;
         let workflowMotion = null;
 
         const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+        const smoothStep = (start, end, value) => {
+            const progress = clamp((value - start) / Math.max(end - start, 0.0001), 0, 1);
+            return progress * progress * (3 - 2 * progress);
+        };
         const formatIndex = (index) => `${String(index + 1).padStart(2, "0")} / ${String(showcaseItems.length).padStart(2, "0")}`;
         const getGroup = (groupName) => showcaseGroups[groupName] || showcaseGroups.workflow;
         const getSide = (item) => getGroup(item.group).contentSide || (groupOrder.indexOf(item.group) % 2 === 0 ? "left" : "right");
@@ -1165,7 +1168,10 @@ const showcaseGroups = {
 
         const getWorkflowOffset = (item, index, localProgress) => {
             const stageWidth = Math.max(stage.clientWidth, 1);
-            const base = clamp(stageWidth * 0.27, 245, 405);
+            const workflowWidth = Math.max(workflow.offsetWidth || stageWidth * 0.45, 1);
+            const edgeGap = clamp(stageWidth * 0.035, 28, 54);
+            const safeBase = Math.max(190, stageWidth / 2 - workflowWidth / 2 - edgeGap);
+            const base = Math.min(clamp(stageWidth * 0.27, 230, 405), safeBase);
             const side = getSide(item);
             const groupIndex = Math.max(groupOrder.indexOf(item.group), 0);
             const groupProgress = getGroupProgress(item, index, localProgress);
@@ -1199,11 +1205,11 @@ const showcaseGroups = {
             if (!workflowMotion) {
                 gsap.set(workflow, { xPercent: -50, yPercent: -50 });
                 workflowMotion = {
-                    x: gsap.quickTo(workflow, "x", { duration: 0.5, ease: "power3.out" }),
-                    y: gsap.quickTo(workflow, "y", { duration: 0.5, ease: "power3.out" }),
-                    scaleX: gsap.quickTo(workflow, "scaleX", { duration: 0.46, ease: "elastic.out(1,0.62)" }),
-                    scaleY: gsap.quickTo(workflow, "scaleY", { duration: 0.46, ease: "elastic.out(1,0.62)" }),
-                    rotation: gsap.quickTo(workflow, "rotation", { duration: 0.5, ease: "power3.out" })
+                    x: gsap.quickTo(workflow, "x", { duration: 0.3, ease: "power3.out" }),
+                    y: gsap.quickTo(workflow, "y", { duration: 0.3, ease: "power3.out" }),
+                    scaleX: gsap.quickTo(workflow, "scaleX", { duration: 0.34, ease: "elastic.out(1,0.62)" }),
+                    scaleY: gsap.quickTo(workflow, "scaleY", { duration: 0.34, ease: "elastic.out(1,0.62)" }),
+                    rotation: gsap.quickTo(workflow, "rotation", { duration: 0.32, ease: "power3.out" })
                 };
             }
             return workflowMotion;
@@ -1255,7 +1261,8 @@ const showcaseGroups = {
             if (groupBody) groupBody.textContent = group.body;
             root.classList.add("is-group-switching");
             workflow.classList.add("is-group-switching");
-            window.setTimeout(() => {
+            window.clearTimeout(groupSwitchTimer);
+            groupSwitchTimer = window.setTimeout(() => {
                 root.classList.remove("is-group-switching");
                 workflow.classList.remove("is-group-switching");
             }, 620);
@@ -1273,31 +1280,24 @@ const showcaseGroups = {
             root.dataset.showcaseSide = getSide(item);
         };
 
-        const hideContent = () => {
-            contentReveal = 0;
-            window.clearTimeout(contentTimer);
-            contentTimer = null;
+        const hideStageCard = () => {
+            if (typeof gsap !== "undefined") {
+                gsap.killTweensOf(card);
+                gsap.set(card, { autoAlpha: 0 });
+            }
+        };
+
+        const hideAllContent = () => {
+            window.clearTimeout(groupSwitchTimer);
+            groupSwitchTimer = null;
             if (typeof gsap !== "undefined") {
                 gsap.killTweensOf([card, titleCard].filter(Boolean));
                 gsap.set([card, titleCard].filter(Boolean), { autoAlpha: 0 });
             }
         };
 
-        const scheduleContentReveal = () => {
-            if (contentReveal) return;
-            if (contentTimer) return;
-            contentTimer = window.setTimeout(() => {
-                contentTimer = null;
-                contentReveal = 1;
-                updateShowcase();
-                if (typeof gsap === "undefined") return;
-                gsap.fromTo(titleCard, { autoAlpha: 0, y: 18, filter: "blur(6px)" }, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.32, ease: "power3.out", overwrite: "auto" });
-                gsap.fromTo(card, { autoAlpha: 0, y: 28, scale: 0.965 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.36, delay: 0.1, ease: "back.out(1.45)", overwrite: "auto" });
-            }, 420);
-        };
-
         const updateNodeState = (item, index, localProgress) => {
-            const archivedThrough = index + (localProgress > 0.74 ? 1 : 0);
+            const archivedThrough = index + (localProgress > 0.82 ? 1 : 0);
             const counts = { intent: 0, synthesis: 0, validation: 0, deploy: 0 };
             showcaseItems.slice(0, archivedThrough).forEach((archivedItem) => {
                 if (counts[archivedItem.node] !== undefined) counts[archivedItem.node] += 1;
@@ -1341,19 +1341,44 @@ const showcaseGroups = {
             return offset;
         };
 
+        const updateTitleMotion = (item, index, localProgress) => {
+            if (!titleCard) return;
+            const first = groupFirstIndex[item.group] ?? index;
+            const last = groupLastIndex[item.group] ?? index;
+            const isFirstInGroup = index === first;
+            const isLastInGroup = index === last;
+            const enter = isFirstInGroup ? smoothStep(0.18, 0.36, localProgress) : 1;
+            const exit = isLastInGroup ? smoothStep(0.92, 0.995, localProgress) : 0;
+            const alpha = clamp(enter * (1 - exit), 0, 1);
+            const y = (1 - enter) * 18 - exit * 14;
+            const scale = 0.975 + alpha * 0.025;
+            const blur = (1 - alpha) * 7;
+
+            if (typeof gsap !== "undefined") {
+                gsap.set(titleCard, {
+                    autoAlpha: alpha,
+                    y,
+                    scale,
+                    filter: `blur(${blur.toFixed(2)}px)`
+                });
+            } else {
+                titleCard.style.opacity = String(alpha);
+            }
+        };
+
         const updateCardMotion = (item, index, localProgress, workflowOffset) => {
             const baseX = getCardBaseX(item);
             const route = entryRoutes[index % entryRoutes.length];
-            const enter = contentReveal ? 1 : clamp(localProgress / 0.22, 0, 1);
-            const archive = clamp((localProgress - 0.68) / 0.24, 0, 1);
+            const enter = smoothStep(0.26, 0.48, localProgress);
+            const archive = smoothStep(0.74, index === showcaseItems.length - 1 ? 0.985 : 0.94, localProgress);
             const nodeOffset = getNodeArchiveOffset(item, workflowOffset);
             const startX = baseX + route.x * (1 - enter);
             const startY = route.y * (1 - enter);
             const x = startX + (nodeOffset.x - baseX) * archive;
             const y = startY + nodeOffset.y * archive;
-            const scale = 0.94 + 0.06 * enter - 0.66 * archive;
+            const scale = 0.9 + 0.1 * enter - 0.68 * archive;
             const rotation = route.rotation * (1 - enter) + (workflowOffset.side === "left" ? 5 : -5) * archive;
-            const alpha = contentReveal ? Math.max(0, 1 - archive * 1.25) : 0;
+            const alpha = clamp(enter * (1 - archive * 1.12), 0, 1);
 
             if (typeof gsap !== "undefined") {
                 gsap.set(card, { x, y, scale, rotation, autoAlpha: alpha });
@@ -1373,26 +1398,25 @@ const showcaseGroups = {
             if (index !== activeIndex) {
                 activeIndex = index;
                 renderCard(item, index);
-                hideContent();
+                hideStageCard();
             }
 
             if (groupChanged) {
                 activeGroup = item.group;
                 renderGroup(item);
-                hideContent();
             }
 
             workflow.classList.add("is-showcase-controlled");
             if (typeof gsap !== "undefined") gsap.set(workflow, { autoAlpha: 1 });
             const workflowOffset = updateWorkflowMotion(item, index, localProgress);
             updateNodeState(item, index, localProgress);
+            updateTitleMotion(item, index, localProgress);
             updateCardMotion(item, index, localProgress, workflowOffset);
-            scheduleContentReveal();
         };
 
         const releaseWorkflow = (hideWorkflow) => {
             workflow.classList.remove("is-showcase-controlled", "is-group-switching");
-            hideContent();
+            hideAllContent();
             if (hideWorkflow && typeof gsap !== "undefined") {
                 gsap.to(workflow, {
                     autoAlpha: 0,
@@ -1461,6 +1485,27 @@ const showcaseGroups = {
         const navLinks = Array.from(document.querySelectorAll(".nav-link[href^='#']"));
         const sectionIds = ["before", "workflow", "methodology", "risk-map", "findings", "impact", "team", "cta"];
         const sectionLinks = new Map(navLinks.map((link) => [link.getAttribute("href").slice(1), link]));
+        const productRoot = document.querySelector("[data-product-showcase]");
+        const groupToSectionId = {
+            workflow: "workflow",
+            method: "methodology",
+            risk: "risk-map",
+            fixes: "findings",
+            impact: "impact"
+        };
+
+        const moveNavFocus = (activeLink) => {
+            if (!activeLink || !activeLink.getClientRects().length) {
+                nav.style.setProperty("--active-nav-left", "0px");
+                nav.style.setProperty("--active-nav-width", "0px");
+                return;
+            }
+
+            const navRect = nav.getBoundingClientRect();
+            const linkRect = activeLink.getBoundingClientRect();
+            nav.style.setProperty("--active-nav-left", `${(linkRect.left - navRect.left).toFixed(1)}px`);
+            nav.style.setProperty("--active-nav-width", `${linkRect.width.toFixed(1)}px`);
+        };
 
         const updateActiveLink = () => {
             const probeY = window.scrollY + 120;
@@ -1474,9 +1519,25 @@ const showcaseGroups = {
                 if (probeY >= top && probeY < bottom) activeId = id;
             });
 
+            if (productRoot) {
+                const productRect = productRoot.getBoundingClientRect();
+                if (productRect.top <= 120 && productRect.bottom > 120) {
+                    activeId = groupToSectionId[productRoot.dataset.showcaseGroup] || activeId || "workflow";
+                }
+            }
+
+            ["team", "cta"].forEach((id) => {
+                const section = document.getElementById(id);
+                if (!section) return;
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 160 && rect.bottom > 120) activeId = id;
+            });
+
             navLinks.forEach((link) => link.classList.remove("active"));
             const activeLink = sectionLinks.get(activeId);
             if (activeLink) activeLink.classList.add("active");
+            nav.dataset.activeSection = activeId;
+            moveNavFocus(activeLink);
         };
 
         const updateProgress = () => {
