@@ -1225,6 +1225,15 @@ const showcaseGroups = {
             };
         };
 
+        const getThumbnailSourcePoint = (item) => {
+            const sourceX = card.offsetLeft + getCardBaseX(item) + card.offsetWidth * 0.18;
+            const sourceY = getCardHomeY() + card.offsetHeight * 0.52;
+            return {
+                x: sourceX,
+                y: sourceY
+            };
+        };
+
         const getWorkflowNodeStagePoint = (nodeName = "intent") => {
             const targetNode = nodeMap.get(nodeName) || nodeMap.get("intent") || nodes[0];
             if (!targetNode) return { x: stage.clientWidth / 2, y: stage.clientHeight / 2 };
@@ -1509,13 +1518,17 @@ const showcaseGroups = {
                 const isActive = archiveIndex === state.index;
                 const visible = state.groupArchive > 0.04 ? 1 : isActive ? Math.max(0, stored - 0.15) : stored;
                 const point = getArchivePoint(archiveItem, localArchiveIndex);
+                const source = getThumbnailSourcePoint(archiveItem);
+                const morph = smoothStep(0.04, 0.92, stored);
+                const parkedX = source.x + (point.x - source.x) * morph;
+                const parkedY = source.y + (point.y - source.y) * morph - Math.sin(morph * Math.PI) * 18;
                 const staggeredArchive = smoothStep(localArchiveIndex * 0.035, 0.72 + localArchiveIndex * 0.025, state.groupArchive);
                 const arc = Math.sin(staggeredArchive * Math.PI) * (localArchiveIndex % 2 === 0 ? -18 : 18);
-                const x = point.x + (target.x - point.x) * staggeredArchive + arc;
-                const y = point.y + (target.y - point.y) * staggeredArchive + Math.sin((localArchiveIndex + 1) * 1.7) * (1 - staggeredArchive) * 5;
-                const scale = 0.72 - staggeredArchive * 0.42;
-                const rotation = ((localArchiveIndex % 2 === 0 ? -1 : 1) * (4 + localArchiveIndex * 1.3)) * (1 - staggeredArchive);
-                const alpha = clamp(visible * (1 - staggeredArchive * 1.1) * exitAlpha, 0, 0.92);
+                const x = parkedX + (target.x - parkedX) * staggeredArchive + arc;
+                const y = parkedY + (target.y - parkedY) * staggeredArchive + Math.sin((localArchiveIndex + 1) * 1.7) * (1 - staggeredArchive) * 5;
+                const scale = (1.32 - morph * 0.6) - staggeredArchive * 0.42;
+                const rotation = ((localArchiveIndex % 2 === 0 ? -1 : 1) * (9 - morph * 4 + localArchiveIndex * 1.3)) * (1 - staggeredArchive);
+                const alpha = clamp(visible * smoothStep(0.08, 0.28, stored) * (1 - staggeredArchive * 1.1) * exitAlpha, 0, 0.92);
 
                 gsap.set(archiveCard, { x, y, scale, rotation, autoAlpha: alpha });
             });
@@ -1551,7 +1564,7 @@ const showcaseGroups = {
             const groupChanged = item.group !== activeGroup;
             const rootExitAlpha = clamp(smoothStep(window.innerHeight * 0.18, window.innerHeight * 1.04, rootRect.bottom), 0, 1);
             const teamRect = teamSection ? teamSection.getBoundingClientRect() : null;
-            const teamFadeAlpha = teamRect ? smoothStep(window.innerHeight * 0.34, window.innerHeight * 0.92, teamRect.top) : 1;
+            const teamFadeAlpha = teamRect ? smoothStep(window.innerHeight * 0.58, window.innerHeight * 0.9, teamRect.top) : 1;
             const exitAlpha = Math.min(rootExitAlpha, teamFadeAlpha);
 
             if (index !== activeIndex) {
