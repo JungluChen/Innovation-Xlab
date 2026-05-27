@@ -131,51 +131,9 @@ section[id]{scroll-margin-top:88px;}
 .js-enabled .reveal-on-scroll{opacity:0;transform:translateY(18px);}
 .js-enabled .finding-body{overflow:hidden;max-height:0;}
 .js-enabled .finding-body.open{max-height:600px;}
-@media(max-width:767px){
-    #risk-map > div{padding-top:44px!important;padding-bottom:44px!important;}
-    #risk-map h2{font-size:28px;line-height:1.12;}
-    #risk-map .mt-10.grid{margin-top:24px!important;gap:14px!important;}
-    #risk-map .glass{padding:12px!important;border-radius:12px;}
-    #risk-map .glass > .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px!important;}
-    #risk-map .stage-card{border-left:0;border-top:3px solid transparent;border-radius:10px;padding:12px!important;box-shadow:0 1px 0 rgba(15,23,42,0.04);transition:border-color .24s cubic-bezier(.22,1,.36,1),background .24s cubic-bezier(.22,1,.36,1),box-shadow .24s cubic-bezier(.22,1,.36,1),transform .24s cubic-bezier(.22,1,.36,1);}
-    #risk-map .stage-card > div{display:grid!important;grid-template-columns:1fr;gap:6px!important;}
-    #risk-map .stage-card h3{margin-top:4px!important;font-size:14px;line-height:1.2;}
-    #risk-map .stage-card span{font-size:11px;line-height:1.35;padding:3px 8px;border-radius:999px;background:rgba(1,61,124,0.06);width:max-content;}
-    #risk-map .stage-card > p{display:none;margin-top:8px!important;font-size:12px;line-height:1.45;}
-    #risk-map .stage-card.active{grid-column:1 / -1;border-top-color:var(--gold);background:linear-gradient(180deg,rgba(255,250,232,0.96),rgba(255,255,255,0.98));box-shadow:0 0 0 3px rgba(255,192,0,0.16),0 10px 24px rgba(1,61,124,0.08);transform:translateY(-1px);}
-    #risk-map .stage-card.active h3{font-size:17px;}
-    #risk-map .stage-card.active > div{grid-template-columns:1fr auto;align-items:center;}
-    #risk-map .stage-card.active > p{display:block;}
-    #risk-detail-panel{padding:18px!important;border-radius:12px;}
-    #risk-detail-panel dl{margin-top:14px!important;display:grid;gap:10px!important;}
-    #risk-detail-panel dl > div{padding:12px 14px;border:1px solid rgba(226,232,240,0.95);border-radius:10px;background:rgba(255,255,255,0.72);}
-    #risk-detail-panel dt{font-size:12px;}
-    #risk-detail-panel dd{font-size:13px;line-height:1.5;}
-    #risk-detail-panel #detail-stage{font-size:18px!important;line-height:1.2;}
-}
 @media(max-width:640px){
     #site-nav{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}
     .mobile-menu{position:fixed;top:72px;left:12px;right:12px;width:auto!important;max-width:none;max-height:calc(100dvh - 84px);border-radius:12px;z-index:260;}
-    #risk-map > div{padding-top:44px!important;padding-bottom:44px!important;}
-    #risk-map h2{font-size:28px;line-height:1.12;}
-    #risk-map .mt-10.grid{margin-top:24px!important;gap:14px!important;}
-    #risk-map .glass{padding:12px!important;border-radius:12px;}
-    #risk-map .glass > .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px!important;}
-    #risk-map .stage-card{border-left:0;border-top:3px solid transparent;border-radius:10px;padding:12px!important;box-shadow:0 1px 0 rgba(15,23,42,0.04);transition:border-color .24s cubic-bezier(.22,1,.36,1),background .24s cubic-bezier(.22,1,.36,1),box-shadow .24s cubic-bezier(.22,1,.36,1),transform .24s cubic-bezier(.22,1,.36,1);}
-    #risk-map .stage-card > div{display:grid!important;grid-template-columns:1fr;gap:6px!important;}
-    #risk-map .stage-card h3{margin-top:4px!important;font-size:14px;line-height:1.2;}
-    #risk-map .stage-card span{font-size:11px;line-height:1.35;padding:3px 8px;border-radius:999px;background:rgba(1,61,124,0.06);width:max-content;}
-    #risk-map .stage-card > p{display:none;margin-top:8px!important;font-size:12px;line-height:1.45;}
-    #risk-map .stage-card.active{grid-column:1 / -1;border-top-color:var(--gold);background:linear-gradient(180deg,rgba(255,250,232,0.96),rgba(255,255,255,0.98));box-shadow:0 0 0 3px rgba(255,192,0,0.16),0 10px 24px rgba(1,61,124,0.08);transform:translateY(-1px);}
-    #risk-map .stage-card.active h3{font-size:17px;}
-    #risk-map .stage-card.active > div{grid-template-columns:1fr auto;align-items:center;}
-    #risk-map .stage-card.active > p{display:block;}
-    #risk-detail-panel{padding:18px!important;border-radius:12px;}
-    #risk-detail-panel dl{margin-top:14px!important;display:grid;gap:10px!important;}
-    #risk-detail-panel dl > div{padding:12px 14px;border:1px solid rgba(226,232,240,0.95);border-radius:10px;background:rgba(255,255,255,0.72);}
-    #risk-detail-panel dt{font-size:12px;}
-    #risk-detail-panel dd{font-size:13px;line-height:1.5;}
-    #risk-detail-panel #detail-stage{font-size:18px!important;line-height:1.2;}
     .workflow-scroll-section{min-height:auto;}
     .workflow-sticky-panel{padding-top:44px!important;padding-bottom:44px!important;}
     .workflow-sticky-panel > .reveal-on-scroll h2{font-size:28px;line-height:1.12;}
@@ -251,10 +209,6 @@ section[id]{scroll-margin-top:88px;}
 }
 @media(max-width:420px){
     .btn-primary,.btn-secondary{padding:11px 16px;font-size:14px;}
-    #risk-map .glass > .grid{grid-template-columns:1fr;}
-    #risk-map .stage-card.active{grid-column:auto;}
-    #risk-map .stage-card.active > div{grid-template-columns:1fr;}
-    #risk-detail-panel{padding:16px!important;}
     .workflow-sticky-panel{padding-top:36px!important;padding-bottom:36px!important;}
     .workflow-stages-container{grid-template-columns:1fr;}
     .workflow-stage{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;}
@@ -417,20 +371,6 @@ section[id]{scroll-margin-top:88px;}
    Risk Map Final Layout Fix
    =============================== */
 
-.risk-section {
-  min-height: auto !important;
-  height: auto !important;
-  overflow: visible !important;
-}
-
-.risk-sticky {
-  position: relative !important;
-  top: auto !important;
-  min-height: auto !important;
-  height: auto !important;
-  z-index: auto !important;
-}
-
 .risk-tail-section {
   position: relative;
   z-index: 5;
@@ -444,58 +384,7 @@ section[id]{scroll-margin-top:88px;}
   opacity: 1 !important;
 }
 
-#risk-map .mt-10.grid {
-  align-items: stretch !important;
-}
 
-#risk-map .glass.p-4.sm\:p-6,
-#risk-detail-panel {
-  height: 100%;
-}
-
-#risk-detail-panel {
-  display: flex;
-  flex-direction: column;
-}
-
-#risk-detail-panel .detail-copy-box {
-  flex: 0 0 auto;
-}
-
-.risk-video-wrap {
-  margin-top: 1.5rem;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-#stage-video {
-  width: 100%;
-  flex: 1;
-  min-height: 240px;
-  max-height: 360px;
-  object-fit: cover;
-  background: #111;
-}
-
-.stage-card.active {
-  background: linear-gradient(135deg, rgba(255,248,226,0.95), rgba(255,255,255,0.78));
-  border-color: rgba(245,183,0,0.22);
-  box-shadow: 0 0 0 3px rgba(255,192,0,0.18), 0 10px 28px rgba(1,61,124,0.12);
-  transform: scale(1.01) !important;
-}
-
-@media (max-width: 1023px) {
-  #risk-detail-panel {
-    height: auto;
-  }
-
-  #stage-video {
-    max-height: none;
-    aspect-ratio: 16 / 9;
-  }
-}
 
 .method-card {
   position: relative;
@@ -762,6 +651,7 @@ section[id]{scroll-margin-top:88px;}
   font-weight: 400;
   line-height: 1.65;
   color: var(--gray-600);
+  margin: 0;
 }
 #team .slogan-highlight {
   font-weight: 600;
@@ -802,7 +692,7 @@ section[id]{scroll-margin-top:88px;}
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   gap: 12px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 3rem;
 }
 #team .cards-grid.mentors {
   grid-template-columns: repeat(3, 1fr);
@@ -828,22 +718,40 @@ section[id]{scroll-margin-top:88px;}
   background: var(--sky-light);
 }
 #team .avatar {
-  width: 56px;
-  height: 56px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
   margin-bottom: 10px;
-  border: 2px solid transparent;
+  border: 2.5px solid transparent;
   flex-shrink: 0;
+  overflow: hidden;
+  background: #f8fafc;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
 }
 #team .avatar-student { background: var(--navy); color: #fff; border-color: var(--gold); }
 #team .avatar-supervisor { background: var(--navy-deep); color: var(--sky); border-color: var(--sky); }
 #team .avatar-mentor { background: var(--gold-light); color: var(--navy); border-color: var(--gold); }
+#team .avatar-photo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+#team .avatar-photo-chen { object-position: 50% 6%; }
+#team .avatar-photo-jin { object-position: 50% 6%; }
+#team .avatar-photo-zhang,
+#team .avatar-photo-mo,
+#team .avatar-photo-ye { object-position:  50% 6%; }
+#team .avatar-photo-jussi { object-position: 50% 54%; }
+#team .avatar-photo-josh {
+  transform: scale(1.6);
+  object-position: 66% 5%;
+}
+#team .avatar-photo-faryz { object-position: 50% 52%; }
 #team .logo-pills {
   display: flex;
   align-items: center;
@@ -876,7 +784,74 @@ section[id]{scroll-margin-top:88px;}
   display: flex; align-items: center; gap: 12px; margin: 2rem 0 1.5rem;
 }
 #team .sep-line { flex: 1; height: 0.5px; background: #d1d5db; }
-#team .sep-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy); opacity: 0.4; }
+#team .sep-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy); opacity: 0.4; white-space: nowrap; flex-shrink: 0; }
+
+#team .logo-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 4vw, 56px);
+  margin: 0 auto 2.5rem;
+  padding: 2rem 2.5rem;
+  max-width: 720px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1.5px solid var(--gold);
+  border-radius: 60px;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+}
+
+#team .logo-bar:hover {
+  transform: scale(1.06);
+  box-shadow: 0 12px 40px rgba(255, 192, 0, 0.18);
+}
+
+#team .logo-bar-img {
+  height: clamp(68px, 8vw, 100px);
+  width: auto;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+#team .logo-bar:hover .logo-bar-img {
+  transform: scale(1.08);
+}
+
+#team .logo-bar-x {
+  font-size: clamp(28px, 2.8vw, 40px);
+  font-weight: 300;
+  color: var(--gold);
+  line-height: 1;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+#team .logo-bar:hover .logo-bar-x {
+  transform: scale(1.15) rotate(12deg);
+}
+
+#team .card-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+#team .card-logo {
+  height: 22px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  opacity: 0.7;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+#team .card:hover .card-logo {
+  opacity: 1;
+  transform: scale(1.1);
+}
 
 @media (max-width: 640px) {
   #team .cards-grid {
@@ -889,481 +864,332 @@ section[id]{scroll-margin-top:88px;}
   #team .slogan { font-size: 14px; }
 }
 
-/* ===============================
-   Fix horizontal risk map being clipped / stuck
-   =============================== */
+/* =========================================================
+   Risk Map Redesign V2 — Apple-style horizontal story
+   ========================================================= */
 
-/* 不要讓 sticky section 固定太久 */
-#risk-map.horizontal-risk-section {
+.risk2-section {
   position: relative;
-  min-height: auto !important;
-  overflow: visible !important;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(98, 188, 241, 0.14), transparent 34%),
+    linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+  color: #0f172a;
+  overflow: visible;
 }
 
-/* 260vh 取代原本 420vh，不要讓使用者覺得卡住 */
-#risk-map .risk-scroll-track {
+.risk2-scroll-track {
+  height: 260vh;
   position: relative;
-  height: 260vh !important;
 }
 
-/* sticky 場景不要裁切內容 */
-#risk-map .risk-sticky-scene {
+.risk2-sticky {
   position: sticky;
   top: 0;
   min-height: 100dvh;
-  height: auto;
   display: flex;
-  align-items: flex-start;
-  background: inherit;
-  overflow: visible !important;
+  align-items: center;
+  overflow: visible;
 }
 
-/* 減少上下 padding，避免內容超過一個 viewport */
-#risk-map .risk-sticky-scene > .max-w-7xl {
-  padding-top: clamp(24px, 4vh, 56px) !important;
-  padding-bottom: clamp(24px, 4vh, 56px) !important;
-}
-
-/* 標題不要太高 */
-#risk-map h2 {
-  font-size: clamp(36px, 4.4vw, 64px) !important;
-  line-height: 1.03 !important;
-  letter-spacing: -0.045em;
-}
-
-/* stage rail 稍微壓低高度 */
-#risk-map .stage-rail {
-  margin-top: clamp(24px, 4vh, 40px) !important;
-  gap: 12px;
-}
-
-#risk-map .stage-pill {
-  min-height: 112px !important;
-  padding: 18px 20px !important;
-}
-
-#risk-map .stage-title {
-  margin-top: 12px !important;
-  font-size: clamp(18px, 1.45vw, 24px) !important;
-}
-
-#risk-map .stage-risk {
-  margin-top: 14px !important;
-  font-size: 14px !important;
-}
-
-/* 下方 detail + video 不要太高 */
-#risk-map .risk-detail-layout {
-  margin-top: clamp(20px, 3vh, 32px) !important;
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: 24px;
-  align-items: stretch;
-}
-
-/* 兩個 box 等高，但不要硬撐爆 viewport */
-#risk-map .risk-detail-card,
-#risk-map .risk-video-card {
-  min-height: 0;
-  max-height: calc(100dvh - 360px);
-  overflow: hidden;
-}
-
-/* 文字區如果真的太長，內部滾動，不要撐爆整個 sticky scene */
-#risk-map .risk-detail-card {
-  padding: clamp(22px, 2vw, 30px) !important;
-  overflow-y: auto;
-}
-
-/* video card */
-#risk-map .risk-video-card {
-  padding: clamp(18px, 2vw, 24px) !important;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 影片高度用 viewport 控制，避免被底部切掉 */
-#risk-map .risk-video-card video {
+.risk2-container {
   width: 100%;
-  height: clamp(260px, 34vh, 420px) !important;
-  max-height: 42vh !important;
-  aspect-ratio: auto !important;
-  object-fit: cover;
-  border-radius: 18px;
-  background: #111;
+  padding: clamp(28px, 4vw, 72px);
 }
 
-/* 避免 active card 往右推太多造成 rail 溢出 */
-#risk-map .stage-pill.active {
-  transform: scale(1.025) !important;
+.risk2-heading {
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
-#risk-map .stage-pill {
-  position: relative;
-  min-height: 112px !important;
-  border: 1px solid transparent;
-  border-radius: 22px;
-  padding: 18px 20px !important;
-  text-align: left;
-  background: transparent;
-  cursor: pointer;
-  overflow: hidden;
-  transform: translateX(0);
-  transition:
-    background 0.45s ease,
-    border-color 0.45s ease,
-    box-shadow 0.45s ease,
-    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.45s ease;
-}
-
-#risk-map .stage-pill::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 248, 226, 0.95),
-    rgba(255, 255, 255, 0.7)
-  );
-  opacity: 0;
-  transition: opacity 0.45s ease;
-}
-
-#risk-map .stage-pill > span {
-  position: relative;
-  z-index: 1;
-  display: block;
-}
-
-#risk-map .stage-number {
+.risk2-eyebrow {
+  margin: 0;
   font-size: 12px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #7a8493;
+  color: #64748b;
   font-weight: 700;
 }
 
-#risk-map .stage-pill.completed {
-  background: rgba(241, 245, 249, 0.65);
-  opacity: 0.46;
-  filter: grayscale(1);
-}
-
-#risk-map .stage-pill.active::before {
-  opacity: 1;
-}
-
-#risk-map .stage-pill.upcoming {
-  opacity: 0.72;
-}
-
-/* glass-morphism shared */
-#risk-map .risk-detail-card,
-#risk-map .risk-video-card {
-  border-radius: 28px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.07);
-  backdrop-filter: blur(24px);
-}
-
-#risk-map .risk-detail-content {
-  margin-top: 24px;
-  display: grid;
-  gap: 20px;
-}
-
-#risk-map .risk-label {
-  color: rgb(1, 61, 124);
-  font-weight: 700;
-  font-size: 15px;
-  margin: 0;
-}
-
-#detail-stage {
-  margin-top: 6px;
-  font-size: 28px;
-  line-height: 1.1;
-  letter-spacing: -0.035em;
-  font-weight: 700;
+.risk2-heading h2 {
+  margin: 14px 0 0;
+  font-size: clamp(40px, 5.2vw, 82px);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  font-weight: 760;
   color: #0f172a;
 }
 
-#risk-map .risk-detail-content p:not(.risk-label) {
-  margin-top: 6px;
+.risk2-heading p:last-child {
+  margin-top: 22px;
+  max-width: 980px;
+  font-size: clamp(16px, 1.25vw, 21px);
+  line-height: 1.75;
   color: #475569;
-  line-height: 1.65;
-  font-size: 16px;
 }
 
-/* detail change animation */
-#risk-map .risk-detail-card.changing,
-#risk-map .risk-video-card.changing {
-  opacity: 0;
-  transform: translateY(14px);
+/* Full-width stage rail */
+.risk2-stage-rail {
+  width: 100%;
+  max-width: none;
+  margin: clamp(34px, 5vh, 58px) auto 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(12px, 1.2vw, 20px);
 }
 
-#risk-map .risk-detail-card,
-#risk-map .risk-video-card {
+/* Stage base */
+.risk2-stage {
+  position: relative;
+  min-width: 0;
+  min-height: clamp(126px, 14vh, 170px);
+  padding: clamp(20px, 2vw, 30px);
+  border: 1px solid transparent;
+  border-radius: clamp(26px, 2.2vw, 36px);
+  background: rgba(255, 255, 255, 0.34);
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: none;
+  opacity: 0.68;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 0.45s ease,
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.45s ease,
+    border-color 0.45s ease,
+    box-shadow 0.45s ease,
+    filter 0.45s ease;
+}
+
+/* 尚未到 */
+.risk2-stage.is-upcoming {
+  opacity: 0.54;
+}
+
+/* 已完成：變灰色 */
+.risk2-stage.is-completed {
+  opacity: 0.38;
+  background: rgba(226, 232, 240, 0.42);
+  filter: grayscale(1);
+}
+
+/* 當下：明顯高亮 */
+.risk2-stage.is-active {
+  opacity: 1;
+  filter: none;
+  background:
+    linear-gradient(135deg, rgba(255, 248, 226, 0.98), rgba(255, 255, 255, 0.92));
+  border-color: rgba(245, 183, 0, 0.7);
+  box-shadow:
+    0 28px 80px rgba(245, 183, 0, 0.22),
+    0 10px 28px rgba(15, 23, 42, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+  transform: translateY(-8px) scale(1.02);
+}
+
+.risk2-stage.is-active::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 24px;
+  bottom: 24px;
+  width: 4px;
+  border-radius: 999px;
+  background: #f5b700;
+  box-shadow: 0 0 22px rgba(245, 183, 0, 0.4);
+}
+
+.risk2-stage-number,
+.risk2-stage-title,
+.risk2-stage-risk {
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.risk2-stage-number {
+  font-size: clamp(12px, 0.85vw, 15px);
+  letter-spacing: 0.28em;
+  color: #94a3b8;
+  font-weight: 760;
+}
+
+.risk2-stage.is-active .risk2-stage-number {
+  color: rgb(1, 61, 124);
+}
+
+.risk2-stage-title {
+  margin-top: clamp(16px, 2vh, 24px);
+  font-size: clamp(22px, 1.75vw, 32px);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+  color: #0f172a;
+  font-weight: 760;
+}
+
+.risk2-stage-risk {
+  margin-top: clamp(16px, 1.7vh, 22px);
+  font-size: clamp(14px, 1.05vw, 18px);
+  line-height: 1.35;
+  color: rgb(1, 61, 124);
+  font-weight: 680;
+}
+
+/* 下方資訊與影片 */
+.risk2-body {
+  width: 100%;
+  margin-top: clamp(30px, 5vh, 60px);
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(24px, 3vw, 56px);
+  align-items: start;
+}
+
+.risk2-copy-card,
+.risk2-video-card {
+  border-radius: clamp(30px, 2.8vw, 46px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow:
+    0 26px 80px rgba(15, 23, 42, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(26px);
+  -webkit-backdrop-filter: blur(26px);
   transition:
     opacity 0.32s ease,
     transform 0.32s ease;
 }
 
-/* 小螢幕不要 sticky */
+/* 左邊只包內容，不再有多餘空白 */
+.risk2-copy-card {
+  align-self: start;
+  height: auto;
+  min-height: 0;
+  padding: clamp(30px, 3.2vw, 56px);
+}
+
+.risk2-panel-label {
+  margin: 0 0 26px;
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.risk2-copy-card h3 {
+  margin: 0;
+  font-size: clamp(38px, 3.4vw, 56px);
+  line-height: 1.02;
+  letter-spacing: -0.055em;
+  font-weight: 760;
+  color: #0f172a;
+}
+
+.risk2-info-grid {
+  margin-top: clamp(28px, 3vh, 42px);
+  display: grid;
+  gap: clamp(18px, 2.4vh, 30px);
+}
+
+.risk2-info-label {
+  margin: 0;
+  font-size: clamp(15px, 1.05vw, 18px);
+  line-height: 1.35;
+  color: rgb(1, 61, 124);
+  font-weight: 760;
+}
+
+.risk2-info-grid p:not(.risk2-info-label) {
+  margin: 8px 0 0;
+  font-size: clamp(16px, 1.25vw, 21px);
+  line-height: 1.65;
+  color: #475569;
+}
+
+.risk2-quote {
+  font-style: italic;
+}
+
+/* 右邊影片區 */
+.risk2-video-card {
+  align-self: start;
+  padding: clamp(24px, 2.8vw, 44px);
+}
+
+.risk2-video-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.risk2-video-header p {
+  margin: 0;
+  color: rgb(1, 61, 124);
+  font-size: clamp(15px, 1.05vw, 18px);
+  font-weight: 760;
+}
+
+.risk2-video-header span {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.risk2-video-card video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  max-height: 46vh;
+  border-radius: clamp(18px, 1.6vw, 28px);
+  object-fit: cover;
+  background: #111827;
+}
+
+/* 切換動畫 */
+.risk2-copy-card.is-changing,
+.risk2-video-card.is-changing {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+/* 平板與手機 */
 @media (max-width: 1023px) {
-  #risk-map .risk-scroll-track {
-    height: auto !important;
+  .risk2-scroll-track {
+    height: auto;
   }
 
-  #risk-map .risk-sticky-scene {
-    position: relative !important;
-    min-height: auto !important;
+  .risk2-sticky {
+    position: relative;
+    min-height: auto;
   }
 
-  #risk-map .stage-rail {
+  .risk2-stage-rail {
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     padding-bottom: 12px;
   }
 
-  #risk-map .stage-pill {
-    min-width: 240px;
+  .risk2-stage {
+    min-width: 250px;
     scroll-snap-align: start;
   }
 
-  #risk-map .risk-detail-layout {
+  .risk2-body {
     grid-template-columns: 1fr;
   }
 
-  #risk-map .risk-detail-card,
-  #risk-map .risk-video-card {
+  .risk2-video-card video {
     max-height: none;
-    overflow: visible;
   }
 
-  #risk-map .risk-video-card video {
-    height: auto !important;
-    aspect-ratio: 16 / 9 !important;
-  }
-}
-
-/* =========================================================
-   Risk Map Final UI Fix
-   1. Stage rail full width
-   2. Remove empty space in left detail card
-   3. Make active stage highlight clearer
-   ========================================================= */
-
-/* 整個 risk map 不要被限制得太窄 */
-#risk-map .risk-sticky-scene > .max-w-7xl {
-  max-width: none !important;
-  width: 100% !important;
-  padding-left: clamp(24px, 4vw, 72px) !important;
-  padding-right: clamp(24px, 4vw, 72px) !important;
-}
-
-/* 標題仍然可以控制寬度，不要跟 stage rail 一樣全滿 */
-#risk-map .risk-sticky-scene > .max-w-7xl > .max-w-5xl {
-  max-width: 1280px !important;
-}
-
-/* 1. 讓 5 個 Stage 平均吃滿整個頁面寬度 */
-#risk-map .stage-rail {
-  width: 100% !important;
-  max-width: none !important;
-  display: grid !important;
-  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-  gap: clamp(12px, 1.2vw, 20px) !important;
-
-  margin-top: clamp(28px, 4vh, 48px) !important;
-  padding: 0 !important;
-
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* 每個 stage 都平均寬，不要被內容撐開 */
-#risk-map .stage-pill {
-  width: 100% !important;
-  min-width: 0 !important;
-  min-height: 132px !important;
-
-  border-radius: 28px !important;
-  padding: 24px 28px !important;
-
-  background: rgba(255, 255, 255, 0.36) !important;
-  border: 1px solid transparent !important;
-  box-shadow: none !important;
-
-  opacity: 0.72;
-  filter: none !important;
-
-  transform: none !important;
-}
-
-/* 尚未到的 stage */
-#risk-map .stage-pill.upcoming {
-  opacity: 0.62;
-}
-
-/* 已經出現過的 stage 變灰 */
-#risk-map .stage-pill.completed {
-  opacity: 0.42;
-  background: rgba(226, 232, 240, 0.38) !important;
-  filter: grayscale(1) !important;
-}
-
-/* 3. 當前 active stage 高亮更清楚 */
-#risk-map .stage-pill.active {
-  opacity: 1 !important;
-  filter: none !important;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 249, 230, 0.98) 0%,
-      rgba(255, 255, 255, 0.92) 72%
-    ) !important;
-
-  border: 1.5px solid rgba(245, 183, 0, 0.62) !important;
-
-  box-shadow:
-    0 24px 70px rgba(245, 183, 0, 0.20),
-    0 10px 30px rgba(15, 23, 42, 0.08),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.75) !important;
-
-  transform: translateY(-6px) scale(1.015) !important;
-}
-
-/* active 左側加一條金色提示線，讓高亮更明顯 */
-#risk-map .stage-pill.active::after {
-  content: "";
-  position: absolute;
-  left: 18px;
-  top: 22px;
-  bottom: 22px;
-  width: 4px;
-  border-radius: 999px;
-  background: #f5b700;
-  box-shadow: 0 0 18px rgba(245, 183, 0, 0.35);
-}
-
-/* 避免原本 ::before 蓋住內容或造成奇怪光暈 */
-#risk-map .stage-pill::before {
-  opacity: 0 !important;
-}
-
-/* 文字層級 */
-#risk-map .stage-number {
-  font-size: 13px !important;
-  letter-spacing: 0.28em !important;
-  color: #94a3b8 !important;
-}
-
-#risk-map .stage-pill.active .stage-number {
-  color: rgb(1, 61, 124) !important;
-}
-
-#risk-map .stage-title {
-  margin-top: 16px !important;
-  font-size: clamp(22px, 1.7vw, 30px) !important;
-  line-height: 1.05 !important;
-  color: #0f172a !important;
-}
-
-#risk-map .stage-risk {
-  margin-top: 20px !important;
-  font-size: clamp(15px, 1.05vw, 18px) !important;
-  color: rgb(1, 61, 124) !important;
-}
-
-/* 2. 修正左邊 detail card 空白過多 */
-/* 關鍵：不要讓左邊 card 跟右邊 video card 等高 */
-#risk-map .risk-detail-layout {
-  width: 100% !important;
-  max-width: none !important;
-
-  display: grid !important;
-  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr) !important;
-  gap: clamp(28px, 3vw, 56px) !important;
-
-  align-items: start !important;
-  margin-top: clamp(32px, 4vh, 56px) !important;
-}
-
-/* 左邊 detail card 只包住內容，不再被撐高 */
-#risk-map .risk-detail-card {
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-
-  align-self: start !important;
-
-  padding: clamp(28px, 3vw, 44px) !important;
-  overflow: visible !important;
-}
-
-/* detail 內部不要額外撐空間 */
-#risk-map .risk-detail-content {
-  margin-top: 0 !important;
-  gap: clamp(18px, 2.2vh, 28px) !important;
-}
-
-/* 右邊 video card 可以比較高，但不要影響左邊 */
-#risk-map .risk-video-card {
-  align-self: start !important;
-
-  height: auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-
-  padding: clamp(24px, 2.6vw, 40px) !important;
-}
-
-/* video 比例固定，避免把整個 sticky scene 撐爆 */
-#risk-map .risk-video-card video {
-  width: 100% !important;
-  height: auto !important;
-  aspect-ratio: 16 / 9 !important;
-
-  max-height: 46vh !important;
-  object-fit: cover !important;
-
-  border-radius: 24px !important;
-  background: #111 !important;
-}
-
-/* 讓左側標題 Start 更像主要標題 */
-#risk-map #detail-stage {
-  font-size: clamp(32px, 3vw, 48px) !important;
-  line-height: 1.05 !important;
-  margin: 0 !important;
-}
-
-/* 手機版改成橫向滑動 */
-@media (max-width: 1023px) {
-  #risk-map .stage-rail {
-    display: flex !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory;
-    gap: 14px !important;
-    padding-bottom: 12px !important;
-  }
-
-  #risk-map .stage-pill {
-    min-width: 250px !important;
-    scroll-snap-align: start;
-  }
-
-  #risk-map .risk-detail-layout {
-    grid-template-columns: 1fr !important;
-  }
-
-  #risk-map .risk-video-card video {
-    max-height: none !important;
+  .risk2-heading h2 {
+    font-size: clamp(34px, 9vw, 52px);
   }
 }

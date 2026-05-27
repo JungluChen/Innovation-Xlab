@@ -430,92 +430,103 @@
             </div>
         </section>
 
-        <section id="risk-map" class="section-gray risk-section horizontal-risk-section">
-            <div class="risk-scroll-track">
-                <div class="risk-sticky-scene">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <section id="risk-map" class="risk2-section">
+  <div class="risk2-scroll-track">
+    <div class="risk2-sticky">
+      <div class="risk2-container">
 
-                        <div class="max-w-5xl">
-                            <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 leading-tight whitespace-nowrap">Journey failures became an operational risk map</h2>
-                        </div>
+        <div class="risk2-heading">
+          <p class="risk2-eyebrow">Human failure-point section</p>
+          <h2>Journey failures became an operational risk map.</h2>
+          <p>
+            This journey map translates usability breakdowns into reconciliation risk:
+            wrong workflows, missed variance signals, unclear system state, and weak automation trust.
+          </p>
+        </div>
 
-                        <!-- Horizontal Stage Rail -->
-                        <div class="stage-rail" aria-label="Risk map stages">
-                            <button type="button" class="stage-pill active" data-index="0">
-                                <span class="stage-number">01</span>
-                                <span class="stage-title">Start</span>
-                                <span class="stage-risk">Onboarding risk</span>
-                            </button>
+        <div class="risk2-stage-rail" aria-label="Risk journey stages">
+          <button class="risk2-stage is-active" type="button" data-risk-stage="0">
+            <span class="risk2-stage-number">01</span>
+            <span class="risk2-stage-title">Start</span>
+            <span class="risk2-stage-risk">Onboarding risk</span>
+          </button>
 
-                            <button type="button" class="stage-pill" data-index="1">
-                                <span class="stage-number">02</span>
-                                <span class="stage-title">Template</span>
-                                <span class="stage-risk">Workflow selection risk</span>
-                            </button>
+          <button class="risk2-stage" type="button" data-risk-stage="1">
+            <span class="risk2-stage-number">02</span>
+            <span class="risk2-stage-title">Template</span>
+            <span class="risk2-stage-risk">Workflow selection risk</span>
+          </button>
 
-                            <button type="button" class="stage-pill" data-index="2">
-                                <span class="stage-number">03</span>
-                                <span class="stage-title">Configure</span>
-                                <span class="stage-risk">Matching setup risk</span>
-                            </button>
+          <button class="risk2-stage" type="button" data-risk-stage="2">
+            <span class="risk2-stage-number">03</span>
+            <span class="risk2-stage-title">Configure</span>
+            <span class="risk2-stage-risk">Matching setup risk</span>
+          </button>
 
-                            <button type="button" class="stage-pill" data-index="3">
-                                <span class="stage-number">04</span>
-                                <span class="stage-title">Test</span>
-                                <span class="stage-risk">Trust risk</span>
-                            </button>
+          <button class="risk2-stage" type="button" data-risk-stage="3">
+            <span class="risk2-stage-number">04</span>
+            <span class="risk2-stage-title">Test</span>
+            <span class="risk2-stage-risk">Trust risk</span>
+          </button>
 
-                            <button type="button" class="stage-pill" data-index="4">
-                                <span class="stage-number">05</span>
-                                <span class="stage-title">Output</span>
-                                <span class="stage-risk">Exception visibility risk</span>
-                            </button>
-                        </div>
+          <button class="risk2-stage" type="button" data-risk-stage="4">
+            <span class="risk2-stage-number">05</span>
+            <span class="risk2-stage-title">Output</span>
+            <span class="risk2-stage-risk">Exception visibility risk</span>
+          </button>
+        </div>
 
-                        <!-- Detail + Video -->
-                        <div class="risk-detail-layout">
-                            <article class="risk-detail-card">
-                                <div class="risk-detail-content">
-                                    <div>
-                                        <h3 id="detail-stage">Start</h3>
-                                    </div>
+        <div class="risk2-body">
+          <article class="risk2-copy-card">
+            <div class="risk2-copy-inner">
+              <p class="risk2-panel-label">Selected-stage panel</p>
 
-                                    <div>
-                                        <p class="risk-label">Observed user problem</p>
-                                        <p id="detail-problem">Hidden entry points slowed onboarding.</p>
-                                    </div>
+              <h3 id="risk2-title">Start</h3>
 
-                                    <div>
-                                        <p class="risk-label">Operational risk</p>
-                                        <p id="detail-risk">Users may not begin the correct workflow.</p>
-                                    </div>
-
-                                    <div>
-                                        <p class="risk-label">Example user quote</p>
-                                        <p id="detail-quote" class="italic">I dragged my file in, but nothing is responding.</p>
-                                    </div>
-
-                                    <div>
-                                        <p class="risk-label">Product improvement direction</p>
-                                        <p id="detail-direction">
-                                            Make system entry points clearer and provide immediate response cues.
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <article class="risk-video-card">
-                                <p id="video-title" class="risk-label">Start interaction</p>
-                                <video id="stage-video" controls playsinline preload="metadata">
-                                    <source src="video/start.mp4" type="video/mp4">
-                                </video>
-                            </article>
-                        </div>
-
-                    </div>
+              <div class="risk2-info-grid">
+                <div>
+                  <p class="risk2-info-label">Observed user problem</p>
+                  <p id="risk2-problem">Hidden entry points slowed onboarding.</p>
                 </div>
+
+                <div>
+                  <p class="risk2-info-label">Operational risk</p>
+                  <p id="risk2-risk">Users may not begin the correct workflow.</p>
+                </div>
+
+                <div>
+                  <p class="risk2-info-label">Example user quote</p>
+                  <p id="risk2-quote" class="risk2-quote">
+                    I dragged my file in, but nothing is responding.
+                  </p>
+                </div>
+
+                <div>
+                  <p class="risk2-info-label">Product improvement direction</p>
+                  <p id="risk2-direction">
+                    Make system entry points clearer and provide immediate response cues.
+                  </p>
+                </div>
+              </div>
             </div>
-        </section>
+          </article>
+
+          <article class="risk2-video-card">
+            <div class="risk2-video-header">
+              <p id="risk2-video-title">Start interaction</p>
+              <span>Demo video</span>
+            </div>
+
+            <video id="risk2-video" controls playsinline preload="metadata">
+              <source src="video/start.mp4" type="video/mp4">
+            </video>
+          </article>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
 
         <section class="section-gray risk-tail-section">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
@@ -606,8 +617,14 @@
 
         <section id="team" class="section-white">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-
-                <h2 class="section-title">Innovation XLab Team</h2>
+                <div class="logo-bar w-full max-w-none -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-center gap-4 flex-wrap">
+                    <img class="logo-bar-img h-16 sm:h-20 object-contain cursor-pointer hover:scale-110 transition-transform duration-300" src="assets/Logo/NUS.jpg" alt="NUS">
+                    <span class="logo-bar-x text-slate-400 text-xl">&times;</span>
+                    <img class="logo-bar-img h-16 sm:h-20 object-contain cursor-pointer hover:scale-110 transition-transform duration-300" src="assets/Logo/Innovationxlab.png" alt="Innovation XLab">
+                    <span class="logo-bar-x text-slate-400 text-xl">&times;</span>
+                    <img class="logo-bar-img h-16 sm:h-20 object-contain cursor-pointer hover:scale-110 transition-transform duration-300" src="assets/Logo/Staple.jpg" alt="STAPLE">
+                </div>
+                <h2 class="section-title">Innovation XLab</h2>
 
                 <div class="slogan-wrap">
                     <p class="slogan">
@@ -615,41 +632,64 @@
                         where bold ideas become industry-ready solutions.
                     </p>
                 </div>
+
+
+
                 <div class="cards-grid">
                     <div class="card">
-                        <div class="avatar avatar-student">JC</div>
+                        <div class="avatar avatar-student"><img class="avatar-photo avatar-photo-chen" src="assets/Photo/chen.png" alt="Chen Jung-Lu portrait"></div>
                         <div class="logo-pills"><span class="logo-pill pill-nus">NUS</span><span class="logo-pill pill-ixlab">IXLab</span></div>
                         <p class="card-name">Chen Jung-Lu</p>
                         <p class="card-role">Leader</p>
                         <a class="card-link" href="#team-placeholder-note"><svg class="linkedin-icon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+                        <div class="card-logos">
+                            <img class="card-logo" src="assets/Logo/NUS.jpg" alt="NUS">
+                            <img class="card-logo" src="assets/Logo/Innovationxlab.png" alt="Innovation XLab">
+                        </div>
                     </div>
                     <div class="card">
-                        <div class="avatar avatar-student">JH</div>
+                        <div class="avatar avatar-student"><img class="avatar-photo avatar-photo-jin" src="assets/Photo/Jin.jpg" alt="Jin Hongquan portrait"></div>
                         <div class="logo-pills"><span class="logo-pill pill-nus">NUS</span><span class="logo-pill pill-ixlab">IXLab</span></div>
                         <p class="card-name">Jin Hongquan</p>
                         <p class="card-role">Project member</p>
                         <a class="card-link" href="#team-placeholder-note"><svg class="linkedin-icon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+                        <div class="card-logos">
+                            <img class="card-logo" src="assets/Logo/NUS.jpg" alt="NUS">
+                            <img class="card-logo" src="assets/Logo/Innovationxlab.png" alt="Innovation XLab">
+                        </div>
                     </div>
                     <div class="card">
-                        <div class="avatar avatar-student">ZZ</div>
+                        <div class="avatar avatar-student"><img class="avatar-photo avatar-photo-zhang" src="assets/Photo/Zhang.jpeg" alt="Zhang Zhiyuan portrait"></div>
                         <div class="logo-pills"><span class="logo-pill pill-nus">NUS</span><span class="logo-pill pill-ixlab">IXLab</span></div>
                         <p class="card-name">Zhang Zhiyuan</p>
                         <p class="card-role">Project member</p>
                         <a class="card-link" href="#team-placeholder-note"><svg class="linkedin-icon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+                        <div class="card-logos">
+                            <img class="card-logo" src="assets/Logo/NUS.jpg" alt="NUS">
+                            <img class="card-logo" src="assets/Logo/Innovationxlab.png" alt="Innovation XLab">
+                        </div>
                     </div>
                     <div class="card">
-                        <div class="avatar avatar-student">MY</div>
+                        <div class="avatar avatar-student"><img class="avatar-photo avatar-photo-mo" src="assets/Photo/Mo.jpeg" alt="Mo Yuyang portrait"></div>
                         <div class="logo-pills"><span class="logo-pill pill-nus">NUS</span><span class="logo-pill pill-ixlab">IXLab</span></div>
                         <p class="card-name">Mo Yuyang</p>
                         <p class="card-role">Project member</p>
                         <a class="card-link" href="#team-placeholder-note"><svg class="linkedin-icon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+                        <div class="card-logos">
+                            <img class="card-logo" src="assets/Logo/NUS.jpg" alt="NUS">
+                            <img class="card-logo" src="assets/Logo/Innovationxlab.png" alt="Innovation XLab">
+                        </div>
                     </div>
                     <div class="card">
-                        <div class="avatar avatar-student">YW</div>
+                        <div class="avatar avatar-student"><img class="avatar-photo avatar-photo-ye" src="assets/Photo/Ye.jpg" alt="Ye Wenrui portrait"></div>
                         <div class="logo-pills"><span class="logo-pill pill-nus">NUS</span><span class="logo-pill pill-ixlab">IXLab</span></div>
                         <p class="card-name">Ye Wenrui</p>
                         <p class="card-role">Project member</p>
                         <a class="card-link" href="#team-placeholder-note"><svg class="linkedin-icon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+                        <div class="card-logos">
+                            <img class="card-logo" src="assets/Logo/NUS.jpg" alt="NUS">
+                            <img class="card-logo" src="assets/Logo/Innovationxlab.png" alt="Innovation XLab">
+                        </div>
                     </div>
                 </div>
 
@@ -661,25 +701,34 @@
 
                 <div class="cards-grid mentors">
                     <div class="card">
-                        <div class="avatar avatar-supervisor">JK</div>
+                        <div class="avatar avatar-supervisor"><img class="avatar-photo avatar-photo-jussi" src="assets/Photo/Jussi.jpg" alt="Jussi Keppo portrait"></div>
                         <div class="logo-pills"><span class="logo-pill pill-nus">NUS</span></div>
                         <p class="card-name">Jussi Keppo</p>
                         <p class="card-role">Academic supervisor</p>
                         <a class="card-link" href="#team-placeholder-note"><svg class="linkedin-icon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+                        <div class="card-logos">
+                            <img class="card-logo" src="assets/Logo/NUS.jpg" alt="NUS">
+                        </div>
                     </div>
                     <div class="card">
-                        <div class="avatar avatar-mentor">JK</div>
+                        <div class="avatar avatar-mentor"><img class="avatar-photo avatar-photo-josh" src="assets/Photo/Josh.png" alt="Josh Kettlewell portrait"></div>
                         <div class="logo-pills"><span class="logo-pill pill-staple">STAPLE</span></div>
                         <p class="card-name">Josh Kettlewell</p>
                         <p class="card-role">Industry mentor</p>
                         <a class="card-link" href="#team-placeholder-note"><svg class="linkedin-icon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+                        <div class="card-logos">
+                            <img class="card-logo" src="assets/Logo/Staple.jpg" alt="STAPLE">
+                        </div>
                     </div>
                     <div class="card">
-                        <div class="avatar avatar-mentor">FK</div>
+                        <div class="avatar avatar-mentor"><img class="avatar-photo avatar-photo-faryz" src="assets/Photo/Faryz.jpeg" alt="Faryz Khazid portrait"></div>
                         <div class="logo-pills"><span class="logo-pill pill-staple">STAPLE</span></div>
                         <p class="card-name">Faryz Khazid</p>
                         <p class="card-role">Industry mentor</p>
                         <a class="card-link" href="#team-placeholder-note"><svg class="linkedin-icon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg> LinkedIn</a>
+                        <div class="card-logos">
+                            <img class="card-logo" src="assets/Logo/Staple.jpg" alt="STAPLE">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -690,7 +739,7 @@
                 <div class="cta-block p-8 sm:p-10 lg:p-12 text-center reveal-on-scroll">
                     <h2 class="mt-3 text-3xl sm:text-4xl font-semibold text-slate-900">Explore the live Fibula workflow ecosystem.</h2>
                     <p class="mt-5 text-lg leading-8 text-slate-600 max-w-3xl mx-auto">Project Fibula shows how natural-language reconciliation requirements can become stateful, validated workflows for industrial teams.</p>
-                    <div class="mt-8 flex flex-col sm:flex-row justify-center gap-3"><a class="btn-primary mobile-full-button" href="https://fibula.ai" target="_blank" rel="noreferrer">Explore Live Site at Fibula.ai</a><a class="btn-secondary mobile-full-button" href="assets/fibula-research-poster.pdf">Download Full Research Poster</a><a class="btn-secondary mobile-full-button" href="documents.html">Open Documents Library</a></div>
+                    <div class="mt-8 flex flex-col sm:flex-row justify-center gap-3"><a class="btn-primary mobile-full-button" href="https://fibula.ai" target="_blank" rel="noreferrer">Explore Fibula</a><a class="btn-secondary mobile-full-button" href="assets/fibula-research-poster.pdf">Download Full Research Poster</a><a class="btn-secondary mobile-full-button" href="documents.html">Open Documents Library</a></div>
                 </div>
             </div>
         </section>

@@ -45,52 +45,52 @@ const workflowStages = [
     }
 ];
 
-const riskStages = [
-    {
-        stage: "Start",
-        problem: "Hidden entry points slowed onboarding.",
-        risk: "Users may not begin the correct workflow.",
-        quote: "I dragged my file in, but nothing is responding.",
-        direction: "Make system entry points clearer and provide immediate response cues.",
-        videoTitle: "Start interaction",
-        video: "video/start.mp4"
-    },
-    {
-        stage: "Template",
-        problem: "Too many choices led users into wrong workflow paths.",
-        risk: "Users may select the wrong reconciliation flow before understanding the task.",
-        quote: "I am not sure which template I should choose.",
-        direction: "Provide guided workflow recommendations and reduce first-step decision load.",
-        videoTitle: "Template selection",
-        video: "video/template.mp4"
-    },
-    {
-        stage: "Configure",
-        problem: "Unclear fields and node expectations weakened matching setup.",
-        risk: "Incorrect field mapping may cause PO, GRN, invoice, and credit-note mismatch.",
-        quote: "I do not know what this field is expecting.",
-        direction: "Add inline field explanations, previews, and validation before execution.",
-        videoTitle: "Configuration flow",
-        video: "video/configure.mp4"
-    },
-    {
-        stage: "Test",
-        problem: "Unclear system states reduced trust.",
-        risk: "Users may stop trusting the automation if processing status is invisible.",
-        quote: "Is the system still working or did it fail?",
-        direction: "Show live processing states, progress feedback, and visible error recovery.",
-        videoTitle: "Testing feedback",
-        video: "video/test.mp4"
-    },
-    {
-        stage: "Output",
-        problem: "Outputs and variance details were hard to find.",
-        risk: "Important exceptions may be missed during finance review.",
-        quote: "Where can I see what changed or failed?",
-        direction: "Make reconciled outputs, variance details, and exception actions more visible.",
-        videoTitle: "Output review",
-        video: "video/output.mp4"
-    }
+const risk2Stages = [
+  {
+    title: "Start",
+    problem: "Hidden entry points slowed onboarding.",
+    risk: "Users may not begin the correct workflow.",
+    quote: "I dragged my file in, but nothing is responding.",
+    direction: "Make system entry points clearer and provide immediate response cues.",
+    videoTitle: "Start interaction",
+    video: "video/start.mp4"
+  },
+  {
+    title: "Template",
+    problem: "Too many choices led users into wrong workflow paths.",
+    risk: "Users may select the wrong reconciliation flow before understanding the task.",
+    quote: "I am not sure which template I should choose.",
+    direction: "Provide guided workflow recommendations and reduce first-step decision load.",
+    videoTitle: "Template selection",
+    video: "video/template.mp4"
+  },
+  {
+    title: "Configure",
+    problem: "Unclear fields and node expectations weakened matching setup.",
+    risk: "Incorrect field mapping may cause PO, GRN, invoice, and credit-note mismatch.",
+    quote: "I do not know what this field is expecting.",
+    direction: "Add inline field explanations, previews, and validation before execution.",
+    videoTitle: "Configuration flow",
+    video: "video/configure.mp4"
+  },
+  {
+    title: "Test",
+    problem: "Unclear system states reduced trust.",
+    risk: "Users may stop trusting the automation if processing status is invisible.",
+    quote: "Is the system still working or did it fail?",
+    direction: "Show live processing states, progress feedback, and visible error recovery.",
+    videoTitle: "Testing feedback",
+    video: "video/test.mp4"
+  },
+  {
+    title: "Output",
+    problem: "Outputs and variance details were hard to find.",
+    risk: "Important exceptions may be missed during finance review.",
+    quote: "Where can I see what changed or failed?",
+    direction: "Make reconciled outputs, variance details, and exception actions more visible.",
+    videoTitle: "Output review",
+    video: "video/output.mp4"
+  }
 ];
 
 (function () {
@@ -213,110 +213,108 @@ const riskStages = [
         }
     }
 
-    function initRiskSelection() {
-        const riskTrack = document.querySelector("#risk-map .risk-scroll-track");
-        const stagePills = Array.from(document.querySelectorAll("#risk-map .stage-pill"));
+    function initRiskSelectionV2() {
+        const risk2Track = document.querySelector("#risk-map .risk2-scroll-track");
+        const risk2StagesEls = Array.from(document.querySelectorAll("#risk-map .risk2-stage"));
 
-        const detailCard = document.querySelector("#risk-map .risk-detail-card");
-        const videoCard = document.querySelector("#risk-map .risk-video-card");
+        const risk2CopyCard = document.querySelector("#risk-map .risk2-copy-card");
+        const risk2VideoCard = document.querySelector("#risk-map .risk2-video-card");
 
-        const detailStage = document.getElementById("detail-stage");
-        const detailProblem = document.getElementById("detail-problem");
-        const detailRisk = document.getElementById("detail-risk");
-        const detailQuote = document.getElementById("detail-quote");
-        const detailDirection = document.getElementById("detail-direction");
-        const videoTitle = document.getElementById("video-title");
-        const video = document.getElementById("stage-video");
+        const risk2Title = document.getElementById("risk2-title");
+        const risk2Problem = document.getElementById("risk2-problem");
+        const risk2Risk = document.getElementById("risk2-risk");
+        const risk2Quote = document.getElementById("risk2-quote");
+        const risk2Direction = document.getElementById("risk2-direction");
+        const risk2VideoTitle = document.getElementById("risk2-video-title");
+        const risk2Video = document.getElementById("risk2-video");
 
-        if (!riskTrack || !stagePills.length) return;
+        if (!risk2Track || !risk2StagesEls.length) return;
 
-        let activeRiskIndex = -1;
-        let riskTicking = false;
+        let risk2ActiveIndex = -1;
+        let risk2Ticking = false;
 
-        function clamp(value, min, max) {
+        function risk2Clamp(value, min, max) {
             return Math.min(Math.max(value, min), max);
         }
 
-        function setRiskStage(index) {
-            index = clamp(index, 0, riskStages.length - 1);
+        function setRisk2Stage(index) {
+            index = risk2Clamp(index, 0, risk2Stages.length - 1);
 
-            if (index === activeRiskIndex) return;
+            if (index === risk2ActiveIndex) return;
 
-            activeRiskIndex = index;
-            const data = riskStages[index];
+            risk2ActiveIndex = index;
+            const data = risk2Stages[index];
 
-            stagePills.forEach((pill, i) => {
-                pill.classList.toggle("completed", i < index);
-                pill.classList.toggle("active", i === index);
-                pill.classList.toggle("upcoming", i > index);
-                pill.setAttribute("aria-selected", i === index ? "true" : "false");
+            risk2StagesEls.forEach((stage, i) => {
+                stage.classList.toggle("is-completed", i < index);
+                stage.classList.toggle("is-active", i === index);
+                stage.classList.toggle("is-upcoming", i > index);
+                stage.setAttribute("aria-selected", i === index ? "true" : "false");
             });
 
-            detailCard.classList.add("changing");
-            videoCard.classList.add("changing");
+            risk2CopyCard.classList.add("is-changing");
+            risk2VideoCard.classList.add("is-changing");
 
             window.setTimeout(() => {
-                detailStage.textContent = data.stage;
-                detailProblem.textContent = data.problem;
-                detailRisk.textContent = data.risk;
-                detailQuote.innerHTML = `<em>${data.quote}</em>`;
-                detailDirection.textContent = data.direction;
-                videoTitle.textContent = data.videoTitle;
+                risk2Title.textContent = data.title;
+                risk2Problem.textContent = data.problem;
+                risk2Risk.textContent = data.risk;
+                risk2Quote.textContent = data.quote;
+                risk2Direction.textContent = data.direction;
+                risk2VideoTitle.textContent = data.videoTitle;
 
-                const source = video.querySelector("source");
+                const source = risk2Video.querySelector("source");
 
                 if (source && source.getAttribute("src") !== data.video) {
                     source.setAttribute("src", data.video);
-                    video.load();
+                    risk2Video.load();
                 }
 
-                detailCard.classList.remove("changing");
-                videoCard.classList.remove("changing");
+                risk2CopyCard.classList.remove("is-changing");
+                risk2VideoCard.classList.remove("is-changing");
             }, 180);
         }
 
-        function updateRiskStageByScroll() {
-            if (!riskTrack) return;
+        function updateRisk2ByScroll() {
+            if (!risk2Track) return;
 
-            const rect = riskTrack.getBoundingClientRect();
+            const rect = risk2Track.getBoundingClientRect();
             const viewportHeight = window.innerHeight;
 
-            const scrollableDistance = rect.height - viewportHeight;
-            const scrolledInside = clamp(-rect.top, 0, scrollableDistance);
+            const scrollable = rect.height - viewportHeight;
+            const inside = risk2Clamp(-rect.top, 0, scrollable);
 
-            const progress = scrollableDistance > 0
-                ? scrolledInside / scrollableDistance
-                : 0;
+            const progress = scrollable > 0 ? inside / scrollable : 0;
 
             const index = Math.min(
-                riskStages.length - 1,
-                Math.floor(progress * riskStages.length)
+                risk2Stages.length - 1,
+                Math.floor(progress * risk2Stages.length)
             );
 
-            setRiskStage(index);
+            setRisk2Stage(index);
 
-            riskTicking = false;
+            risk2Ticking = false;
         }
 
-        function onRiskScroll() {
-            if (!riskTicking) {
-                window.requestAnimationFrame(updateRiskStageByScroll);
-                riskTicking = true;
+        function onRisk2Scroll() {
+            if (!risk2Ticking) {
+                window.requestAnimationFrame(updateRisk2ByScroll);
+                risk2Ticking = true;
             }
         }
 
-        window.addEventListener("scroll", onRiskScroll, { passive: true });
-        window.addEventListener("resize", updateRiskStageByScroll);
+        window.addEventListener("scroll", onRisk2Scroll, { passive: true });
+        window.addEventListener("resize", updateRisk2ByScroll);
 
-        stagePills.forEach((pill) => {
-            pill.addEventListener("click", () => {
-                const index = Number(pill.dataset.index);
-                setRiskStage(index);
+        risk2StagesEls.forEach((stage) => {
+            stage.addEventListener("click", () => {
+                const index = Number(stage.dataset.riskStage);
+                setRisk2Stage(index);
             });
         });
 
-        setRiskStage(0);
-        updateRiskStageByScroll();
+        setRisk2Stage(0);
+        updateRisk2ByScroll();
     }
 
     function initFindingsAccordion() {
@@ -697,7 +695,7 @@ const riskStages = [
         initWorkflowObserver();
         window.addEventListener("resize", () => window.requestAnimationFrame(updateActiveWorkflowPanelOrigin));
         window.requestAnimationFrame(updateActiveWorkflowPanelOrigin);
-        initRiskSelection();
+        initRiskSelectionV2();
         initFindingsAccordion();
         initActiveNav();
         initMobileMenu();

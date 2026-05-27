@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fibula - 工業數據秩序</title>
+    <link rel="icon" href="data:,">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #020408;
+            overflow-x: hidden;
+            color: #f1f5f9;
+            margin: 0;
+        }
+
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            touch-action: pan-y;
+        }
+
+        /* 隱藏滾動條 */
+        ::-webkit-scrollbar { width: 0; }
+
+        .fibula-link {
+            pointer-events: auto;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            outline: none;
+            transform: translateZ(0);
+        }
+
+        .fibula-link:focus-visible .fibula-title,
+        .fibula-link:hover .fibula-title {
+            filter: drop-shadow(0 0 34px rgba(98, 188, 241, 0.55));
+        }
+
+        .fibula-title {
+            background: linear-gradient(180deg, #ffffff 0%, #62bcf1 60%, #013d7c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1.2em;
+            text-indent: 1.2em;
+        }
+
+        .fibula-link-mark {
+            color: rgba(255, 192, 0, 0.85);
+            border: 1px solid rgba(255, 192, 0, 0.34);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            background: rgba(2, 4, 8, 0.72);
+        }
+
+        /* 六大象限標籤發光效果 */
+        .category-label {
+            position: fixed;
+            font-family: 'Orbitron';
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 14px;
+            background: rgba(2, 4, 8, 0.9);
+            border-radius: 4px;
+            letter-spacing: 2px;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
+            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            z-index: 30;
+            border-width: 1px;
+            white-space: nowrap;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 滾動指引呼吸 */
+        @keyframes scroll-glow {
+            0%, 100% { opacity: 0.3; transform: translateY(0); }
+            50% { opacity: 0.8; transform: translateY(6px); }
+        }
+        .scroll-indicator {
+            animation: scroll-glow 2s infinite ease-in-out;
+        }
+
+        .workflow-story {
+            position: fixed;
+            left: 50%;
+            top: 86px;
+            width: min(1080px, calc(100vw - 48px));
+            transform: translate(-50%, 18px);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 25;
+            transition: opacity 0.45s ease, transform 0.45s ease;
+        }
+
+        .workflow-story.is-visible {
+            opacity: 1;
+            transform: translate(-50%, 0);
+            pointer-events: auto;
+        }
+
+        .workflow-panel,
+        .workflow-card {
+            background: rgba(2, 4, 8, 0.78);
+            border: 1px solid rgba(98, 188, 241, 0.18);
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.38);
+            backdrop-filter: blur(14px);
+        }
+
+        .workflow-panel {
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .workflow-cards {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .workflow-card {
+            border-radius: 8px;
+            padding: 12px;
+            color: #e2e8f0;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+            min-height: 64px;
+        }
+
+        .workflow-card:hover,
+        .workflow-card.is-active {
+            border-color: rgba(255, 192, 0, 0.75);
+            background: rgba(8, 16, 28, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .workflow-card h3 {
+            font-size: 12px;
+            line-height: 1.2;
+            font-weight: 700;
+            margin: 0 0 8px;
+            color: #ffffff;
+        }
+
+        .workflow-card p {
+            font-family: 'Orbitron', sans-serif;
+            color: rgba(98, 188, 241, 0.78);
+            font-size: 8px;
+            line-height: 1.5;
+            margin: 0;
+            letter-spacing: 0.04em;
+        }
+
+        @media (max-width: 900px) {
+            .workflow-story {
+                top: 78px;
+                width: min(100vw - 28px, 620px);
+            }
+
+            .workflow-cards {
+                display: flex;
+                gap: 10px;
+                overflow-x: auto;
+                padding-bottom: 4px;
+                scrollbar-width: none;
+            }
+
+            .workflow-card {
+                flex: 0 0 min(270px, 78vw);
+                min-height: 76px;
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .workflow-story {
+                top: 78px;
+            }
+        }
+    </style>
+</head>
+<body class="select-none">
+
+    <!-- 滾動深度容器 -->
+    <div id="scroll-height" style="height: 760vh;"></div>
+
+    <!-- 靜態背景輔助遮罩與光暈 -->
+    <div class="fixed inset-0 pointer-events-none z-0 bg-[radial-gradient(circle_at_center,rgba(1,61,124,0.15)_0%,rgba(2,4,8,0)_70%)]"></div>
+
+    <!-- 固定 UI 覆蓋層 -->
+    <div class="fixed inset-0 z-20 pointer-events-none flex flex-col justify-between p-8">
+        
+        <!-- 頂部資訊列 -->
+        <header class="w-full flex justify-between items-start">
+            <div class="pointer-events-auto">
+                <div class="orbitron text-xs tracking-[0.4em] text-[#62bcf1] font-bold">FIBULA</div>
+            </div>
+            <div class="text-right pointer-events-auto flex items-center gap-4">
+                <div>
+                    <span id="scroll-pct" class="orbitron text-xs text-[#ffc000] font-bold">0%</span>
+                    <div class="w-24 h-[1px] bg-slate-800 mt-1 relative">
+                        <div id="scroll-progress-bar" class="absolute top-0 right-0 h-full bg-[#ffc000] transition-all duration-100" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 中央主要核心：Fibula 科技大底 -->
+        <div id="core-system" class="text-center transition-all duration-1000 opacity-0 transform translate-y-20 flex flex-col items-center justify-center">
+            <a class="fibula-link" href="https://fibula.ai/" target="_blank" rel="noopener noreferrer" aria-label="Open Fibula website">
+                <h1 class="orbitron fibula-title text-5xl md:text-8xl font-black mb-0 filter drop-shadow-[0_0_30px_rgba(98,188,241,0.25)]">FIBULA</h1>
+                <span class="fibula-link-mark">OPEN</span>
+            </a>
+        </div>
+
+        <!-- 底部提示導引 -->
+        <footer class="w-full flex flex-col items-center justify-center pb-4">
+            <div id="scroll-tip" class="scroll-indicator flex flex-col items-center transition-all duration-500">
+                <svg class="w-5 h-5 text-[#62bcf1]/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+            </div>
+        </footer>
+    </div>
+
+    <section id="workflow-story" class="workflow-story" aria-label="Fibula executable workflow examples">
+        <div class="workflow-panel">
+            <div id="workflow-cards" class="workflow-cards"></div>
+        </div>
+    </section>
+
+    <!-- AP 流程標籤（符合起點到終點與4向匹配關係） -->
+    <div id="label-0" class="category-label border-[#62bcf1]/40 text-[#62bcf1]">PDF / SCAN</div>
+    <div id="label-1" class="category-label border-[#013d7c]/40 text-[#013d7c]">PO STACK</div>
+    <div id="label-2" class="category-label border-[#62bcf1]/40 text-[#62bcf1]">GRN STACK</div>
+    <div id="label-3" class="category-label border-[#013d7c]/40 text-[#013d7c]">CN STACK</div>
+    <div id="label-4" class="category-label border-[#ffc000]/40 text-[#ffc000]">INV STACK</div>
+    <div id="label-5" class="category-label border-[#ffc000]/40 text-[#ffc000]">RECEIPT / LEDGER</div>
+
+    <canvas id="main-canvas"></canvas>
+
+    <script>
+        const { Engine, World, Bodies, Body, Mouse, MouseConstraint } = Matter;
+        
+        let engine, canvas, ctx;
+        let documents = [];
+        let particles = []; 
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        let scrollProgress = 0;
+        let flowOffset = 0; // 用於管道脈衝動畫的偏移量
+        let mouseConstraint; 
+        let activeWorkflowIndex = 0;
+        let workflowManuallySelected = false;
+
+        // 物理邊界與中央支撐物
+        let ground, leftWall, rightWall, centralPyramid;
+        const pyramidRadius = 140; 
+
+        // 配色方案
+        const COLORS = {
+            navy: 'rgb(1, 61, 124)',
+            gold: 'rgb(255, 192, 0)',
+            skyblue: 'rgb(98, 188, 241)',
+            navyLight: 'rgba(1, 61, 124, 0.8)',
+            goldLight: 'rgba(255, 192, 0, 0.8)',
+            skyblueLight: 'rgba(98, 188, 241, 0.8)'
+        };
+
+        // 文件分類定義 (對應 AP 4向匹配場景)
+        const docTypes = [
+            // Cat 0: Ingested Documents (Skyblue)
+            { name: 'DOC', cat: 0, color: COLORS.skyblue, desc: '原始檔案' },
+            { name: 'PDF', cat: 0, color: COLORS.skyblue, desc: '電子郵件/PDF' },
+            { name: 'SCAN', cat: 0, color: COLORS.skyblue, desc: '掃描檔案' },
+            { name: 'IMG', cat: 0, color: COLORS.skyblue, desc: '圖檔' },
+
+            // Cat 1: Purchase Order (Navy)
+            { name: 'PO', cat: 1, color: COLORS.navy, desc: '採購單' },
+            { name: 'POL', cat: 1, color: COLORS.navy, desc: '採購明細' },
+
+            // Cat 2: Goods Received Note (Skyblue)
+            { name: 'GRN', cat: 2, color: COLORS.skyblue, desc: '到貨單' },
+            { name: 'BOL', cat: 2, color: COLORS.skyblue, desc: '提貨單' },
+
+            // Cat 4: Invoices (Gold)
+            { name: 'INV', cat: 4, color: COLORS.gold, desc: '應付發票' },
+            { name: 'TAX', cat: 4, color: COLORS.gold, desc: '稅單' },
+
+            // Cat 3: Credit Note (Navy)
+            { name: 'CN', cat: 3, color: COLORS.navy, desc: '折讓單' },
+            { name: 'CRED', cat: 3, color: COLORS.navy, desc: '貸記憑證' },
+
+            // Cat 5: Reconciliation Output (Gold)
+            { name: 'RCPT', cat: 5, color: COLORS.gold, desc: '收據' },
+            { name: 'LEDGER', cat: 5, color: COLORS.gold, desc: '總帳' }
+        ];
+
+        // 6大 Stack 的對齊定位 (自適應螢幕，形成從左到右的拓撲網絡)
+        let stackTargets = Array(6).fill(null).map(() => ({ x: 0, y: 0 }));
+
+        const workflowTypeStyles = {
+            "Stack Input": { color: "#62bcf1", fill: "rgba(98, 188, 241, 0.12)" },
+            "Manual Upload": { color: "#62bcf1", fill: "rgba(98, 188, 241, 0.12)" },
+            "Instruction": { color: "#94a3b8", fill: "rgba(148, 163, 184, 0.11)" },
+            "Document Schema": { color: "#ffc000", fill: "rgba(255, 192, 0, 0.12)" },
+            "Reconciliation": { color: "#ffffff", fill: "rgba(255, 255, 255, 0.10)" },
+            "Document Holder": { color: "#4ade80", fill: "rgba(74, 222, 128, 0.12)" }
+        };
+
+        const fibulaWorkflows = [
+            {
+                id: "expense-report",
+                title: "Expense Report Processing",
+                steps: "Split -> Categorise -> Extract -> Store",
+                description:
+                    "Upload a multi-page expense report, split it into individual receipts, categorise each receipt, extract fields, and store results in separate document holders.",
+                nodes: [
+                    { id: "upload-expense", type: "Stack Input", label: "Expense Stack", x: 0, y: 1 },
+                    { id: "split-report", type: "Instruction", label: "Split Multi-page Report", x: 1, y: 1 },
+                    { id: "categorise", type: "Instruction", label: "Categorise Receipts", x: 2, y: 1 },
+                    { id: "extract-itemised", type: "Document Schema", label: "Extract Itemised Receipt Data", x: 3, y: 0 },
+                    { id: "extract-simple", type: "Document Schema", label: "Extract Simple Receipt Data", x: 3, y: 2 },
+                    { id: "holder-itemised", type: "Document Holder", label: "Itemised Receipt Holder", x: 4, y: 0 },
+                    { id: "holder-simple", type: "Document Holder", label: "Simple Receipt Holder", x: 4, y: 2 }
+                ],
+                edges: [
+                    ["upload-expense", "split-report"],
+                    ["split-report", "categorise"],
+                    ["categorise", "extract-itemised"],
+                    ["categorise", "extract-simple"],
+                    ["extract-itemised", "holder-itemised"],
+                    ["extract-simple", "holder-simple"]
+                ]
+            },
+            {
+                id: "bank-reconciliation",
+                title: "Bank Statement Reconciliation",
+                steps: "Extract -> Match Period -> Compare Debit -> Store",
+                description:
+                    "Upload bank statements and ledger entries through separate paths, extract both datasets, match ledger entries to statement periods, compare debit amounts, and store matched records.",
+                nodes: [
+                    { id: "upload-bank", type: "Stack Input", label: "Bank Stack", x: 0, y: 0 },
+                    { id: "upload-ledger", type: "Stack Input", label: "Ledger Stack", x: 0, y: 2 },
+                    { id: "extract-bank", type: "Document Schema", label: "Extract Bank Statement Data", x: 1, y: 0 },
+                    { id: "extract-ledger", type: "Document Schema", label: "Extract Ledger Entry Data", x: 1, y: 2 },
+                    { id: "match-period", type: "Reconciliation", label: "Match Statement Period", x: 2, y: 1 },
+                    { id: "compare-debit", type: "Reconciliation", label: "Compare Debit Amounts", x: 3, y: 1 },
+                    { id: "holder-bank", type: "Document Holder", label: "Matched Bank Records", x: 4, y: 0 },
+                    { id: "holder-ledger", type: "Document Holder", label: "Matched Ledger Entries", x: 4, y: 2 }
+                ],
+                edges: [
+                    ["upload-bank", "extract-bank"],
+                    ["upload-ledger", "extract-ledger"],
+                    ["extract-bank", "match-period"],
+                    ["extract-ledger", "match-period"],
+                    ["match-period", "compare-debit"],
+                    ["compare-debit", "holder-bank"],
+                    ["compare-debit", "holder-ledger"]
+                ]
+            },
+            {
+                id: "po-invoice-price",
+                title: "PO & Invoice Price Matching",
+                steps: "Extract PO -> Extract Invoice -> Compare Price -> Store",
+                description:
+                    "Purchase orders and invoices enter Fibula through separate upload paths. Each path extracts its own document structure, compares prices, and routes matched results into separate holders.",
+                nodes: [
+                    { id: "upload-po", type: "Stack Input", label: "PO Stack", x: 0, y: 0 },
+                    { id: "upload-invoice", type: "Stack Input", label: "Invoice Stack", x: 0, y: 2 },
+                    { id: "extract-po", type: "Document Schema", label: "Extract PO Data", x: 1, y: 0 },
+                    { id: "extract-invoice", type: "Document Schema", label: "Extract Invoice Data", x: 1, y: 2 },
+                    { id: "price-comparison", type: "Reconciliation", label: "Price Comparison", x: 2, y: 1 },
+                    { id: "holder-po", type: "Document Holder", label: "Matched POs", x: 3, y: 0 },
+                    { id: "holder-invoice", type: "Document Holder", label: "Matched Invoices", x: 3, y: 2 }
+                ],
+                edges: [
+                    ["upload-po", "extract-po"],
+                    ["upload-invoice", "extract-invoice"],
+                    ["extract-po", "price-comparison"],
+                    ["extract-invoice", "price-comparison"],
+                    ["price-comparison", "holder-po"],
+                    ["price-comparison", "holder-invoice"]
+                ]
+            },
+            {
+                id: "supplier-compliance",
+                title: "Supplier Compliance Check",
+                steps: "Split -> Classify -> Extract -> Validate",
+                description:
+                    "Upload a supplier package, split certificates, contracts, and invoices, extract required fields, validate compliance, and route approved packages or exception cases.",
+                nodes: [
+                    { id: "upload-package", type: "Stack Input", label: "Supplier Stack", x: 0, y: 1 },
+                    { id: "split-docs", type: "Instruction", label: "Split Supplier Documents", x: 1, y: 1 },
+                    { id: "categorise-docs", type: "Instruction", label: "Categorise Documents", x: 2, y: 1 },
+                    { id: "extract-cert", type: "Document Schema", label: "Extract Certificate Data", x: 3, y: 0 },
+                    { id: "extract-contract", type: "Document Schema", label: "Extract Contract Terms", x: 3, y: 1 },
+                    { id: "extract-invoice-supplier", type: "Document Schema", label: "Extract Invoice Data", x: 3, y: 2 },
+                    { id: "compliance", type: "Reconciliation", label: "Compliance Check", x: 4, y: 1 },
+                    { id: "approved", type: "Document Holder", label: "Approved Supplier Package", x: 5, y: 0 },
+                    { id: "exception", type: "Document Holder", label: "Exception Review", x: 5, y: 2 }
+                ],
+                edges: [
+                    ["upload-package", "split-docs"],
+                    ["split-docs", "categorise-docs"],
+                    ["categorise-docs", "extract-cert"],
+                    ["categorise-docs", "extract-contract"],
+                    ["categorise-docs", "extract-invoice-supplier"],
+                    ["extract-cert", "compliance"],
+                    ["extract-contract", "compliance"],
+                    ["extract-invoice-supplier", "compliance"],
+                    ["compliance", "approved"],
+                    ["compliance", "exception"]
+                ]
+            }
+        ];
+
+        function updateStackTargets() {
+            const isMobile = width < 768;
+            
+            if (isMobile) {
+                // 手機板：由上至下依序流向
+                stackTargets[0] = { x: width * 0.5, y: height * 0.15 }; // Begin Ingestion
+                stackTargets[1] = { x: width * 0.3, y: height * 0.32 }; // PO
+                stackTargets[2] = { x: width * 0.7, y: height * 0.32 }; // GRN
+                stackTargets[4] = { x: width * 0.3, y: height * 0.55 }; // INV
+                stackTargets[3] = { x: width * 0.7, y: height * 0.55 }; // CN
+                stackTargets[5] = { x: width * 0.5, y: height * 0.82 }; // End Export
+            } else {
+                // 電腦版：經典AP四向核對拓撲圖 (左 -> 中四象限 -> 右)
+                stackTargets[0] = { x: width * 0.14, y: height * 0.50 }; // 起點：Ingestion (Left)
+                
+                // 中央核對層
+                stackTargets[1] = { x: width * 0.42, y: height * 0.28 }; // PO (Top-Left)
+                stackTargets[2] = { x: width * 0.68, y: height * 0.28 }; // GRN (Top-Right)
+                
+                stackTargets[4] = { x: width * 0.42, y: height * 0.72 }; // INV (Bottom-Left)
+                stackTargets[3] = { x: width * 0.68, y: height * 0.72 }; // CN (Bottom-Right)
+                
+                stackTargets[5] = { x: width * 0.88, y: height * 0.50 }; // 終點：4-Way Match Hub (Right)
+            }
+        }
+
+        function renderWorkflowCards() {
+            const container = document.getElementById("workflow-cards");
+            if (!container) return;
+
+            container.innerHTML = "";
+            fibulaWorkflows.forEach((workflow, index) => {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "workflow-card";
+                button.dataset.workflowIndex = index;
+                button.innerHTML = `<h3>${workflow.title}</h3><p>${workflow.steps}</p>`;
+                button.addEventListener("click", () => {
+                    workflowManuallySelected = true;
+                    setActiveWorkflow(index);
+                });
+                container.appendChild(button);
+            });
+
+            setActiveWorkflow(0);
+        }
+
+        function setActiveWorkflow(index) {
+            activeWorkflowIndex = Math.max(0, Math.min(fibulaWorkflows.length - 1, index));
+            document.querySelectorAll(".workflow-card").forEach((card, idx) => {
+                const isActive = idx === activeWorkflowIndex;
+                card.classList.toggle("is-active", isActive);
+                card.setAttribute("aria-pressed", isActive ? "true" : "false");
+                if (isActive && window.innerWidth <= 900 && document.getElementById("workflow-story")?.classList.contains("is-visible")) {
+                    card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+                }
+            });
+        }
+
+        function updateWorkflowStory() {
+            const story = document.getElementById("workflow-story");
+            if (!story) return;
+
+            const isVisible = scrollProgress > 0.72;
+            story.classList.toggle("is-visible", isVisible);
+
+            if (!workflowManuallySelected && isVisible) {
+                const stageProgress = Math.max(0, Math.min(0.999, (scrollProgress - 0.72) / 0.26));
+                const nextIndex = Math.floor(stageProgress * fibulaWorkflows.length);
+                if (nextIndex !== activeWorkflowIndex) setActiveWorkflow(nextIndex);
+            }
+
+            if (scrollProgress < 0.68) {
+                workflowManuallySelected = false;
+            }
+        }
+
+        function init() {
+            engine = Engine.create({
+                gravity: { y: 0.08, scale: 0.001 }
+            });
+            
+            canvas = document.getElementById('main-canvas');
+            ctx = canvas.getContext('2d');
+            
+            resize();
+            updateStackTargets();
+            renderWorkflowCards();
+
+            // 設定物理世界界線
+            const borderThickness = 100;
+            ground = Bodies.rectangle(width/2, height + borderThickness/2 - 10, width * 2, borderThickness, { 
+                isStatic: true,
+                friction: 0.9 
+            });
+            leftWall = Bodies.rectangle(-borderThickness/2, height/2, borderThickness, height * 2, { isStatic: true });
+            rightWall = Bodies.rectangle(width + borderThickness/2, height/2, borderThickness, height * 2, { isStatic: true });
+            
+            // 隱形中央三角架 (開場形成三角文件山)
+            centralPyramid = Bodies.polygon(width / 2, height - 120, 3, pyramidRadius, {
+                isStatic: true,
+                angle: -Math.PI / 6,
+                friction: 0.5,
+                restitution: 0.1
+            });
+
+            World.add(engine.world, [ground, leftWall, rightWall, centralPyramid]);
+
+            createDocuments(320);
+
+            // 滑鼠/觸控交互
+            const mouse = Mouse.create(canvas);
+            mouseConstraint = MouseConstraint.create(engine, {
+                mouse: mouse,
+                constraint: {
+                    stiffness: 0.2,
+                    render: { visible: false }
+                }
+            });
+            
+            World.add(engine.world, mouseConstraint);
+
+            if (mouse.element) {
+                mouse.element.removeEventListener("mousewheel", mouse.mousewheel);
+                mouse.element.removeEventListener("DOMMouseScroll", mouse.mousewheel);
+            }
+
+            function update(time) {
+                Engine.update(engine);
+                handleScroll();
+                handleInteractiveCursor(mouse);
+                updateParticles();
+                draw();
+                
+                flowOffset += 0.004;
+                if (flowOffset > 1) flowOffset = 0;
+
+                requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        function spawnGlowParticle(x, y, color) {
+            particles.push({
+                x: x,
+                y: y,
+                vx: (Math.random() - 0.5) * 6,
+                vy: -Math.random() * 4 - 2,
+                size: Math.random() * 3.5 + 1.5,
+                color: color || `rgba(${220 + Math.random() * 35}, ${170 + Math.random() * 85}, ${50 + Math.random() * 50}, 0.9)`,
+                alpha: 1,
+                decay: 0.012 + Math.random() * 0.01
+            });
+        }
+
+        function updateParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= p.decay;
+                p.size *= 0.98;
+                if (p.alpha <= 0 || p.size < 0.2) {
+                    particles.splice(i, 1);
+                }
+            }
+        }
+
+        function easeOutBack(x) {
+            const c1 = 1.70158;
+            const c3 = c1 + 1;
+            return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+        }
+
+        function handleInteractiveCursor(mouse) {
+            if (scrollProgress <= 0.35) {
+                mouseConstraint.enabled = true;
+                const bodies = documents.map(doc => doc.body);
+                const hoveredBodies = Matter.Query.point(bodies, mouse.position);
+
+                if (mouseConstraint.body) {
+                    canvas.style.cursor = 'grabbing';
+                } else if (hoveredBodies.length > 0) {
+                    canvas.style.cursor = 'grab';
+                } else {
+                    canvas.style.cursor = 'default';
+                }
+            } else {
+                mouseConstraint.enabled = false;
+                if (mouseConstraint.body) {
+                    mouseConstraint.body = null;
+                }
+                canvas.style.cursor = 'default';
+            }
+        }
+
+        function createDocuments(count) {
+            for (let i = 0; i < count; i++) {
+                const categoryIdx = i % 6;
+                const availableTypes = docTypes.filter(t => t.cat === categoryIdx);
+                const type = availableTypes[Math.floor(Math.random() * availableTypes.length)];
+
+                const x = Math.random() * width; 
+                const y = Math.random() * height * 1.35 - height * 0.75; 
+                const w = width < 768 ? 30 : 36;
+                const h = width < 768 ? 39 : 46;
+
+                const body = Bodies.rectangle(x, y, w, h, {
+                    frictionAir: 0.035,
+                    friction: 0.6,
+                    restitution: 0.15,
+                    angle: (Math.random() - 0.5) * 0.5
+                });
+                Body.setVelocity(body, {
+                    x: (Math.random() - 0.5) * 2.2,
+                    y: Math.random() * 0.45
+                });
+
+                documents.push({
+                    body: body,
+                    type: type.name,
+                    category: type.cat,
+                    color: type.color,
+                    w: w,
+                    h: h,
+                    targetIndex: Math.floor(i / 6),
+                    opacity: 1,
+                    isFullyStacked: false
+                });
+                World.add(engine.world, body);
+            }
+        }
+
+        function handleScroll() {
+            const maxScroll = document.getElementById('scroll-height').offsetHeight - height;
+            scrollProgress = window.scrollY / maxScroll;
+
+            // 頂部進度條
+            document.getElementById('scroll-pct').innerText = `${Math.floor(scrollProgress * 100)}%`;
+            document.getElementById('scroll-progress-bar').style.width = `${scrollProgress * 100}%`;
+
+            const scrollTip = document.getElementById('scroll-tip');
+            if (scrollProgress > 0.05) {
+                scrollTip.style.opacity = '0';
+            } else {
+                scrollTip.style.opacity = '1';
+            }
+            updateWorkflowStory();
+
+            // --- 1. 三角文件山物理崩落 ---
+            if (scrollProgress > 0.02) {
+                const sinkProgress = Math.min(1, scrollProgress * 2.5);
+                const sinkDistance = sinkProgress * 800;
+                Body.setPosition(ground, { x: width/2, y: (height + 40) + sinkDistance });
+                Body.setPosition(centralPyramid, { x: width/2, y: (height - 120) + sinkDistance });
+            } else {
+                Body.setPosition(ground, { x: width/2, y: height - 10 });
+                Body.setPosition(centralPyramid, { x: width/2, y: height - 120 });
+            }
+
+            // --- 2. Fibula 引擎彈出 ---
+            const core = document.getElementById('core-system');
+
+            if (scrollProgress > 0.15) {
+                const rawPop = (scrollProgress - 0.15) / 0.35;
+                const popProgress = Math.max(0, Math.min(1, rawPop));
+                const easedPop = easeOutBack(popProgress);
+                const workflowStageFade = scrollProgress > 0.72 ? Math.max(0, 1 - (scrollProgress - 0.72) * 10) : 1;
+
+                core.style.opacity = Math.min(1, popProgress * 1.5) * workflowStageFade;
+                const translateY = 220 - (easedPop * 270); 
+                core.style.transform = `translateY(${translateY}px) scale(${0.3 + easedPop * 0.7})`;
+
+                if (popProgress > 0.1 && popProgress < 0.8 && Math.random() < 0.2) {
+                    spawnGlowParticle(width / 2 + (Math.random() - 0.5) * 100, height / 2 + translateY);
+                }
+            } else {
+                core.style.opacity = '0';
+                core.style.transform = 'translateY(220px) scale(0.3)';
+            }
+
+            // --- 3. 文獻磁吸歸納 ---
+            const labels = [
+                document.getElementById('label-0'),
+                document.getElementById('label-1'),
+                document.getElementById('label-2'),
+                document.getElementById('label-3'),
+                document.getElementById('label-4'),
+                document.getElementById('label-5')
+            ];
+
+            documents.forEach((doc) => {
+                if (scrollProgress > 0.38) {
+                    doc.body.isSensor = true; 
+                    
+                    const target = stackTargets[doc.category];
+                    const stackHeightOffset = doc.targetIndex * 3.5;
+                    const targetX = target.x;
+                    const targetY = target.y + 40 - stackHeightOffset;
+
+                    const lerpFactor = Math.min(1, (scrollProgress - 0.38) * 3.0);
+                    
+                    const currentPos = doc.body.position;
+                    const nextX = currentPos.x + (targetX - currentPos.x) * 0.14 * lerpFactor;
+                    const nextY = currentPos.y + (targetY - currentPos.y) * 0.14 * lerpFactor;
+                    
+                    const nextAngle = doc.body.angle + (0 - doc.body.angle) * 0.14 * lerpFactor;
+
+                    Body.setPosition(doc.body, { x: nextX, y: nextY });
+                    Body.setAngle(doc.body, nextAngle);
+
+                    doc.opacity = 1 - (doc.targetIndex * 0.025) * lerpFactor;
+                    
+                    const labelFade = scrollProgress > 0.72 ? Math.max(0, 1 - (scrollProgress - 0.72) * 12) : 1;
+                    labels.forEach((label, idx) => {
+                        if (label) {
+                            label.style.opacity = lerpFactor * labelFade;
+                            const stackT = stackTargets[idx];
+                            label.style.left = `${stackT.x}px`;
+                            label.style.top = `${stackT.y - 70}px`;
+                            label.style.transform = `translate(-50%, -50%) scale(${0.9 + lerpFactor * 0.1})`;
+                        }
+                    });
+                } else {
+                    doc.body.isSensor = false;
+                    doc.opacity = 1;
+                    labels.forEach(l => {
+                        if (l) l.style.opacity = '0';
+                    });
+                }
+            });
+        }
+
+        function drawDigitalGrid() {
+            ctx.strokeStyle = 'rgba(1, 61, 124, 0.04)';
+            ctx.lineWidth = 1;
+            const size = 50;
+            
+            for (let x = 0; x < width; x += size) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < height; y += size) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+        }
+
+        // 核心工作流：四向匹配與傳輸管道
+        function drawWorkflowLines() {
+            if (scrollProgress < 0.60) return;
+
+            const oldWorkflowFade = scrollProgress > 0.72 ? Math.max(0, 1 - (scrollProgress - 0.72) * 12) : 1;
+            const lineAlpha = Math.min(1, (scrollProgress - 0.60) * 4) * oldWorkflowFade;
+            if (lineAlpha <= 0.01) return;
+            const isMobile = width < 768;
+            ctx.save();
+
+            // ==================== 1. 分類路由線路 (BEGIN -> SCHEMAS) ====================
+            // 匯入(0) 路由分支至 -> PO(1), GRN(2), INV(4), CN(3)
+            const targetSchemas = [1, 2, 4, 3];
+            ctx.strokeStyle = `rgba(98, 188, 241, ${lineAlpha * 0.25})`;
+            ctx.lineWidth = 1.5;
+            
+            targetSchemas.forEach(idx => {
+                ctx.beginPath();
+                ctx.moveTo(stackTargets[0].x, stackTargets[0].y + 40);
+                if (!isMobile) {
+                    // 電腦版畫出優雅的折線
+                    const midX = (stackTargets[0].x + stackTargets[idx].x) / 2;
+                    ctx.lineTo(midX, stackTargets[0].y + 40);
+                    ctx.lineTo(midX, stackTargets[idx].y + 40);
+                }
+                ctx.lineTo(stackTargets[idx].x, stackTargets[idx].y + 40);
+                ctx.stroke();
+
+                // 沿分流管道流動的粒子
+                const px = stackTargets[0].x + (stackTargets[idx].x - stackTargets[0].x) * flowOffset;
+                const py = (stackTargets[0].y + 40) + ((stackTargets[idx].y + 40) - (stackTargets[0].y + 40)) * flowOffset;
+                ctx.fillStyle = COLORS.skyblue;
+                ctx.beginPath();
+                ctx.arc(px, py, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // ==================== 2. 核心 4-WAY RECONCILIATION 核對網 ====================
+            // 四種單據之間的複雜核對邏輯：
+            // - Invoices (4) 核對 POs(1) & Credit Notes(3)
+            // - POs(1) 核對 Invoices(4) & GRNs(2)
+            // - GRNs(2) 核對 POs(1)
+            // - Credit Notes(3) 核對 Invoices(4)
+            const reconciliationConnections = [
+                { from: 4, to: 1, color: COLORS.gold },  // INV <-> PO
+                { from: 4, to: 3, color: COLORS.gold },  // INV <-> CN
+                { from: 1, to: 2, color: COLORS.navy },  // PO <-> GRN
+                { from: 3, to: 1, color: COLORS.navy }   // CN <-> PO
+            ];
+
+            reconciliationConnections.forEach(conn => {
+                const nodeA = stackTargets[conn.from];
+                const nodeB = stackTargets[conn.to];
+                
+                ctx.save();
+                ctx.strokeStyle = conn.color;
+                ctx.globalAlpha = lineAlpha * 0.45;
+                ctx.lineWidth = 2.0;
+                ctx.setLineDash([5, 5]);
+                
+                ctx.beginPath();
+                ctx.moveTo(nodeA.x, nodeA.y + 40);
+                ctx.lineTo(nodeB.x, nodeB.y + 40);
+                ctx.stroke();
+                ctx.restore();
+
+                // 交叉匹配光點 (雙向傳輸感)
+                const pulseOffset = (flowOffset * 1.5) % 1;
+                const px = nodeA.x + (nodeB.x - nodeA.x) * pulseOffset;
+                const py = (nodeA.y + 40) + ((nodeB.y + 40) - (nodeA.y + 40)) * pulseOffset;
+                ctx.save();
+                ctx.fillStyle = conn.color;
+                ctx.shadowColor = conn.color;
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.arc(px, py, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+
+            // ==================== 3. 匯聚至終點結構化輸出 (SCHEMAS -> END) ====================
+            // 四個單據棧匯入 -> 4-Way Match / Export (5)
+            ctx.strokeStyle = `rgba(255, 192, 0, ${lineAlpha * 0.35})`;
+            ctx.lineWidth = 1.5;
+
+            targetSchemas.forEach(idx => {
+                ctx.beginPath();
+                ctx.moveTo(stackTargets[idx].x, stackTargets[idx].y + 40);
+                if (!isMobile) {
+                    const midX = (stackTargets[idx].x + stackTargets[5].x) / 2;
+                    ctx.lineTo(midX, stackTargets[idx].y + 40);
+                    ctx.lineTo(midX, stackTargets[5].y + 40);
+                }
+                ctx.lineTo(stackTargets[5].x, stackTargets[5].y + 40);
+                ctx.stroke();
+
+                // 匯聚粒子
+                const px = stackTargets[idx].x + (stackTargets[5].x - stackTargets[idx].x) * flowOffset;
+                const py = (stackTargets[idx].y + 40) + ((stackTargets[5].y + 40) - (stackTargets[idx].y + 40)) * flowOffset;
+                ctx.fillStyle = COLORS.gold;
+                ctx.beginPath();
+                ctx.arc(px, py, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // ==================== 4. 工作流起終點指示 (Terminals) ====================
+            // 起點指示標籤 (Begin Ingestion)
+            const tStart = stackTargets[0];
+            ctx.save();
+            ctx.fillStyle = COLORS.skyblue;
+            ctx.shadowColor = COLORS.skyblue;
+            ctx.shadowBlur = 15;
+            ctx.beginPath();
+            ctx.arc(tStart.x - (isMobile ? 0 : 80), tStart.y + (isMobile ? -40 : 40), 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            if (!isMobile) {
+                ctx.fillStyle = "rgba(98, 188, 241, 0.75)";
+                ctx.font = "bold 9px Orbitron";
+                ctx.fillText("[ START: INGESTION ]", tStart.x - 195, tStart.y + 44);
+            }
+
+            // 終點核對成功指示 (End Validation Hub)
+            const tEnd = stackTargets[5];
+            ctx.save();
+            ctx.fillStyle = COLORS.gold;
+            ctx.shadowColor = COLORS.gold;
+            ctx.shadowBlur = 15;
+            ctx.beginPath();
+            ctx.arc(tEnd.x + (isMobile ? 0 : 80), tEnd.y + (isMobile ? 120 : 40), 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            if (!isMobile) {
+                ctx.fillStyle = "rgba(255, 192, 0, 0.75)";
+                ctx.font = "bold 9px Orbitron";
+                ctx.fillText("[ EXPORT: STRUCTURED DATA ]", tEnd.x + 105, tEnd.y + 44);
+            }
+
+            // ==================== 5. 幾何中心核對指示環 (Reconciliation Hub Anchor) ====================
+            if (!isMobile) {
+                // 取中間四個核對點的幾何中心
+                const centerX = (stackTargets[1].x + stackTargets[2].x + stackTargets[3].x + stackTargets[4].x) / 4;
+                const centerY = ((stackTargets[1].y + 40) + (stackTargets[2].y + 40) + (stackTargets[3].y + 40) + (stackTargets[4].y + 40)) / 4;
+
+                ctx.save();
+                // 描繪發光的核對羅盤環
+                ctx.strokeStyle = `rgba(255, 192, 0, ${lineAlpha * 0.18})`;
+                ctx.lineWidth = 1;
+                ctx.setLineDash([4, 12]);
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 65 + Math.sin(Date.now() / 250) * 4, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                ctx.strokeStyle = `rgba(98, 188, 241, ${lineAlpha * 0.08})`;
+                ctx.setLineDash([]);
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, 50, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.fillStyle = `rgba(255, 255, 255, ${lineAlpha * 0.8})`;
+                ctx.font = "bold 10px Orbitron";
+                ctx.textAlign = "center";
+                ctx.fillText("4-WAY MATCH ACTIVE", centerX, centerY - 5);
+                
+                ctx.fillStyle = `rgba(255, 192, 0, ${lineAlpha * 0.6})`;
+                ctx.font = "8px Orbitron";
+                ctx.textAlign = "center";
+                ctx.fillText("PO • GRN • INV • CN", centerX, centerY + 12);
+            }
+
+            ctx.restore();
+        }
+
+        function roundedRectPath(x, y, w, h, r) {
+            const radius = Math.min(r, w / 2, h / 2);
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + w - radius, y);
+            ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
+            ctx.lineTo(x + w, y + h - radius);
+            ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+            ctx.lineTo(x + radius, y + h);
+            ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+
+        function wrapCanvasText(text, x, y, maxWidth, lineHeight, maxLines) {
+            const words = text.split(" ");
+            let line = "";
+            let lines = [];
+
+            words.forEach((word) => {
+                const testLine = line ? `${line} ${word}` : word;
+                if (ctx.measureText(testLine).width > maxWidth && line) {
+                    lines.push(line);
+                    line = word;
+                } else {
+                    line = testLine;
+                }
+            });
+            if (line) lines.push(line);
+
+            if (lines.length > maxLines) {
+                lines = lines.slice(0, maxLines);
+                let last = lines[lines.length - 1];
+                while (last.length > 3 && ctx.measureText(`${last}...`).width > maxWidth) {
+                    last = last.slice(0, -1);
+                }
+                lines[lines.length - 1] = `${last}...`;
+            }
+
+            lines.forEach((textLine, index) => {
+                ctx.fillText(textLine, x, y + index * lineHeight);
+            });
+        }
+
+        function getWorkflowNodeLayout(workflow, nodeW, nodeH) {
+            const maxX = Math.max(...workflow.nodes.map(node => node.x));
+            const maxY = Math.max(...workflow.nodes.map(node => node.y));
+            const isMobile = width < 768;
+            const left = isMobile ? width * 0.09 : width * 0.11;
+            const right = isMobile ? width * 0.91 : width * 0.89;
+            const top = isMobile ? height * 0.62 : height * 0.68;
+            const bottom = isMobile ? height * 0.92 : height * 0.90;
+            const usableW = Math.max(1, right - left);
+            const usableH = Math.max(1, bottom - top);
+
+            return workflow.nodes.reduce((positions, node) => {
+                positions[node.id] = {
+                    x: left + (maxX === 0 ? 0.5 : node.x / maxX) * usableW,
+                    y: top + (maxY === 0 ? 0.5 : node.y / maxY) * usableH,
+                    node,
+                    w: nodeW,
+                    h: nodeH
+                };
+                return positions;
+            }, {});
+        }
+
+        function drawGeneratedWorkflow() {
+            if (scrollProgress < 0.72) return;
+
+            const alpha = Math.min(1, Math.max(0, (scrollProgress - 0.72) * 4));
+            if (alpha <= 0.01) return;
+
+            const workflow = fibulaWorkflows[activeWorkflowIndex];
+            const isMobile = width < 768;
+            const nodeW = isMobile ? Math.max(72, Math.min(92, width * 0.2)) : 158;
+            const nodeH = isMobile ? 54 : 68;
+            const layout = getWorkflowNodeLayout(workflow, nodeW, nodeH);
+
+            ctx.save();
+            ctx.globalAlpha = alpha;
+
+            workflow.edges.forEach((edge, index) => {
+                const from = layout[edge[0]];
+                const to = layout[edge[1]];
+                if (!from || !to) return;
+
+                const lineProgress = Math.min(1, Math.max(0, (scrollProgress - 0.74) * 5 - index * 0.05));
+                if (lineProgress <= 0) return;
+
+                const startX = from.x + (to.x >= from.x ? nodeW / 2 : 0);
+                const startY = from.y;
+                const endX = to.x - (to.x >= from.x ? nodeW / 2 : 0);
+                const endY = to.y;
+                const midX = startX + (endX - startX) * 0.5;
+
+                ctx.save();
+                ctx.globalAlpha = alpha * lineProgress;
+                ctx.strokeStyle = "rgba(98, 188, 241, 0.38)";
+                ctx.lineWidth = isMobile ? 1.2 : 1.8;
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                ctx.bezierCurveTo(midX, startY, midX, endY, endX, endY);
+                ctx.stroke();
+
+                const pulse = (flowOffset + index * 0.12) % 1;
+                const px = startX + (endX - startX) * pulse;
+                const py = startY + (endY - startY) * pulse;
+                ctx.fillStyle = "#ffc000";
+                ctx.shadowColor = "#ffc000";
+                ctx.shadowBlur = 12;
+                ctx.beginPath();
+                ctx.arc(px, py, isMobile ? 2 : 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+
+            workflow.nodes.forEach((node, index) => {
+                const item = layout[node.id];
+                const style = workflowTypeStyles[node.type] || workflowTypeStyles["Instruction"];
+                const nodeProgress = Math.min(1, Math.max(0, (scrollProgress - 0.735) * 5 - index * 0.035));
+                if (nodeProgress <= 0) return;
+
+                const x = item.x - nodeW / 2;
+                const y = item.y - nodeH / 2;
+                const scale = 0.94 + nodeProgress * 0.06;
+
+                ctx.save();
+                ctx.translate(item.x, item.y);
+                ctx.scale(scale, scale);
+                ctx.translate(-item.x, -item.y);
+                ctx.globalAlpha = alpha * nodeProgress;
+
+                ctx.shadowColor = style.color;
+                ctx.shadowBlur = node.type === "Document Holder" ? 18 : 10;
+                ctx.fillStyle = style.fill;
+                roundedRectPath(x, y, nodeW, nodeH, 8);
+                ctx.fill();
+
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = style.color;
+                ctx.lineWidth = node.type === "Reconciliation" ? 1.8 : 1.2;
+                roundedRectPath(x, y, nodeW, nodeH, 8);
+                ctx.stroke();
+
+                if (node.type === "Manual Upload") {
+                    ctx.strokeStyle = "rgba(255, 255, 255, 0.18)";
+                    for (let i = 0; i < 3; i++) {
+                        ctx.strokeRect(x + 10 + i * 3, y + 12 - i * 3, 15, 20);
+                    }
+                }
+
+                ctx.fillStyle = style.color;
+                ctx.font = isMobile ? "bold 7px Orbitron" : "bold 8px Orbitron";
+                ctx.textAlign = "left";
+                ctx.fillText(node.type.toUpperCase(), x + (isMobile ? 8 : 12), y + (isMobile ? 13 : 15));
+
+                ctx.fillStyle = "#ffffff";
+                ctx.font = isMobile ? "bold 9px Noto Sans TC" : "bold 12px Noto Sans TC";
+                ctx.textAlign = "center";
+                wrapCanvasText(node.label, item.x, y + (isMobile ? 29 : 36), nodeW - 18, isMobile ? 11 : 14, 2);
+                ctx.restore();
+            });
+
+            ctx.restore();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            drawDigitalGrid();
+            drawWorkflowLines();
+            drawGeneratedWorkflow();
+
+            // 繪製粒子
+            ctx.save();
+            particles.forEach(p => {
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.restore();
+
+            // 繪製文件主體
+            documents.forEach(doc => {
+                const workflowFade = scrollProgress > 0.72 ? Math.max(0, 1 - (scrollProgress - 0.72) * 12) : 1;
+                const visibleOpacity = doc.opacity * workflowFade;
+                if (visibleOpacity <= 0.02) return;
+
+                const pos = doc.body.position;
+                const angle = doc.body.angle;
+
+                ctx.save();
+                ctx.translate(pos.x, pos.y);
+                ctx.rotate(angle);
+                ctx.globalAlpha = visibleOpacity;
+
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+                ctx.shadowBlur = 6;
+                ctx.shadowOffsetY = 3;
+
+                ctx.fillStyle = '#0a0d14';
+                ctx.fillRect(-doc.w/2, -doc.h/2, doc.w, doc.h);
+
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetY = 0;
+                ctx.lineWidth = 1.2;
+                ctx.strokeStyle = doc.color;
+                ctx.strokeRect(-doc.w/2, -doc.h/2, doc.w, doc.h);
+
+                ctx.fillStyle = doc.color;
+                ctx.fillRect(-doc.w/2, -doc.h/2, 4, 4);
+                ctx.fillRect(doc.w/2 - 4, -doc.h/2, 4, 4);
+
+                ctx.fillStyle = 'rgba(255,255,255,0.85)';
+                ctx.font = 'bold 9px Orbitron';
+                ctx.textAlign = 'center';
+                ctx.fillText(doc.type, 0, -2);
+
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(-10, 8); ctx.lineTo(10, 8);
+                ctx.moveTo(-10, 13); ctx.lineTo(5, 13);
+                ctx.stroke();
+
+                ctx.fillStyle = doc.color;
+                ctx.beginPath();
+                ctx.arc(-8, 18, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            });
+        }
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            updateStackTargets();
+        }
+
+        window.addEventListener('resize', resize);
+        window.onload = init;
+    </script>
+</body>
+</html>
