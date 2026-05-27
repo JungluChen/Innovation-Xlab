@@ -1207,13 +1207,13 @@ const showcaseGroups = {
             const stageWidth = Math.max(stage.clientWidth, 1);
             const stageHeight = Math.max(stage.clientHeight, 1);
             const side = getSide(item);
-            const row = Math.floor(localIndex / 3);
-            const col = localIndex % 3;
-            const xBase = side === "left" ? stageWidth * 0.47 : stageWidth * 0.53;
+            const row = Math.floor(localIndex / 2);
+            const col = localIndex % 2;
+            const xBase = side === "left" ? stageWidth * 0.48 : stageWidth * 0.52;
             const xDirection = side === "left" ? 1 : -1;
             return {
-                x: clamp(xBase + xDirection * (col * 46 + row * 16), stageWidth * 0.26, stageWidth * 0.74),
-                y: clamp(stageHeight * 0.79 - row * 58 + col * 7, stageHeight * 0.38, stageHeight * 0.84)
+                x: clamp(xBase + xDirection * (col * 78 + row * 20), stageWidth * 0.24, stageWidth * 0.76),
+                y: clamp(stageHeight * 0.78 - row * 70 + col * 9, stageHeight * 0.36, stageHeight * 0.84)
             };
         };
 
@@ -1477,8 +1477,8 @@ const showcaseGroups = {
             const route = entryRoutes[index % entryRoutes.length];
             const sectionGate = smoothStep(sectionTiming.readStart, sectionTiming.readStart + 0.07, groupProgress);
             const enter = smoothStep(0.015, 0.24, localProgress) * sectionGate;
-            const storeScale = smoothStep(0.62, 0.86, localProgress);
-            const storeMove = smoothStep(0.78, 0.96, localProgress);
+            const storeScale = smoothStep(0.54, 0.94, localProgress);
+            const storeMove = smoothStep(0.68, 0.985, localProgress);
             const archive = groupArchive;
             const nodeOffset = getNodeArchiveOffset(item, workflowOffset);
             const miniOffset = getArchiveCardOffset(item, localIndex);
@@ -1488,7 +1488,7 @@ const showcaseGroups = {
             const storedY = startY + miniOffset.y * storeMove;
             const x = storedX + (nodeOffset.x - storedX) * archive;
             const y = storedY + (nodeOffset.y - storedY) * archive;
-            const scale = 0.9 + 0.1 * enter - 0.52 * storeScale - 0.62 * archive;
+            const scale = 0.9 + 0.1 * enter - 0.42 * storeScale - 0.58 * archive;
             const rotation = route.rotation * (1 - enter) + (workflowOffset.side === "left" ? 5 : -5) * storeMove - 8 * archive;
             const alpha = clamp(enter * (1 - storeScale * 0.96) * (1 - archive * 1.05) * exitAlpha, 0, 1);
 
@@ -1514,21 +1514,22 @@ const showcaseGroups = {
 
                 const localArchiveIndex = groupItems.indexOf(archiveItem);
                 const readProgress = state.groupReadScaled - localArchiveIndex;
-                const stored = smoothStep(0.68, 0.96, readProgress);
+                const stored = smoothStep(0.52, 0.985, readProgress);
                 const isActive = archiveIndex === state.index;
-                const visible = state.groupArchive > 0.04 ? 1 : isActive ? Math.max(0, stored - 0.15) : stored;
+                const visible = state.groupArchive > 0.04 ? 1 : isActive ? Math.max(0, stored - 0.08) : stored;
                 const point = getArchivePoint(archiveItem, localArchiveIndex);
                 const source = getThumbnailSourcePoint(archiveItem);
-                const morph = smoothStep(0.04, 0.92, stored);
+                const morph = smoothStep(0.02, 0.98, stored);
                 const parkedX = source.x + (point.x - source.x) * morph;
-                const parkedY = source.y + (point.y - source.y) * morph - Math.sin(morph * Math.PI) * 18;
-                const staggeredArchive = smoothStep(localArchiveIndex * 0.035, 0.72 + localArchiveIndex * 0.025, state.groupArchive);
-                const arc = Math.sin(staggeredArchive * Math.PI) * (localArchiveIndex % 2 === 0 ? -18 : 18);
+                const parkedY = source.y + (point.y - source.y) * morph - Math.sin(morph * Math.PI) * 28;
+                const staggeredArchive = smoothStep(localArchiveIndex * 0.045, 0.82 + localArchiveIndex * 0.03, state.groupArchive);
+                const arc = Math.sin(staggeredArchive * Math.PI) * (localArchiveIndex % 2 === 0 ? -24 : 24);
                 const x = parkedX + (target.x - parkedX) * staggeredArchive + arc;
                 const y = parkedY + (target.y - parkedY) * staggeredArchive + Math.sin((localArchiveIndex + 1) * 1.7) * (1 - staggeredArchive) * 5;
-                const scale = (1.32 - morph * 0.6) - staggeredArchive * 0.42;
+                const scale = (1.28 - morph * 0.42) - staggeredArchive * 0.46;
                 const rotation = ((localArchiveIndex % 2 === 0 ? -1 : 1) * (9 - morph * 4 + localArchiveIndex * 1.3)) * (1 - staggeredArchive);
-                const alpha = clamp(visible * smoothStep(0.08, 0.28, stored) * (1 - staggeredArchive * 1.1) * exitAlpha, 0, 0.92);
+                const archiveFade = 1 - smoothStep(0.72, 1, staggeredArchive);
+                const alpha = clamp(visible * smoothStep(0.05, 0.32, stored) * archiveFade * exitAlpha, 0, 0.94);
 
                 gsap.set(archiveCard, { x, y, scale, rotation, autoAlpha: alpha });
             });
@@ -1562,10 +1563,14 @@ const showcaseGroups = {
             const state = getShowcaseState();
             const { item, index, localIndex, localProgress, groupArchive } = state;
             const groupChanged = item.group !== activeGroup;
-            const rootExitAlpha = clamp(smoothStep(window.innerHeight * 0.18, window.innerHeight * 1.04, rootRect.bottom), 0, 1);
+            const rootExitAlpha = clamp(smoothStep(window.innerHeight * 0.32, window.innerHeight * 1.08, rootRect.bottom), 0, 1);
             const teamRect = teamSection ? teamSection.getBoundingClientRect() : null;
-            const teamFadeAlpha = teamRect ? smoothStep(window.innerHeight * 0.58, window.innerHeight * 0.9, teamRect.top) : 1;
-            const exitAlpha = Math.min(rootExitAlpha, teamFadeAlpha);
+            const teamFadeAlpha = teamRect ? smoothStep(window.innerHeight * 0.88, window.innerHeight * 1.1, teamRect.top) : 1;
+            const impactExitBlend = item.group === "impact" ? smoothStep(0.92, 1, groupArchive) : 1;
+            const gatedRootExitAlpha = item.group === "impact" ? 1 - impactExitBlend + rootExitAlpha * impactExitBlend : rootExitAlpha;
+            const gatedTeamFadeAlpha = item.group === "impact" ? 1 - impactExitBlend + teamFadeAlpha * impactExitBlend : teamFadeAlpha;
+            const rawExitAlpha = Math.min(gatedRootExitAlpha, gatedTeamFadeAlpha);
+            const exitAlpha = rawExitAlpha < 0.035 ? 0 : rawExitAlpha;
 
             if (index !== activeIndex) {
                 activeIndex = index;
