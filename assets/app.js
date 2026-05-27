@@ -361,12 +361,12 @@ const showcaseGroups = {
         const getArchivedAlpha = () => introSection ? 0 : 0.42;
         const getIntroHandoffX = () => {
             if (!introSection || mobileDemoQuery.matches) return 0;
-            return clampValue(window.innerWidth * 0.28, 245, 405);
+            return 0;
         };
         const getIntroHandoffY = () => {
             if (!introSection) return 0;
-            if (mobileDemoQuery.matches) return clampValue(window.innerHeight * 0.08, 28, 64);
-            return -clampValue(window.innerHeight * 0.06, 44, 68);
+            if (mobileDemoQuery.matches) return clampValue(window.innerHeight * 0.1, 36, 76);
+            return clampValue(window.innerHeight * 0.075, 54, 86);
         };
 
         const getNodeBox = (nodeName) => {
@@ -534,7 +534,7 @@ const showcaseGroups = {
             };
 
             if (introSection && introPin) {
-                timelineConfig.end = "+=175%";
+                timelineConfig.end = "+=145%";
                 timelineConfig.pin = introPin;
                 timelineConfig.anticipatePin = 1;
             } else {
@@ -579,12 +579,12 @@ const showcaseGroups = {
                 .to(workflow, {
                     x: getIntroHandoffX,
                     y: getIntroHandoffY,
-                    scaleX: 0.97,
-                    scaleY: 1.02,
-                    rotation: 1.2,
-                    duration: 0.24,
-                    ease: "power3.out"
-                }, 0.7);
+                    scaleX: 1.015,
+                    scaleY: 0.985,
+                    rotation: 0,
+                    duration: 0.18,
+                    ease: "power2.out"
+                }, 0.62);
 
             if (introCopy) {
                 timeline
@@ -608,9 +608,9 @@ const showcaseGroups = {
                         scaleX: 1,
                         scaleY: 1,
                         rotation: 0,
-                        duration: 0.2,
-                        ease: "back.out(1.7)"
-                    }, 1.56);
+                        duration: 0.14,
+                        ease: "back.out(1.45)"
+                    }, 1.5);
             }
 
             return () => {
@@ -687,11 +687,11 @@ const showcaseGroups = {
                 timeline.to(workflow, {
                     x: getIntroHandoffX,
                     y: getIntroHandoffY,
-                    scale: 0.9,
+                    scale: 0.92,
                     rotation: 0,
-                    duration: 0.28,
-                    ease: "power3.inOut"
-                }, 0.86);
+                    duration: 0.22,
+                    ease: "power2.out"
+                }, 0.78);
 
                 return () => {
                     timeline.kill();
@@ -1205,11 +1205,11 @@ const showcaseGroups = {
             if (!workflowMotion) {
                 gsap.set(workflow, { xPercent: -50, yPercent: -50 });
                 workflowMotion = {
-                    x: gsap.quickTo(workflow, "x", { duration: 0.3, ease: "power3.out" }),
-                    y: gsap.quickTo(workflow, "y", { duration: 0.3, ease: "power3.out" }),
-                    scaleX: gsap.quickTo(workflow, "scaleX", { duration: 0.34, ease: "elastic.out(1,0.62)" }),
-                    scaleY: gsap.quickTo(workflow, "scaleY", { duration: 0.34, ease: "elastic.out(1,0.62)" }),
-                    rotation: gsap.quickTo(workflow, "rotation", { duration: 0.32, ease: "power3.out" })
+                    x: gsap.quickTo(workflow, "x", { duration: 0.2, ease: "power3.out" }),
+                    y: gsap.quickTo(workflow, "y", { duration: 0.2, ease: "power3.out" }),
+                    scaleX: gsap.quickTo(workflow, "scaleX", { duration: 0.24, ease: "back.out(1.55)" }),
+                    scaleY: gsap.quickTo(workflow, "scaleY", { duration: 0.24, ease: "back.out(1.55)" }),
+                    rotation: gsap.quickTo(workflow, "rotation", { duration: 0.22, ease: "power2.out" })
                 };
             }
             return workflowMotion;
@@ -1297,7 +1297,7 @@ const showcaseGroups = {
         };
 
         const updateNodeState = (item, index, localProgress) => {
-            const archivedThrough = index + (localProgress > 0.82 ? 1 : 0);
+            const archivedThrough = index + (localProgress > 0.9 ? 1 : 0);
             const counts = { intent: 0, synthesis: 0, validation: 0, deploy: 0 };
             showcaseItems.slice(0, archivedThrough).forEach((archivedItem) => {
                 if (counts[archivedItem.node] !== undefined) counts[archivedItem.node] += 1;
@@ -1344,13 +1344,10 @@ const showcaseGroups = {
         const updateTitleMotion = (item, index, localProgress) => {
             if (!titleCard) return;
             const first = groupFirstIndex[item.group] ?? index;
-            const last = groupLastIndex[item.group] ?? index;
             const isFirstInGroup = index === first;
-            const isLastInGroup = index === last;
             const enter = isFirstInGroup ? smoothStep(0.18, 0.36, localProgress) : 1;
-            const exit = isLastInGroup ? smoothStep(0.92, 0.995, localProgress) : 0;
-            const alpha = clamp(enter * (1 - exit), 0, 1);
-            const y = (1 - enter) * 18 - exit * 14;
+            const alpha = clamp(enter, 0, 1);
+            const y = (1 - enter) * 18;
             const scale = 0.975 + alpha * 0.025;
             const blur = (1 - alpha) * 7;
 
@@ -1369,8 +1366,8 @@ const showcaseGroups = {
         const updateCardMotion = (item, index, localProgress, workflowOffset) => {
             const baseX = getCardBaseX(item);
             const route = entryRoutes[index % entryRoutes.length];
-            const enter = smoothStep(0.26, 0.48, localProgress);
-            const archive = smoothStep(0.74, index === showcaseItems.length - 1 ? 0.985 : 0.94, localProgress);
+            const enter = smoothStep(0.16, 0.36, localProgress);
+            const archive = smoothStep(0.82, index === showcaseItems.length - 1 ? 1.08 : 0.98, localProgress);
             const nodeOffset = getNodeArchiveOffset(item, workflowOffset);
             const startX = baseX + route.x * (1 - enter);
             const startY = route.y * (1 - enter);
@@ -1388,6 +1385,13 @@ const showcaseGroups = {
         };
 
         const updateShowcase = () => {
+            const rootRect = root.getBoundingClientRect();
+            if (rootRect.top > 96) {
+                workflow.classList.remove("is-showcase-controlled", "is-group-switching");
+                hideAllContent();
+                return;
+            }
+
             const progress = getShowcaseProgress();
             const scaled = progress * showcaseItems.length;
             const index = Math.min(showcaseItems.length - 1, Math.floor(scaled));
@@ -1467,7 +1471,7 @@ const showcaseGroups = {
         ScrollTrigger.create({
             trigger: track,
             start: "top top",
-            end: "bottom bottom",
+            end: "bottom top",
             scrub: true,
             invalidateOnRefresh: true,
             refreshPriority: -8,
