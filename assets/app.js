@@ -1110,6 +1110,7 @@ const showcaseGroups = {
         const stage = root ? root.querySelector("[data-showcase-stage]") : null;
         const card = root ? root.querySelector("[data-showcase-card]") : null;
         const titleCard = root ? root.querySelector("[data-showcase-title-card]") : null;
+        const archiveLayer = root ? root.querySelector("[data-showcase-archive]") : null;
         const workflow = configureSharedWorkflowElement(document.querySelector("[data-demo-workflow]"));
         if (!root || !track || !stage || !card || !workflow || !showcaseItems.length) return;
 
@@ -1124,6 +1125,7 @@ const showcaseGroups = {
         const groupTitle = root.querySelector("[data-showcase-group-title]");
         const groupBody = root.querySelector("[data-showcase-group-body]");
         const mobileList = root.querySelector("[data-showcase-mobile-list]");
+        const teamSection = document.getElementById("team");
         const nodes = Array.from(workflow.querySelectorAll("[data-showcase-node]"));
         const lines = Array.from(workflow.querySelectorAll("[data-showcase-line]"));
         const counters = Array.from(workflow.querySelectorAll("[data-node-count]"));
@@ -1139,6 +1141,12 @@ const showcaseGroups = {
             return map;
         }, {});
 
+        const groupItemsByName = showcaseItems.reduce((map, item) => {
+            if (!map[item.group]) map[item.group] = [];
+            map[item.group].push(item);
+            return map;
+        }, {});
+
         const entryRoutes = [
             { x: -460, y: -120, rotation: -12 },
             { x: 420, y: -150, rotation: 10 },
@@ -1151,6 +1159,16 @@ const showcaseGroups = {
         let activeGroup = "";
         let groupSwitchTimer = null;
         let workflowMotion = null;
+        let showcaseSyncFrame = null;
+        let archiveCards = [];
+        const sectionTiming = {
+            setupStart: 0.015,
+            setupEnd: 0.17,
+            readStart: 0.19,
+            readEnd: 0.76,
+            archiveStart: 0.79,
+            archiveEnd: 0.985
+        };
 
         const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
         const smoothStep = (start, end, value) => {
@@ -1159,6 +1177,7 @@ const showcaseGroups = {
         };
         const formatIndex = (index) => `${String(index + 1).padStart(2, "0")} / ${String(showcaseItems.length).padStart(2, "0")}`;
         const getGroup = (groupName) => showcaseGroups[groupName] || showcaseGroups.workflow;
+        const getGroupItems = (groupName) => groupItemsByName[groupName] || [];
         const getSide = (item) => getGroup(item.group).contentSide || (groupOrder.indexOf(item.group) % 2 === 0 ? "left" : "right");
         const getGroupProgress = (item, index, localProgress) => {
             const first = groupFirstIndex[item.group] ?? index;
@@ -1179,6 +1198,41 @@ const showcaseGroups = {
                 x: side === "left" ? base : -base,
                 y: -64 + groupProgress * 20 + Math.sin((groupIndex + 1) * 0.9) * 6,
                 side
+            };
+        };
+
+        const getCardHomeY = () => Math.max(stage.clientHeight, 1) * 0.64 - Math.max(card.offsetHeight, 1) / 2;
+
+        const getArchivePoint = (item, localIndex) => {
+            const stageWidth = Math.max(stage.clientWidth, 1);
+            const stageHeight = Math.max(stage.clientHeight, 1);
+            const side = getSide(item);
+            const row = Math.floor(localIndex / 3);
+            const col = localIndex % 3;
+            const xBase = side === "left" ? stageWidth * 0.47 : stageWidth * 0.53;
+            const xDirection = side === "left" ? 1 : -1;
+            return {
+                x: clamp(xBase + xDirection * (col * 46 + row * 16), stageWidth * 0.26, stageWidth * 0.74),
+                y: clamp(stageHeight * 0.79 - row * 58 + col * 7, stageHeight * 0.38, stageHeight * 0.84)
+            };
+        };
+
+        const getArchiveCardOffset = (item, localIndex) => {
+            const point = getArchivePoint(item, localIndex);
+            return {
+                x: point.x - card.offsetLeft,
+                y: point.y - getCardHomeY()
+            };
+        };
+
+        const getWorkflowNodeStagePoint = (nodeName = "intent") => {
+            const targetNode = nodeMap.get(nodeName) || nodeMap.get("intent") || nodes[0];
+            if (!targetNode) return { x: stage.clientWidth / 2, y: stage.clientHeight / 2 };
+            const stageRect = stage.getBoundingClientRect();
+            const nodeRect = targetNode.getBoundingClientRect();
+            return {
+                x: nodeRect.left - stageRect.left + nodeRect.width / 2,
+                y: nodeRect.top - stageRect.top + nodeRect.height / 2
             };
         };
 
@@ -1205,27 +1259,55 @@ const showcaseGroups = {
             if (!workflowMotion) {
                 gsap.set(workflow, { xPercent: -50, yPercent: -50 });
                 workflowMotion = {
-                    x: gsap.quickTo(workflow, "x", { duration: 0.2, ease: "power3.out" }),
-                    y: gsap.quickTo(workflow, "y", { duration: 0.2, ease: "power3.out" }),
-                    scaleX: gsap.quickTo(workflow, "scaleX", { duration: 0.24, ease: "back.out(1.55)" }),
-                    scaleY: gsap.quickTo(workflow, "scaleY", { duration: 0.24, ease: "back.out(1.55)" }),
-                    rotation: gsap.quickTo(workflow, "rotation", { duration: 0.22, ease: "power2.out" })
+                    x: gsap.quickTo(workflow, "x", { duration: 0.13, ease: "power3.out" }),
+                    y: gsap.quickTo(workflow, "y", { duration: 0.13, ease: "power3.out" }),
+                    scaleX: gsap.quickTo(workflow, "scaleX", { duration: 0.18, ease: "back.out(1.8)" }),
+                    scaleY: gsap.quickTo(workflow, "scaleY", { duration: 0.18, ease: "back.out(1.8)" }),
+                    rotation: gsap.quickTo(workflow, "rotation", { duration: 0.15, ease: "power3.out" })
                 };
             }
             return workflowMotion;
         };
 
-        const getShowcaseProgress = () => {
+        const getShowcaseState = () => {
             const anchors = Array.from(root.querySelectorAll(".product-showcase-anchor"));
-            const firstAnchor = anchors[0];
-            const lastAnchor = anchors[anchors.length - 1];
-            if (!firstAnchor || !lastAnchor) return 0;
+            if (!anchors.length) {
+                return { item: showcaseItems[0], index: 0, localIndex: 0, localProgress: 0, groupProgress: 0, groupArchive: 0, groupReadScaled: 0 };
+            }
 
-            const probe = 92;
-            const firstRect = firstAnchor.getBoundingClientRect();
-            const lastRect = lastAnchor.getBoundingClientRect();
-            const travel = Math.max(1, lastRect.bottom - firstRect.top - window.innerHeight * 0.18);
-            return clamp((probe - firstRect.top) / travel, 0, 0.999999);
+            const probe = Math.min(window.innerHeight * 0.32, 260);
+            let activeAnchor = anchors[0];
+            let nearestDistance = Infinity;
+
+            anchors.forEach((anchor) => {
+                const rect = anchor.getBoundingClientRect();
+                if (rect.top <= probe && rect.bottom > probe) {
+                    activeAnchor = anchor;
+                    nearestDistance = 0;
+                    return;
+                }
+
+                const distance = Math.min(Math.abs(rect.top - probe), Math.abs(rect.bottom - probe));
+                if (distance < nearestDistance) {
+                    nearestDistance = distance;
+                    activeAnchor = anchor;
+                }
+            });
+
+            const groupName = activeAnchor.dataset.showcaseAnchor || "workflow";
+            const groupItems = getGroupItems(groupName);
+            const rect = activeAnchor.getBoundingClientRect();
+            const groupProgress = clamp((probe - rect.top) / Math.max(rect.height, 1), 0, 0.999999);
+            const setupProgress = smoothStep(sectionTiming.setupStart, sectionTiming.setupEnd, groupProgress);
+            const readProgress = clamp((groupProgress - sectionTiming.readStart) / Math.max(sectionTiming.readEnd - sectionTiming.readStart, 0.0001), 0, 0.999999);
+            const groupReadScaled = readProgress * Math.max(groupItems.length, 1);
+            const localIndex = Math.min(groupItems.length - 1, Math.max(0, Math.floor(groupReadScaled)));
+            const localProgress = groupReadScaled - localIndex;
+            const item = groupItems[localIndex] || showcaseItems[0];
+            const index = Math.max(0, showcaseItems.indexOf(item));
+            const groupArchive = smoothStep(sectionTiming.archiveStart, sectionTiming.archiveEnd, groupProgress);
+
+            return { item, index, localIndex, localProgress, groupProgress, setupProgress, readProgress, groupArchive, groupReadScaled };
         };
 
         const renderMobileCards = () => {
@@ -1251,6 +1333,17 @@ const showcaseGroups = {
                         <ul>${pointMarkup}</ul>
                     </article>`;
             }).join("");
+        };
+
+        const renderArchiveCards = () => {
+            if (!archiveLayer) return;
+            archiveLayer.innerHTML = showcaseItems.map((item, index) => `
+                <article class="product-archive-file" data-archive-index="${index}">
+                    <span>${item.section}</span>
+                    <strong>${item.title}</strong>
+                </article>
+            `).join("");
+            archiveCards = Array.from(archiveLayer.querySelectorAll("[data-archive-index]"));
         };
 
         const renderGroup = (item) => {
@@ -1291,13 +1384,13 @@ const showcaseGroups = {
             window.clearTimeout(groupSwitchTimer);
             groupSwitchTimer = null;
             if (typeof gsap !== "undefined") {
-                gsap.killTweensOf([card, titleCard].filter(Boolean));
-                gsap.set([card, titleCard].filter(Boolean), { autoAlpha: 0 });
+                gsap.killTweensOf([card, titleCard, ...archiveCards].filter(Boolean));
+                gsap.set([card, titleCard, ...archiveCards].filter(Boolean), { autoAlpha: 0 });
             }
         };
 
-        const updateNodeState = (item, index, localProgress) => {
-            const archivedThrough = index + (localProgress > 0.9 ? 1 : 0);
+        const updateNodeState = (item, index, localProgress, groupArchive = 0) => {
+            const archivedThrough = index + (groupArchive > 0.62 || localProgress > 0.92 ? 1 : 0);
             const counts = { intent: 0, synthesis: 0, validation: 0, deploy: 0 };
             showcaseItems.slice(0, archivedThrough).forEach((archivedItem) => {
                 if (counts[archivedItem.node] !== undefined) counts[archivedItem.node] += 1;
@@ -1311,7 +1404,7 @@ const showcaseGroups = {
                 node.classList.toggle("is-active", node.dataset.showcaseNode === item.node);
             });
 
-            const activeLines = {
+            const activeLines = groupArchive > 0.08 ? ["intent-synthesis", "intent-validation", "synthesis-deploy", "validation-deploy"] : {
                 intent: [],
                 synthesis: ["intent-synthesis"],
                 validation: ["intent-validation"],
@@ -1320,6 +1413,13 @@ const showcaseGroups = {
 
             lines.forEach((line) => {
                 line.classList.toggle("is-active", activeLines.includes(line.dataset.showcaseLine));
+            });
+
+            workflow.classList.toggle("is-accepting-files", groupArchive > 0.08);
+            workflow.classList.toggle("is-processing-files", groupArchive <= 0.08 && localProgress > 0.18 && localProgress < 0.9);
+            nodes.forEach((node) => {
+                node.classList.toggle("is-receiving", groupArchive > 0.08 && node.dataset.showcaseNode === "intent");
+                node.classList.toggle("is-processing", groupArchive <= 0.08 && node.dataset.showcaseNode === item.node && localProgress > 0.18 && localProgress < 0.9);
             });
         };
 
@@ -1341,15 +1441,14 @@ const showcaseGroups = {
             return offset;
         };
 
-        const updateTitleMotion = (item, index, localProgress) => {
+        const updateTitleMotion = (state, exitAlpha = 1) => {
             if (!titleCard) return;
-            const first = groupFirstIndex[item.group] ?? index;
-            const isFirstInGroup = index === first;
-            const enter = isFirstInGroup ? smoothStep(0.18, 0.36, localProgress) : 1;
-            const alpha = clamp(enter, 0, 1);
-            const y = (1 - enter) * 18;
+            const enter = smoothStep(0.07, sectionTiming.setupEnd, state.groupProgress);
+            const leave = smoothStep(0.965, 0.995, state.groupProgress);
+            const alpha = clamp(enter * (1 - leave) * exitAlpha, 0, 1);
+            const y = (1 - enter) * 16 - leave * 18;
             const scale = 0.975 + alpha * 0.025;
-            const blur = (1 - alpha) * 7;
+            const blur = (1 - alpha) * 6;
 
             if (typeof gsap !== "undefined") {
                 gsap.set(titleCard, {
@@ -1363,19 +1462,26 @@ const showcaseGroups = {
             }
         };
 
-        const updateCardMotion = (item, index, localProgress, workflowOffset) => {
+        const updateCardMotion = (state, workflowOffset, exitAlpha = 1) => {
+            const { item, index, localIndex, localProgress, groupArchive, groupProgress } = state;
             const baseX = getCardBaseX(item);
             const route = entryRoutes[index % entryRoutes.length];
-            const enter = smoothStep(0.16, 0.36, localProgress);
-            const archive = smoothStep(0.82, index === showcaseItems.length - 1 ? 1.08 : 0.98, localProgress);
+            const sectionGate = smoothStep(sectionTiming.readStart, sectionTiming.readStart + 0.07, groupProgress);
+            const enter = smoothStep(0.015, 0.24, localProgress) * sectionGate;
+            const storeScale = smoothStep(0.62, 0.86, localProgress);
+            const storeMove = smoothStep(0.78, 0.96, localProgress);
+            const archive = groupArchive;
             const nodeOffset = getNodeArchiveOffset(item, workflowOffset);
+            const miniOffset = getArchiveCardOffset(item, localIndex);
             const startX = baseX + route.x * (1 - enter);
             const startY = route.y * (1 - enter);
-            const x = startX + (nodeOffset.x - baseX) * archive;
-            const y = startY + nodeOffset.y * archive;
-            const scale = 0.9 + 0.1 * enter - 0.68 * archive;
-            const rotation = route.rotation * (1 - enter) + (workflowOffset.side === "left" ? 5 : -5) * archive;
-            const alpha = clamp(enter * (1 - archive * 1.12), 0, 1);
+            const storedX = startX + (miniOffset.x - baseX) * storeMove;
+            const storedY = startY + miniOffset.y * storeMove;
+            const x = storedX + (nodeOffset.x - storedX) * archive;
+            const y = storedY + (nodeOffset.y - storedY) * archive;
+            const scale = 0.9 + 0.1 * enter - 0.52 * storeScale - 0.62 * archive;
+            const rotation = route.rotation * (1 - enter) + (workflowOffset.side === "left" ? 5 : -5) * storeMove - 8 * archive;
+            const alpha = clamp(enter * (1 - storeScale * 0.96) * (1 - archive * 1.05) * exitAlpha, 0, 1);
 
             if (typeof gsap !== "undefined") {
                 gsap.set(card, { x, y, scale, rotation, autoAlpha: alpha });
@@ -1384,20 +1490,69 @@ const showcaseGroups = {
             }
         };
 
+        const updateArchiveCards = (state, exitAlpha = 1) => {
+            if (!archiveCards.length || typeof gsap === "undefined") return;
+            const groupItems = getGroupItems(state.item.group);
+            const target = getWorkflowNodeStagePoint("intent");
+
+            archiveCards.forEach((archiveCard) => {
+                const archiveIndex = Number(archiveCard.dataset.archiveIndex || -1);
+                const archiveItem = showcaseItems[archiveIndex];
+                if (!archiveItem || archiveItem.group !== state.item.group) {
+                    gsap.set(archiveCard, { autoAlpha: 0 });
+                    return;
+                }
+
+                const localArchiveIndex = groupItems.indexOf(archiveItem);
+                const readProgress = state.groupReadScaled - localArchiveIndex;
+                const stored = smoothStep(0.68, 0.96, readProgress);
+                const isActive = archiveIndex === state.index;
+                const visible = state.groupArchive > 0.04 ? 1 : isActive ? Math.max(0, stored - 0.15) : stored;
+                const point = getArchivePoint(archiveItem, localArchiveIndex);
+                const staggeredArchive = smoothStep(localArchiveIndex * 0.035, 0.72 + localArchiveIndex * 0.025, state.groupArchive);
+                const arc = Math.sin(staggeredArchive * Math.PI) * (localArchiveIndex % 2 === 0 ? -18 : 18);
+                const x = point.x + (target.x - point.x) * staggeredArchive + arc;
+                const y = point.y + (target.y - point.y) * staggeredArchive + Math.sin((localArchiveIndex + 1) * 1.7) * (1 - staggeredArchive) * 5;
+                const scale = 0.72 - staggeredArchive * 0.42;
+                const rotation = ((localArchiveIndex % 2 === 0 ? -1 : 1) * (4 + localArchiveIndex * 1.3)) * (1 - staggeredArchive);
+                const alpha = clamp(visible * (1 - staggeredArchive * 1.1) * exitAlpha, 0, 0.92);
+
+                gsap.set(archiveCard, { x, y, scale, rotation, autoAlpha: alpha });
+            });
+        };
+
         const updateShowcase = () => {
             const rootRect = root.getBoundingClientRect();
             if (rootRect.top > 96) {
-                workflow.classList.remove("is-showcase-controlled", "is-group-switching");
                 hideAllContent();
+                const handoffProgress = 1 - clamp((rootRect.top - 96) / Math.max(window.innerHeight * 0.32, 240), 0, 1);
+                if (handoffProgress > 0.01 && typeof gsap !== "undefined") {
+                    const firstItem = showcaseItems[0];
+                    const offset = getWorkflowOffset(firstItem, 0, 0);
+                    const motion = getWorkflowMotion();
+                    const introY = clamp(window.innerHeight * 0.075, 54, 86);
+                    const easedHandoff = smoothStep(0, 1, handoffProgress);
+                    const handoffArc = Math.sin(easedHandoff * Math.PI);
+                    workflow.classList.add("is-showcase-controlled", "is-handoff");
+                    gsap.set(workflow, { autoAlpha: 1 });
+                    motion.x(offset.x * easedHandoff);
+                    motion.y(introY * (1 - easedHandoff) + offset.y * easedHandoff - handoffArc * 18);
+                    motion.scaleX(1 + handoffArc * 0.05);
+                    motion.scaleY(1 - handoffArc * 0.035);
+                    motion.rotation(-1.8 * easedHandoff);
+                } else {
+                    workflow.classList.remove("is-showcase-controlled", "is-group-switching", "is-handoff", "is-processing-files", "is-accepting-files");
+                }
                 return;
             }
 
-            const progress = getShowcaseProgress();
-            const scaled = progress * showcaseItems.length;
-            const index = Math.min(showcaseItems.length - 1, Math.floor(scaled));
-            const localProgress = scaled - index;
-            const item = showcaseItems[index];
+            const state = getShowcaseState();
+            const { item, index, localIndex, localProgress, groupArchive } = state;
             const groupChanged = item.group !== activeGroup;
+            const rootExitAlpha = clamp(smoothStep(window.innerHeight * 0.18, window.innerHeight * 1.04, rootRect.bottom), 0, 1);
+            const teamRect = teamSection ? teamSection.getBoundingClientRect() : null;
+            const teamFadeAlpha = teamRect ? smoothStep(window.innerHeight * 0.34, window.innerHeight * 0.92, teamRect.top) : 1;
+            const exitAlpha = Math.min(rootExitAlpha, teamFadeAlpha);
 
             if (index !== activeIndex) {
                 activeIndex = index;
@@ -1411,27 +1566,48 @@ const showcaseGroups = {
             }
 
             workflow.classList.add("is-showcase-controlled");
-            if (typeof gsap !== "undefined") gsap.set(workflow, { autoAlpha: 1 });
+            workflow.classList.remove("is-handoff");
             const workflowOffset = updateWorkflowMotion(item, index, localProgress);
-            updateNodeState(item, index, localProgress);
-            updateTitleMotion(item, index, localProgress);
-            updateCardMotion(item, index, localProgress, workflowOffset);
+            if (typeof gsap !== "undefined") gsap.set(workflow, { autoAlpha: exitAlpha });
+            updateNodeState(item, index, localProgress, groupArchive);
+            updateTitleMotion(state, exitAlpha);
+            updateCardMotion(state, workflowOffset, exitAlpha);
+            updateArchiveCards(state, exitAlpha);
         };
 
         const releaseWorkflow = (hideWorkflow) => {
-            workflow.classList.remove("is-showcase-controlled", "is-group-switching");
-            hideAllContent();
+            if (hideWorkflow) {
+                const rootBottom = root.getBoundingClientRect().bottom;
+                const teamTop = teamSection ? teamSection.getBoundingClientRect().top : Infinity;
+                if (rootBottom > window.innerHeight * 0.12 && teamTop > window.innerHeight * 0.18) {
+                    updateShowcase();
+                    return;
+                }
+            }
+
+            workflow.classList.remove("is-showcase-controlled", "is-group-switching", "is-processing-files", "is-accepting-files");
             if (hideWorkflow && typeof gsap !== "undefined") {
-                gsap.to(workflow, {
+                workflow.classList.add("is-fading-away");
+                gsap.to([workflow, card, titleCard, ...archiveCards].filter(Boolean), {
                     autoAlpha: 0,
-                    duration: 0.12,
+                    y: "-=18",
+                    scale: 0.985,
+                    filter: "blur(5px)",
+                    duration: 0.62,
                     ease: "power2.out",
                     overwrite: "auto",
-                    onComplete: () => gsap.set(workflow, { autoAlpha: 0 })
+                    onComplete: () => {
+                        workflow.classList.remove("is-fading-away", "is-accepting-files");
+                        nodes.forEach((node) => node.classList.remove("is-processing", "is-receiving"));
+                        gsap.set([workflow, card, titleCard, ...archiveCards].filter(Boolean), { autoAlpha: 0, y: 0, scale: 1, filter: "none" });
+                    }
                 });
+            } else {
+                hideAllContent();
             }
         };
 
+        renderArchiveCards();
         renderMobileCards();
 
         if (window.matchMedia("(max-width: 767px)").matches) {
@@ -1468,6 +1644,14 @@ const showcaseGroups = {
         gsap.registerPlugin(ScrollTrigger);
         gsap.set([card, titleCard].filter(Boolean), { autoAlpha: 0 });
 
+        const requestShowcaseSync = () => {
+            if (showcaseSyncFrame !== null) return;
+            showcaseSyncFrame = window.requestAnimationFrame(() => {
+                showcaseSyncFrame = null;
+                updateShowcase();
+            });
+        };
+
         ScrollTrigger.create({
             trigger: track,
             start: "top top",
@@ -1481,6 +1665,10 @@ const showcaseGroups = {
             onLeave: () => releaseWorkflow(true),
             onLeaveBack: () => releaseWorkflow(false)
         });
+
+        window.addEventListener("scroll", requestShowcaseSync, { passive: true });
+        window.addEventListener("resize", requestShowcaseSync);
+        requestShowcaseSync();
     }
 
     function initNavProgress() {
