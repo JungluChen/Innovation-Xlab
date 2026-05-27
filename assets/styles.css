@@ -1193,3 +1193,120 @@ section[id]{scroll-margin-top:88px;}
     font-size: clamp(34px, 9vw, 52px);
   }
 }
+
+@media (max-width: 767px) {
+  .risk2-section {
+    overflow: hidden;
+  }
+
+  .risk2-container {
+    padding: 48px 18px 56px;
+  }
+
+  .risk2-heading h2 {
+    font-size: clamp(34px, 11vw, 48px);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+
+  .risk2-heading p:last-child {
+    margin-top: 16px;
+    font-size: 16px;
+    line-height: 1.68;
+  }
+
+  .risk2-stage-rail {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding-bottom: 0;
+    margin-top: 28px;
+  }
+
+  .risk2-stage {
+    min-width: 0;
+    width: 100%;
+    min-height: 0;
+    scroll-snap-align: none;
+    padding: 16px 18px 16px 20px;
+    border-radius: 18px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 14px;
+    row-gap: 4px;
+    align-items: center;
+  }
+
+  .risk2-stage.is-active {
+    transform: none;
+    box-shadow:
+      0 0 0 2px rgba(245, 183, 0, 0.22),
+      0 14px 32px rgba(15, 23, 42, 0.08);
+  }
+
+  .risk2-stage.is-active::before {
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 4px;
+  }
+
+  .risk2-stage-number {
+    grid-row: 1 / span 2;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+  }
+
+  .risk2-stage-title {
+    margin-top: 0;
+    font-size: 22px;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .risk2-stage-risk {
+    margin-top: 2px;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .risk2-body {
+    margin-top: 24px;
+    gap: 18px;
+  }
+
+  .risk2-copy-card,
+  .risk2-video-card {
+    border-radius: 22px;
+  }
+
+  .risk2-copy-card {
+    padding: 24px 22px;
+  }
+
+  .risk2-copy-card h3 {
+    font-size: 36px;
+    letter-spacing: -0.04em;
+  }
+
+  .risk2-panel-label {
+    margin-bottom: 18px;
+    letter-spacing: 0.18em;
+  }
+
+  .risk2-info-grid {
+    margin-top: 24px;
+    gap: 18px;
+  }
+
+  .risk2-info-label {
+    font-size: 15px;
+  }
+
+  .risk2-info-grid p:not(.risk2-info-label) {
+    font-size: 16px;
+    line-height: 1.62;
+  }
+}
