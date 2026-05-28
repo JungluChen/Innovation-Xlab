@@ -502,11 +502,11 @@ section[id]{scroll-margin-top:88px;}
 .product-showcase-file li{position:relative;padding-left:18px;font-size:13px;line-height:1.55;color:#5f6c7d;}
 .product-showcase-file li::before{content:"";position:absolute;left:0;top:.66em;width:7px;height:7px;border-radius:999px;background:var(--sky);box-shadow:0 0 0 4px rgba(98,188,241,.12);}
 .product-showcase-anchor{height:calc(var(--showcase-span,1) * 100vh);min-height:640px;scroll-margin-top:76px;}
-.product-showcase-anchor[data-showcase-anchor="workflow"]{--showcase-span:3.65;}
-.product-showcase-anchor[data-showcase-anchor="method"]{--showcase-span:2.8;}
-.product-showcase-anchor[data-showcase-anchor="risk"]{--showcase-span:4.45;}
-.product-showcase-anchor[data-showcase-anchor="fixes"]{--showcase-span:2.8;}
-.product-showcase-anchor[data-showcase-anchor="impact"]{--showcase-span:2.85;}
+.product-showcase-anchor[data-showcase-anchor="workflow"]{--showcase-span:5.1;}
+.product-showcase-anchor[data-showcase-anchor="method"]{--showcase-span:4.05;}
+.product-showcase-anchor[data-showcase-anchor="risk"]{--showcase-span:6.25;}
+.product-showcase-anchor[data-showcase-anchor="fixes"]{--showcase-span:4.05;}
+.product-showcase-anchor[data-showcase-anchor="impact"]{--showcase-span:3.95;}
 .shared-workflow-model{position:fixed!important;inset:auto!important;left:50%!important;top:68%!important;z-index:4;width:min(660px,45vw)!important;height:min(390px,43vh)!important;transform-origin:center center;pointer-events:none;contain:layout style;overflow:visible!important;}
 .shared-workflow-model.is-showcase-controlled{z-index:4;}
 .shared-workflow-model .fibula-demo-lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}

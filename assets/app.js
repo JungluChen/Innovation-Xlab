@@ -1163,11 +1163,11 @@ const showcaseGroups = {
         let archiveCards = [];
         const sectionTiming = {
             setupStart: 0.015,
-            setupEnd: 0.17,
-            readStart: 0.19,
-            readEnd: 0.76,
-            archiveStart: 0.79,
-            archiveEnd: 0.985
+            setupEnd: 0.145,
+            readStart: 0.16,
+            readEnd: 0.82,
+            archiveStart: 0.845,
+            archiveEnd: 0.992
         };
 
         const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -1476,9 +1476,9 @@ const showcaseGroups = {
             const baseX = getCardBaseX(item);
             const route = entryRoutes[index % entryRoutes.length];
             const sectionGate = smoothStep(sectionTiming.readStart, sectionTiming.readStart + 0.07, groupProgress);
-            const enter = smoothStep(0.015, 0.24, localProgress) * sectionGate;
-            const storeScale = smoothStep(0.54, 0.94, localProgress);
-            const storeMove = smoothStep(0.68, 0.985, localProgress);
+            const enter = smoothStep(0.015, 0.2, localProgress) * sectionGate;
+            const storeScale = smoothStep(0.7, 1, localProgress);
+            const storeMove = smoothStep(0.76, 1, localProgress);
             const archive = groupArchive;
             const nodeOffset = getNodeArchiveOffset(item, workflowOffset);
             const miniOffset = getArchiveCardOffset(item, localIndex);
@@ -1514,12 +1514,12 @@ const showcaseGroups = {
 
                 const localArchiveIndex = groupItems.indexOf(archiveItem);
                 const readProgress = state.groupReadScaled - localArchiveIndex;
-                const stored = smoothStep(0.52, 0.985, readProgress);
+                const stored = smoothStep(0.62, 1.12, readProgress);
                 const isActive = archiveIndex === state.index;
                 const visible = state.groupArchive > 0.04 ? 1 : isActive ? Math.max(0, stored - 0.08) : stored;
                 const point = getArchivePoint(archiveItem, localArchiveIndex);
                 const source = getThumbnailSourcePoint(archiveItem);
-                const morph = smoothStep(0.02, 0.98, stored);
+                const morph = smoothStep(0.04, 1, stored);
                 const parkedX = source.x + (point.x - source.x) * morph;
                 const parkedY = source.y + (point.y - source.y) * morph - Math.sin(morph * Math.PI) * 28;
                 const staggeredArchive = smoothStep(localArchiveIndex * 0.045, 0.82 + localArchiveIndex * 0.03, state.groupArchive);
@@ -1529,7 +1529,7 @@ const showcaseGroups = {
                 const scale = (1.28 - morph * 0.42) - staggeredArchive * 0.46;
                 const rotation = ((localArchiveIndex % 2 === 0 ? -1 : 1) * (9 - morph * 4 + localArchiveIndex * 1.3)) * (1 - staggeredArchive);
                 const archiveFade = 1 - smoothStep(0.72, 1, staggeredArchive);
-                const alpha = clamp(visible * smoothStep(0.05, 0.32, stored) * archiveFade * exitAlpha, 0, 0.94);
+                const alpha = clamp(visible * smoothStep(0.08, 0.42, stored) * archiveFade * exitAlpha, 0, 0.94);
 
                 gsap.set(archiveCard, { x, y, scale, rotation, autoAlpha: alpha });
             });
