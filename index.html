@@ -1,0 +1,792 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fibula | Innovation XLab</title>
+    <meta
+      name="description"
+      content="Fibula presents how natural-language reconciliation requirements become stateful workflows through evidence-based design and industrial user research."
+    />
+    <meta property="og:title" content="Fibula | Innovation XLab" />
+    <meta
+      property="og:description"
+      content="Natural-language reconciliation requirements become stateful, validated workflows for industrial teams."
+    />
+    <meta property="og:type" content="website" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23013d7c'/%3E%3Ccircle cx='18' cy='32' r='6' fill='%2362bcf1'/%3E%3Ccircle cx='46' cy='32' r='6' fill='%23ffc000'/%3E%3Cpath d='M24 32h16' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <canvas id="gl" aria-hidden="true"></canvas>
+    <div id="hub-labels" aria-hidden="true"></div>
+    <div id="vignette" aria-hidden="true"></div>
+    <div id="grain" aria-hidden="true"></div>
+    <div id="cursor" aria-hidden="true">
+      <div class="cursor-dot"></div>
+      <div class="cursor-ring"></div>
+    </div>
+
+    <header id="topnav">
+      <a class="brand" href="#before"><strong>Fibula</strong></a>
+      <nav class="topnav-links" aria-label="Primary">
+        <a href="#workflow">Workflow</a>
+        <a href="#methodology">Method</a>
+        <a href="#risk-map">Risk&nbsp;Map</a>
+        <a href="#findings">Fixes</a>
+        <a href="#impact">Impact</a>
+        <a href="#team">Team</a>
+      </nav>
+      <a class="btn btn-gold btn-sm magnetic" href="#cta">Try Fibula</a>
+    </header>
+
+    <nav id="dots" aria-label="Section navigation"></nav>
+
+    <main>
+      <!-- ACT I : FILE RAIN -->
+      <section id="before" class="stage stage-hero">
+        <div class="stage-shell hero-shell">
+          <div class="legi-panel hero-copy">
+            <p class="kicker">
+              Industrial reconciliation &middot; evidence-based design &middot; stateful workflows
+            </p>
+            <h1 class="hero-headline split-chars">
+              Industrial reconciliation breaks when documents stop agreeing.
+            </h1>
+            <p class="hero-body">
+              Accounts Payable 3-Way Matching and production BOM checks depend on fragmented
+              invoices, purchase orders, receipt notes, and manufacturing records. Traditional
+              extraction tools can pull data, but they lose context when exceptions appear, forcing
+              teams back into manual investigation.
+            </p>
+          </div>
+          <div class="scroll-hint">
+            <span class="scroll-hint-wheel" aria-hidden="true"></span
+            ><span>Scroll &mdash; watch the documents converge</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT II : CONVERGENCE -->
+      <section id="act-converge" class="stage stage-converge">
+        <div class="stage-shell converge-shell">
+          <div class="legi-panel converge-copy">
+            <p class="converge-line split-chars">17 document types. One workflow.</p>
+            <p class="converge-sub">Fragments converge into reviewable structure.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT III.1 : WORKFLOW -->
+      <section id="workflow" class="stage">
+        <div class="stage-shell">
+          <header class="stage-head">
+            <p class="eyebrow">01 &middot; Workflow</p>
+            <h2 class="stage-title split-chars">
+              Fibula turns reconciliation intent into stateful workflows.
+            </h2>
+            <p class="stage-body">
+              Operators describe matching requirements in plain language, then watch Fibula turn
+              that intent into reviewable workflow structure.
+            </p>
+          </header>
+          <div class="beat-area wf-area">
+            <article class="wf-card beat" data-beat="0">
+              <p class="card-eyebrow">
+                <span class="stage-no">Stage 1</span> Natural Language Prompting
+              </p>
+              <p class="card-lede">
+                Operators explain reconciliation intent in plain language, including matching
+                requirements, variance thresholds, escalation rules, and exception handling
+                expectations.
+              </p>
+              <ul class="card-bullets">
+                <li>
+                  Describe matching rules in natural language without complex configuration forms
+                </li>
+                <li>Set variance thresholds and tolerance ranges for each document type</li>
+                <li>Define escalation paths for exceptions that exceed acceptable variance</li>
+              </ul>
+            </article>
+            <article class="wf-card beat" data-beat="1">
+              <p class="card-eyebrow">
+                <span class="stage-no">Stage 2</span> Agentic Workflow Synthesis
+              </p>
+              <p class="card-lede">
+                Fibula synthesizes node-based workflow structures that connect source documents,
+                logic branches, and exception states into a coherent process representation.
+              </p>
+              <ul class="card-bullets">
+                <li>
+                  Intent-to-node translation preserves the operator's original logic in every step
+                </li>
+                <li>Automatic dependency mapping connects document sources to matching rules</li>
+                <li>
+                  Multi-document state tracking handles PO, INV, GRN, BOM, and WO simultaneously
+                </li>
+              </ul>
+            </article>
+            <article class="wf-card beat" data-beat="2">
+              <p class="card-eyebrow">
+                <span class="stage-no">Stage 3</span> Human-in-the-Loop Validation
+              </p>
+              <p class="card-lede">
+                Generated workflows remain reviewable so teams can inspect nodes, verify
+                assumptions, and adjust the synthesis before live execution.
+              </p>
+              <ul class="card-bullets">
+                <li>
+                  Interactive node inspection lets operators verify every step before deployment
+                </li>
+                <li>Pre-deployment simulation validates workflow behavior against sample data</li>
+                <li>Approval chain configuration routes validation to the right stakeholders</li>
+              </ul>
+            </article>
+            <article class="wf-card beat" data-beat="3">
+              <p class="card-eyebrow">
+                <span class="stage-no">Stage 4</span> Stateful Live Deployment
+              </p>
+              <p class="card-lede">
+                Deployed workflows keep state across matching decisions, output handling, retries,
+                and exception resolution instead of resetting to stateless extraction outputs.
+              </p>
+              <ul class="card-bullets">
+                <li>
+                  Cross-session state persistence preserves context across interruptions and
+                  restarts
+                </li>
+                <li>
+                  Real-time exception handling surfaces variance flags without halting the workflow
+                </li>
+                <li>
+                  Audit-ready decision log records every match, override, and approval with full
+                  metadata
+                </li>
+              </ul>
+            </article>
+            <div class="wf-progress" aria-hidden="true">
+              <span class="wf-progress-num" data-beat="0">1</span
+              ><span class="wf-progress-num" data-beat="1">2</span
+              ><span class="wf-progress-num" data-beat="2">3</span
+              ><span class="wf-progress-num" data-beat="3">4</span
+              ><span class="wf-progress-sep">/ 4</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT III.2 : METHOD -->
+      <section id="methodology" class="stage">
+        <div class="stage-shell">
+          <header class="stage-head">
+            <p class="eyebrow">02 &middot; Method</p>
+            <h2 class="stage-title split-chars">
+              Research evidence moves through the same product workflow.
+            </h2>
+            <p class="stage-body">
+              Document logic, think-aloud behavior, and repeated friction were treated as evidence
+              files before interface changes were made.
+            </p>
+          </header>
+          <div class="beat-area method-area">
+            <div class="method-board">
+              <article class="ev-card beat" data-beat="0">
+                <span class="pin-dot" aria-hidden="true"></span>
+                <p class="card-eyebrow">
+                  <span class="stage-no gold">Evidence 1</span> Workflow Mapping
+                </p>
+                <p class="card-tag">Map document logic before interface fixes.</p>
+                <p class="card-lede">
+                  Document types, matching keys, variance decisions, and exception paths were mapped
+                  before visual fixes were proposed.
+                </p>
+                <ul class="card-bullets">
+                  <li>Map document types across AP and BOM reconciliation flows</li>
+                  <li>Identify matching keys and trace variance decisions</li>
+                  <li>Translate workflow ambiguity into product requirements</li>
+                </ul>
+              </article>
+              <article class="ev-card beat" data-beat="1">
+                <span class="pin-dot" aria-hidden="true"></span>
+                <p class="card-eyebrow">
+                  <span class="stage-no gold">Evidence 2</span> Task-based Testing
+                </p>
+                <p class="card-tag">Observe users without steering their choices.</p>
+                <p class="card-lede">
+                  More than 15 unguided think-aloud sessions captured hesitation, misclicks,
+                  confusion, and abandonment across participant cohorts.
+                </p>
+                <ul class="card-bullets">
+                  <li>Run more than 15 unguided think-aloud sessions</li>
+                  <li>Record hesitation, misclicks, confusion, and abandonment</li>
+                  <li>Compare behavior across 11 participant cohorts</li>
+                </ul>
+              </article>
+              <article class="ev-card beat" data-beat="2">
+                <span class="pin-dot" aria-hidden="true"></span>
+                <p class="card-eyebrow">
+                  <span class="stage-no gold">Evidence 3</span> Success Framework
+                </p>
+                <p class="card-tag">Evidence-based coding prioritized repeated friction.</p>
+                <p class="card-lede">
+                  The 90 percent No-Help Rule kept testing consistent and translated repeated
+                  friction logs into concrete product fixes.
+                </p>
+                <ul class="card-bullets">
+                  <li>Apply the 90 percent No-Help Rule</li>
+                  <li>Use evidence-based coding rather than subjective preference</li>
+                  <li>Keep core evidence visible without hover-only disclosure</li>
+                </ul>
+              </article>
+            </div>
+            <div class="method-stats beat" data-beat="3">
+              <div class="stat">
+                <span class="stat-num" data-count="15" data-suffix="+">0</span
+                ><span class="stat-label">unguided think-aloud sessions</span>
+              </div>
+              <div class="stat">
+                <span class="stat-num" data-count="11">0</span
+                ><span class="stat-label">participant cohorts compared</span>
+              </div>
+              <div class="stat">
+                <span class="stat-num" data-count="90" data-suffix="%">0</span
+                ><span class="stat-label">No-Help Rule threshold</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT III.3 : RISK MAP -->
+      <section id="risk-map" class="stage">
+        <div class="stage-shell">
+          <header class="stage-head">
+            <p class="eyebrow">03 &middot; Risk Map</p>
+            <h2 class="stage-title split-chars">
+              Observed user failures become operational risk signals.
+            </h2>
+            <p class="stage-body">
+              Each journey risk is filed into the workflow so the product can reveal where trust,
+              setup, and output review break down.
+            </p>
+          </header>
+          <div class="beat-area risk-area">
+            <div class="risk-beat beat" data-beat="0">
+              <blockquote class="risk-quote split-chars">
+                I dragged my file in, but nothing is responding.
+              </blockquote>
+              <article class="risk-card">
+                <p class="card-eyebrow"><span class="stage-no warn">Risk 1</span> Start</p>
+                <dl class="risk-rows">
+                  <div>
+                    <dt>Problem</dt>
+                    <dd>Hidden entry points slowed onboarding.</dd>
+                  </div>
+                  <div>
+                    <dt>Risk</dt>
+                    <dd>Users may not begin the correct workflow.</dd>
+                  </div>
+                  <div>
+                    <dt>Direction</dt>
+                    <dd>Make system entry points clearer and provide immediate response cues.</dd>
+                  </div>
+                </dl>
+              </article>
+            </div>
+            <div class="risk-beat beat" data-beat="1">
+              <blockquote class="risk-quote split-chars">
+                I am not sure which template I should choose.
+              </blockquote>
+              <article class="risk-card">
+                <p class="card-eyebrow"><span class="stage-no warn">Risk 2</span> Template</p>
+                <dl class="risk-rows">
+                  <div>
+                    <dt>Problem</dt>
+                    <dd>Too many choices led users into wrong workflow paths.</dd>
+                  </div>
+                  <div>
+                    <dt>Risk</dt>
+                    <dd>
+                      Users may select the wrong reconciliation flow before understanding the task.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Direction</dt>
+                    <dd>
+                      Provide guided workflow recommendations and reduce first-step decision load.
+                    </dd>
+                  </div>
+                </dl>
+              </article>
+            </div>
+            <div class="risk-beat beat" data-beat="2">
+              <blockquote class="risk-quote split-chars">
+                I do not know what this field is expecting.
+              </blockquote>
+              <article class="risk-card">
+                <p class="card-eyebrow"><span class="stage-no warn">Risk 3</span> Configure</p>
+                <dl class="risk-rows">
+                  <div>
+                    <dt>Problem</dt>
+                    <dd>Unclear fields and node expectations weakened matching setup.</dd>
+                  </div>
+                  <div>
+                    <dt>Risk</dt>
+                    <dd>
+                      Incorrect field mapping may cause PO, GRN, invoice, and credit-note mismatch.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Direction</dt>
+                    <dd>
+                      Add inline field explanations, previews, and validation before execution.
+                    </dd>
+                  </div>
+                </dl>
+              </article>
+            </div>
+            <div class="risk-beat beat" data-beat="3">
+              <blockquote class="risk-quote split-chars">
+                Is the system still working or did it fail?
+              </blockquote>
+              <article class="risk-card">
+                <p class="card-eyebrow"><span class="stage-no warn">Risk 4</span> Test</p>
+                <dl class="risk-rows">
+                  <div>
+                    <dt>Problem</dt>
+                    <dd>Unclear system states reduced trust.</dd>
+                  </div>
+                  <div>
+                    <dt>Risk</dt>
+                    <dd>
+                      Users may stop trusting the automation if processing status is invisible.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Direction</dt>
+                    <dd>
+                      Show live processing states, progress feedback, and visible error recovery.
+                    </dd>
+                  </div>
+                </dl>
+              </article>
+            </div>
+            <div class="risk-beat beat" data-beat="4">
+              <blockquote class="risk-quote split-chars">
+                Where can I see what changed or failed?
+              </blockquote>
+              <article class="risk-card">
+                <p class="card-eyebrow"><span class="stage-no warn">Risk 5</span> Output</p>
+                <dl class="risk-rows">
+                  <div>
+                    <dt>Problem</dt>
+                    <dd>Outputs and variance details were hard to find.</dd>
+                  </div>
+                  <div>
+                    <dt>Risk</dt>
+                    <dd>Important exceptions may be missed during finance review.</dd>
+                  </div>
+                  <div>
+                    <dt>Direction</dt>
+                    <dd>
+                      Make reconciled outputs, variance details, and exception actions more visible.
+                    </dd>
+                  </div>
+                </dl>
+              </article>
+            </div>
+            <ol class="journey" aria-label="User journey stages">
+              <li class="journey-stop" data-beat="0"><span class="journey-dot"></span>Start</li>
+              <li class="journey-stop" data-beat="1"><span class="journey-dot"></span>Template</li>
+              <li class="journey-stop" data-beat="2"><span class="journey-dot"></span>Configure</li>
+              <li class="journey-stop" data-beat="3"><span class="journey-dot"></span>Test</li>
+              <li class="journey-stop" data-beat="4"><span class="journey-dot"></span>Output</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT III.4 : FIXES -->
+      <section id="findings" class="stage">
+        <div class="stage-shell">
+          <header class="stage-head">
+            <p class="eyebrow">04 &middot; Fixes</p>
+            <h2 class="stage-title split-chars">
+              Findings archive into concrete product corrections.
+            </h2>
+            <p class="stage-body">
+              The redesign is shown as a sequence of files moving from observed friction to specific
+              workflow fixes.
+            </p>
+          </header>
+          <div class="beat-area fix-area">
+            <article class="fix-card beat" data-beat="0">
+              <p class="card-eyebrow">
+                <span class="stage-no">Fix 1</span> Spatial Desynchronization
+              </p>
+              <p class="card-tag">Users needed visible workflow construction.</p>
+              <p class="card-lede">
+                Silent processing made the workflow feel disconnected from the user's mental model.
+              </p>
+              <dl class="fix-rows">
+                <div>
+                  <dt>Problem</dt>
+                  <dd>Users could not connect intent to system output</dd>
+                </div>
+                <div>
+                  <dt>Fix</dt>
+                  <dd>Draw workflow nodes as synthesis happens</dd>
+                </div>
+                <div>
+                  <dt>Impact</dt>
+                  <dd>Users can see progress and system activity</dd>
+                </div>
+              </dl>
+            </article>
+            <article class="fix-card beat" data-beat="1">
+              <p class="card-eyebrow"><span class="stage-no">Fix 2</span> Convenience Bias</p>
+              <p class="card-tag">Choice overload pushed users toward the quickest path.</p>
+              <p class="card-lede">
+                Verbose option lists caused users to select convenient paths rather than correct
+                reconciliation flows.
+              </p>
+              <dl class="fix-rows">
+                <div>
+                  <dt>Problem</dt>
+                  <dd>Too many visible choices</dd>
+                </div>
+                <div>
+                  <dt>Fix</dt>
+                  <dd>Predictive chips and progressive disclosure</dd>
+                </div>
+                <div>
+                  <dt>Impact</dt>
+                  <dd>Faster choices with less cognitive burden</dd>
+                </div>
+              </dl>
+            </article>
+            <article class="fix-card beat" data-beat="2">
+              <p class="card-eyebrow"><span class="stage-no">Fix 3</span> Operational Opacity</p>
+              <p class="card-tag">Failure states needed visible recovery paths.</p>
+              <p class="card-lede">
+                Silent errors and dead-end modals left users without a clear way to recover inside
+                the workflow.
+              </p>
+              <dl class="fix-rows">
+                <div>
+                  <dt>Problem</dt>
+                  <dd>Unclear error recovery</dd>
+                </div>
+                <div>
+                  <dt>Fix</dt>
+                  <dd>Advice cards, rerun shortcuts, next-step guidance</dd>
+                </div>
+                <div>
+                  <dt>Impact</dt>
+                  <dd>Users recover without leaving the workflow</dd>
+                </div>
+              </dl>
+            </article>
+            <p class="relight beat" data-beat="3">
+              Pipeline restored &mdash; every junction visible.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT III.5 : IMPACT -->
+      <section id="impact" class="stage">
+        <div class="stage-shell">
+          <header class="stage-head">
+            <p class="eyebrow">05 &middot; Impact</p>
+            <h2 class="stage-title split-chars">
+              The workflow ends as visible, auditable reconciliation confidence.
+            </h2>
+            <p class="stage-body">
+              Fibula reduces hidden automation risk by keeping intent, exception handling, and human
+              validation visible from start to deployment.
+            </p>
+          </header>
+          <div class="beat-area impact-area">
+            <article class="impact-card impact-left beat" data-beat="0">
+              <p class="card-eyebrow"><span class="stage-no">Impact 1</span> Mental Model Gap</p>
+              <p class="card-tag">Users needed visible system guidance, not silent synthesis.</p>
+              <p class="card-lede">
+                The redesign makes natural-language intent visible as executable structure and
+                reduces uncertainty during automation.
+              </p>
+              <ul class="card-bullets">
+                <li>Immediate guidance from the first action</li>
+                <li>Live feedback while workflows are synthesized</li>
+                <li>Visible bridge from intent to structure</li>
+              </ul>
+            </article>
+            <article class="impact-card impact-right beat" data-beat="1">
+              <p class="card-eyebrow">
+                <span class="stage-no">Impact 2</span> Reconciliation Risk Mitigation
+              </p>
+              <p class="card-tag">Clear exception visibility protects industrial decisions.</p>
+              <p class="card-lede">
+                Fibula turns outputs into clearer decision surfaces where variance, exception
+                states, and human validation remain visible.
+              </p>
+              <ul class="card-bullets">
+                <li>Expose missed variance and unclear output risk</li>
+                <li>Make exception states visible and recoverable</li>
+                <li>Keep human validation in the automation loop</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT IV : TEAM -->
+      <section id="team" class="stage stage-team">
+        <div class="stage-shell">
+          <header class="stage-head team-head">
+            <p class="eyebrow">06 &middot; Team</p>
+              <h2 class="stage-title team-slogan split-chars">
+                <span>Innovation XLab</span>
+                <span>where bold ideas become industry-ready solutions.</span>
+              </h2>
+          </header>
+          <div class="beat-area team-area">
+            <p class="team-group-label students-label">Students</p>
+            <ul class="students">
+              <li class="member-card" data-member="0">
+                <span class="member-photo">
+                  <img
+                    src="/Photo/chen.jpg"
+                    alt="Chen Jung-Lu"
+                    width="112"
+                    height="112"
+                    loading="lazy"
+                  />
+                </span>
+                <p class="member-name">Chen Jung-Lu</p>
+                <p class="member-role">Leader</p>
+                <a
+                  class="member-link"
+                  href="https://www.linkedin.com/in/jung-lu-chen-5a57a432a/"
+                  target="_blank"
+                  rel="noopener"
+                  >LinkedIn &#8599;</a
+                >
+              </li>
+              <li class="member-card" data-member="1">
+                <span class="member-photo">
+                  <img
+                    src="/Photo/jin.jpg"
+                    alt="Jin Hongquan"
+                    width="112"
+                    height="112"
+                    loading="lazy"
+                  />
+                </span>
+                <p class="member-name">Jin Hongquan</p>
+                <p class="member-role">Project member</p>
+                <a
+                  class="member-link"
+                  href="https://www.linkedin.com/in/hongquan-jin-05669125a/"
+                  target="_blank"
+                  rel="noopener"
+                  >LinkedIn &#8599;</a
+                >
+              </li>
+              <li class="member-card" data-member="2">
+                <span class="member-photo">
+                  <img
+                    src="/Photo/zhang.jpg"
+                    alt="Zhang Zhiyuan"
+                    width="112"
+                    height="112"
+                    loading="lazy"
+                  />
+                </span>
+                <p class="member-name">Zhang Zhiyuan</p>
+                <p class="member-role">Project member</p>
+                <a
+                  class="member-link"
+                  href="https://www.linkedin.com/in/zhiyuan-akya"
+                  target="_blank"
+                  rel="noopener"
+                  >LinkedIn &#8599;</a
+                >
+              </li>
+              <li class="member-card" data-member="3">
+                <span class="member-photo">
+                  <img
+                    src="/Photo/mo.jpg"
+                    alt="Mo Yuyang"
+                    width="112"
+                    height="112"
+                    loading="lazy"
+                  />
+                </span>
+                <p class="member-name">Mo Yuyang</p>
+                <p class="member-role">Project member</p>
+                <a
+                  class="member-link"
+                  href="https://sg.linkedin.com/in/yuyang-mo-a5a39637b"
+                  target="_blank"
+                  rel="noopener"
+                  >LinkedIn &#8599;</a
+                >
+              </li>
+              <li class="member-card" data-member="4">
+                <span class="member-photo">
+                  <img
+                    src="/Photo/ye.jpg"
+                    alt="Ye Wenrui"
+                    width="112"
+                    height="112"
+                    loading="lazy"
+                  />
+                </span>
+                <p class="member-name">Ye Wenrui</p>
+                <p class="member-role">Project member</p>
+                <a
+                  class="member-link"
+                  href="https://www.linkedin.com/in/wenruiye"
+                  target="_blank"
+                  rel="noopener"
+                  >LinkedIn &#8599;</a
+                >
+              </li>
+            </ul>
+            <div class="mentors-block">
+              <p class="team-group-label">Mentors</p>
+              <ul class="mentors">
+                <li class="mentor-card">
+                  <img
+                    src="/Photo/jussi.jpg"
+                    alt="Jussi Keppo"
+                    width="72"
+                    height="72"
+                    loading="lazy"
+                  />
+                  <div>
+                    <p class="member-name">Jussi Keppo</p>
+                    <p class="member-role">Academic supervisor</p>
+                  </div>
+                  <a
+                    class="member-link"
+                    href="https://sg.linkedin.com/in/keppo"
+                    target="_blank"
+                    rel="noopener"
+                    >LinkedIn &#8599;</a
+                  >
+                </li>
+                <li class="mentor-card">
+                  <img
+                    src="/Photo/josh.jpg"
+                    alt="Josh Kettlewell"
+                    width="72"
+                    height="72"
+                    loading="lazy"
+                  />
+                  <div>
+                    <p class="member-name">Josh Kettlewell</p>
+                    <p class="member-role">Industry mentor</p>
+                  </div>
+                  <a
+                    class="member-link"
+                    href="https://sg.linkedin.com/in/joshua-kettlewell"
+                    target="_blank"
+                    rel="noopener"
+                    >LinkedIn &#8599;</a
+                  >
+                </li>
+                <li class="mentor-card">
+                  <img
+                    src="/Photo/faryz.jpg"
+                    alt="Faryz Khazid"
+                    width="72"
+                    height="72"
+                    loading="lazy"
+                  />
+                  <div>
+                    <p class="member-name">Faryz Khazid</p>
+                    <p class="member-role">Industry mentor</p>
+                  </div>
+                  <a
+                    class="member-link"
+                    href="https://sg.linkedin.com/in/faryz-khazid-874152202"
+                    target="_blank"
+                    rel="noopener"
+                    >LinkedIn &#8599;</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <ul class="logos">
+              <li>
+                <img src="/Logo/NUS.jpg" alt="National University of Singapore" loading="lazy" />
+              </li>
+              <li><img src="/Logo/Innovationxlab.png" alt="Innovation XLab" loading="lazy" /></li>
+              <li><img src="/Logo/Staple.jpg" alt="STAPLE" loading="lazy" /></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section id="cta" class="stage stage-cta">
+        <div class="stage-shell cta-shell">
+          <div class="legi-panel cta-copy">
+            <p class="eyebrow">07 &middot; Try Fibula</p>
+            <h2 class="stage-title cta-title split-chars">Explore Fibula Now!</h2>
+            <p class="stage-body cta-body">
+              Fibula shows how natural-language reconciliation requirements can become stateful,
+              validated workflows for industrial teams.
+            </p>
+          </div>
+          <div class="cta-buttons">
+            <a
+              class="btn btn-gold btn-full magnetic"
+              href="https://fibula.ai"
+              target="_blank"
+              rel="noopener"
+              >Explore Fibula</a
+            >
+          </div>
+          <div class="doc-grid">
+            <a class="doc-card" href="report-document.html">
+              <img src="Documents/report-cover.png" alt="Report cover" loading="lazy" />
+              <span class="doc-label">Report</span>
+            </a>
+            <a class="doc-card" href="slides-document.html">
+              <img src="Documents/slide-cover.png" alt="Slide cover" loading="lazy" />
+              <span class="doc-label">Slide</span>
+            </a>
+            <a class="doc-card" href="poster-document.html">
+              <img src="Documents/poster-cover.png" alt="Poster cover" loading="lazy" />
+              <span class="doc-label">Poster</span>
+            </a>
+            <a class="doc-card" href="video-document.html">
+              <img src="Documents/video-cover.png" alt="Video cover" loading="lazy" />
+              <span class="doc-label">Video</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="site-footer">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-brand"><strong>Fibula</strong></p>
+          <p class="footer-sub">
+            MSc Smart Industries and Digital Transformation | Innovation XLab | NUS | STAPLE
+          </p>
+        </div>
+        <nav class="footer-links" aria-label="Footer">
+          <a href="https://fibula.ai" target="_blank" rel="noopener">fibula.ai</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "project-fibula",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "^3.8.4",
+    "vite": "^5.4.0"
+  },
+  "dependencies": {
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.14",
+    "three": "^0.169.0"
+  }
+}
