@@ -2,11 +2,20 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { FileRain } from './fileRain.js';
 import { Subject } from './subject.js';
+import { Ambient } from './ambient.js';
+
+// lateral truck (world units) applied to camera + look-target together, so the
+// whole framed scene reads ~16% to the right and clears the left text column.
+// View direction is unchanged, so every scrubbed scroll timeline stays intact.
+const FIGURE_SHIFT_X = 4.8;
 
 export class Stage3D {
   constructor(canvas) {
     this.renderer = new THREE.WebGLRenderer({
-      canvas, antialias: true, alpha: true, powerPreference: 'high-performance',
+      canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance',
     });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
 
@@ -27,6 +36,7 @@ export class Stage3D {
     fill.position.set(-6, -3, 5);
     this.scene.add(fill);
 
+    this.ambient = new Ambient(this.scene);
     this.rain = new FileRain(this.scene);
     this.subject = new Subject(this.scene);
 
@@ -47,8 +57,9 @@ export class Stage3D {
     const dt = Math.min(this.clock.getDelta(), 0.05);
     const t = this.clock.elapsedTime;
     const c = this.cam;
-    this.camera.position.set(c.x, c.y, c.z);
-    this.camera.lookAt(c.tx, c.ty, c.tz);
+    this.camera.position.set(c.x - FIGURE_SHIFT_X, c.y, c.z);
+    this.camera.lookAt(c.tx - FIGURE_SHIFT_X, c.ty, c.tz);
+    this.ambient.update(dt, t, this.camera);
     this.rain.update(t);
     this.subject.update(dt, t, this.camera, this);
     this.renderer.render(this.scene, this.camera);

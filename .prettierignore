@@ -1,0 +1,6 @@
+dist/
+dist-old/
+node_modules/
+package-lock.json
+public/assets/
+*.pdf

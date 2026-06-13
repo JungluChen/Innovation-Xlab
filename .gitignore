@@ -6,3 +6,4 @@ node_modules/
 .vscode/
 .idea/
 dist-old/
+.claude/settings.local.json

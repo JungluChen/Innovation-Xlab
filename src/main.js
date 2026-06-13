@@ -7,7 +7,9 @@ let webgl = false;
 try {
   const c = document.createElement('canvas');
   webgl = !!(c.getContext('webgl2') || c.getContext('webgl'));
-} catch { /* no webgl */ }
+} catch {
+  /* no webgl */
+}
 
 const heavy = wideQuery.matches && !reduced && webgl;
 document.documentElement.classList.add(heavy ? 'heavy' : 'static');

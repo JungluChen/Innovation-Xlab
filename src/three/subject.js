@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { mulberry32 } from '../util/helpers.js';
+import { makeCardTextures } from './cardTexture.js';
 
 const SKY = new THREE.Color(98 / 255, 188 / 255, 241 / 255);
 const SKY_DEEP = new THREE.Color(0x2e8fd0);
@@ -58,6 +59,29 @@ function ringTexture() {
   g.beginPath();
   g.arc(128, 128, 96, 0, Math.PI * 2);
   g.stroke();
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+function badgeTexture(text, fill = '#013d7c', ink = '#ffffff') {
+  const c = document.createElement('canvas');
+  c.width = 320;
+  c.height = 112;
+  const g = c.getContext('2d');
+  g.clearRect(0, 0, c.width, c.height);
+  g.fillStyle = fill;
+  g.shadowColor = 'rgba(1,61,124,0.24)';
+  g.shadowBlur = 18;
+  g.beginPath();
+  g.roundRect(22, 24, 276, 64, 18);
+  g.fill();
+  g.shadowBlur = 0;
+  g.fillStyle = ink;
+  g.font = '800 25px "Segoe UI", Arial, sans-serif';
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.fillText(text, 160, 57);
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
   return tex;
@@ -144,6 +168,7 @@ export class Subject {
     this.params = {
       scale: 0, labelAlpha: 0, jitter: 0,
       flowSpeed: 1, particleAlpha: 0, glowBoost: 0,
+      methodSignal: 0, riskSignal: 0, repairSignal: 0, confidenceSignal: 0,
     };
     this.flowT = 0;
 
@@ -296,6 +321,95 @@ export class Subject {
     this.stampSprite.position.set(0, 0.65, 0.3);
     this.group.add(this.stampSprite);
 
+    // --- context-driven narrative overlays ---
+    const cardTextures = makeCardTextures();
+    const evidenceGeo = new THREE.PlaneGeometry(0.46, 0.58);
+    this.evidenceDocs = Array.from({ length: 7 }, (_, i) => {
+      const mesh = new THREE.Mesh(
+        evidenceGeo,
+        new THREE.MeshBasicMaterial({
+          map: cardTextures[(i * 2) % cardTextures.length],
+          transparent: true,
+          opacity: 0,
+          depthWrite: false,
+          side: THREE.DoubleSide,
+        }),
+      );
+      mesh.renderOrder = 4;
+      this.group.add(mesh);
+      return mesh;
+    });
+
+    const riskGeo = new THREE.ConeGeometry(0.16, 0.44, 5);
+    const riskMat = new THREE.MeshBasicMaterial({
+      color: GOLD.clone(),
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+    });
+    this.riskBeacons = BRANCH_DEFS.map(() => {
+      const beacon = new THREE.Mesh(riskGeo, riskMat.clone());
+      beacon.renderOrder = 5;
+      this.group.add(beacon);
+      return beacon;
+    });
+    this.riskBadges = ['Entry', 'Template', 'Fields', 'State', 'Output'].map((text) => {
+      const sprite = new THREE.Sprite(
+        new THREE.SpriteMaterial({
+          map: badgeTexture(text, 'rgba(255,192,0,0.96)', '#013d7c'),
+          transparent: true,
+          opacity: 0,
+          depthWrite: false,
+        }),
+      );
+      sprite.renderOrder = 6;
+      this.group.add(sprite);
+      return sprite;
+    });
+
+    const repairGeo = new THREE.TorusGeometry(0.34, 0.018, 8, 64);
+    this.repairRings = BRANCH_DEFS.map(() => {
+      const ring = new THREE.Mesh(
+        repairGeo,
+        new THREE.MeshBasicMaterial({
+          color: SKY.clone(),
+          transparent: true,
+          opacity: 0,
+          depthWrite: false,
+        }),
+      );
+      ring.renderOrder = 4;
+      this.group.add(ring);
+      return ring;
+    });
+
+    this.confidenceRings = [1.8, 2.25, 2.7].map((radius, i) => {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(radius, 0.018 + i * 0.004, 10, 96),
+        new THREE.MeshBasicMaterial({
+          color: i === 1 ? GOLD.clone() : SKY.clone(),
+          transparent: true,
+          opacity: 0,
+          depthWrite: false,
+        }),
+      );
+      ring.position.set(0, 0.65, 0.12 + i * 0.04);
+      ring.renderOrder = 3;
+      this.group.add(ring);
+      return ring;
+    });
+    this.confidenceBadge = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: badgeTexture('Auditable confidence', 'rgba(1,61,124,0.9)', '#ffffff'),
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+      }),
+    );
+    this.confidenceBadge.position.set(0, 0.65, 1.1);
+    this.confidenceBadge.scale.set(2.4, 0.84, 1);
+    this.group.add(this.confidenceBadge);
+
     // --- flow particles along the chain ---
     const P_COUNT = 48;
     this.pGeo = new THREE.BufferGeometry();
@@ -432,6 +546,74 @@ export class Subject {
     if (this.stampSprite.visible) {
       this.stampSprite.scale.setScalar(Math.max(this.stamp.s * 4.6, 0.001));
       this.stampSprite.material.opacity = this.stamp.a;
+    }
+
+    // section metaphors: evidence packets, risk signals, restoration, confidence
+    const methodA = p.methodSignal * (this.group.visible ? 1 : 0);
+    for (let i = 0; i < this.evidenceDocs.length; i++) {
+      const doc = this.evidenceDocs[i];
+      doc.visible = methodA > 0.02;
+      if (doc.visible) {
+        const u = (time * 0.11 + i / this.evidenceDocs.length) % 1;
+        const flow = u * 3;
+        const link = Math.min(2, Math.floor(flow));
+        this.chain[link].point(flow - link, _P);
+        doc.position.set(_P.x, _P.y + Math.sin(time * 2.2 + i) * 0.14, _P.z + 0.58);
+        doc.rotation.set(-0.22 + Math.sin(time + i) * 0.04, 0.2, Math.sin(time * 0.7 + i) * 0.2);
+        doc.scale.setScalar(0.75 + Math.sin(time * 1.7 + i) * 0.06);
+        doc.material.opacity = methodA * (0.46 + (i % 3) * 0.12);
+      }
+    }
+
+    const riskA = p.riskSignal * (this.group.visible ? 1 : 0);
+    for (let i = 0; i < this.riskBeacons.length; i++) {
+      const beacon = this.riskBeacons[i];
+      const badge = this.riskBadges[i];
+      const pulse = 0.75 + Math.sin(time * 5.2 + i * 0.85) * 0.25;
+      beacon.visible = riskA > 0.02;
+      badge.visible = riskA > 0.02;
+      if (beacon.visible) {
+        this.branches[i].point(1, _P);
+        beacon.position.copy(_P);
+        beacon.position.z += 0.26 + pulse * 0.08;
+        beacon.rotation.set(Math.PI, 0, time * 1.4 + i);
+        beacon.scale.setScalar(0.85 + pulse * 0.45);
+        beacon.material.opacity = riskA * (0.56 + pulse * 0.34);
+        badge.position.set(_P.x, _P.y + 0.62, _P.z + 0.78);
+        badge.scale.set(1.1, 0.38, 1);
+        badge.material.opacity = riskA * 0.86;
+      }
+    }
+
+    const repairA = p.repairSignal * (this.group.visible ? 1 : 0);
+    for (let i = 0; i < this.repairRings.length; i++) {
+      const ring = this.repairRings[i];
+      ring.visible = repairA > 0.02;
+      if (ring.visible) {
+        this.branches[i].point(0.62, _P);
+        const breathe = 1 + Math.sin(time * 4 + i) * 0.18;
+        ring.position.copy(_P);
+        ring.position.z += 0.2;
+        ring.rotation.set(Math.PI / 2, 0, time * 1.6 + i);
+        ring.scale.setScalar((1.24 + i * 0.05) * breathe);
+        ring.material.opacity = repairA * (0.78 + Math.sin(time * 3 + i) * 0.18);
+      }
+    }
+
+    const confA = p.confidenceSignal * (this.group.visible ? 1 : 0);
+    for (let i = 0; i < this.confidenceRings.length; i++) {
+      const ring = this.confidenceRings[i];
+      ring.visible = confA > 0.02;
+      if (ring.visible) {
+        ring.rotation.set(Math.PI / 2 + Math.sin(time * 0.4 + i) * 0.08, time * 0.12, time * (0.18 + i * 0.08));
+        ring.scale.setScalar(1 + Math.sin(time * 1.1 + i) * 0.025);
+        ring.material.opacity = confA * (0.42 + i * 0.12);
+      }
+    }
+    this.confidenceBadge.visible = confA > 0.02;
+    if (this.confidenceBadge.visible) {
+      this.confidenceBadge.position.y = 0.65 + Math.sin(time * 1.2) * 0.06;
+      this.confidenceBadge.material.opacity = confA * 0.9;
     }
 
     // labels
