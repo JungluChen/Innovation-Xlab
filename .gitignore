@@ -1,4 +1,5 @@
 node_modules/
+dist/
 .DS_Store
 *.log
 .env
@@ -6,4 +7,12 @@ node_modules/
 .vscode/
 .idea/
 dist-old/
-.claude/settings.local.json
+CLAUDE.md
+.claude/
+.playwright-cli/
+docs/
+output/
+assets/
+REFACTOR-PROMPT.md
+.claude
+CONTENT.md
