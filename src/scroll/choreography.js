@@ -60,8 +60,8 @@ export function initChoreography(stage) {
   });
   // impact — characters press in from oversized, center-out (authoritative final form)
   gsap.set('#impact .stage-title .char', { autoAlpha: 0, scale: 1.55 });
-  // team — whole words rise and assemble (people coming together)
-  gsap.set('#team .stage-title .word', { autoAlpha: 0, y: 30 });
+  // team — slogan lines rise and assemble (people coming together)
+  gsap.set('#team .team-slogan > span', { autoAlpha: 0, y: 30 });
 
   gsap.set('.wf-card', {
     autoAlpha: 0,
@@ -662,11 +662,11 @@ export function initChoreography(stage) {
     .to(subject.params, { glowBoost: 0.5, duration: 0.2 }, 4.6)
     .to(subject.params, { glowBoost: 0, duration: 0.5 }, 4.9);
 
-  // ================= TEAM — title words rise and assemble (people) =================
+  // ================= TEAM — title lines rise and assemble (people) =================
   const teTl = pinTL('#team', 310);
   copyIn(teTl, '#team', 0);
   teTl.to(
-    '#team .stage-title .word',
+    '#team .team-slogan > span',
     {
       autoAlpha: 1,
       y: 0,

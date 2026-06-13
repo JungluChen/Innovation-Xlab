@@ -3,8 +3,8 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import { makeCardTextures } from './cardTexture.js';
 import { mulberry32, clamp01 } from '../util/helpers.js';
 
-const COUNT = 22;
-const AMBIENT_COUNT = 6;
+const COUNT = 38;
+const AMBIENT_COUNT = 16;
 const SPAN_Y = 15;
 const CENTER = new THREE.Vector3(0, 0.6, 0);
 
@@ -47,17 +47,23 @@ export class FileRain {
       this.cards.push({
         holder,
         mats: [bodyMat, faceMat, backMat],
-        x0: (rand() - 0.5) * 16,
-        z0: -3.8 + rand() * 5.6,
-        speed: 0.22 + rand() * 0.34,
+        x0: (rand() - 0.5) * 20,
+        z0: -4.4 + rand() * 7.2,
+        speed: 0.18 + rand() * 0.42,
         phase: rand(),
-        baseScale: 0.78 + rand() * 0.5,
+        baseScale: 0.66 + rand() * 0.62,
         rot: new THREE.Euler((rand() - 0.5) * 0.5, (rand() - 0.5) * 0.9, (rand() - 0.5) * 0.3),
         rotSpeed: new THREE.Vector3((rand() - 0.5) * 0.3, (rand() - 0.5) * 0.5, (rand() - 0.5) * 0.2),
         gatherDelay: (i / COUNT) * 0.42,
         spin: rand() * Math.PI * 2,
         ambient: i < AMBIENT_COUNT
-          ? { x: (rand() - 0.5) * 19, y: (rand() - 0.5) * 7, z: -6.5 - rand() * 2.5, bob: rand() * Math.PI * 2 }
+          ? {
+              x: (rand() - 0.5) * 23,
+              y: (rand() - 0.5) * 9,
+              z: -5.8 - rand() * 4.6,
+              bob: rand() * Math.PI * 2,
+              drift: 0.55 + rand() * 1.4,
+            }
           : null,
       });
     }
@@ -97,11 +103,13 @@ export class FileRain {
       // ambient: faint far-depth drift for later acts
       if (c.ambient && ambient > 0.01) {
         const a = c.ambient;
-        const ax = a.x + Math.sin(t * 0.12 + a.bob) * 0.8;
-        const ay = a.y + Math.sin(t * 0.18 + a.bob * 2) * 0.5;
-        this._free.lerp(this._target.set(ax, ay, a.z), ambient * ge);
-        opacity = fade * Math.max(opacity / fade || 0, 0.34 * ambient * ge);
-        scale = Math.max(scale, c.baseScale * 1.25 * ambient * ge);
+        const ax = a.x + Math.sin(t * 0.11 * a.drift + a.bob) * 1.25;
+        const ay = a.y + Math.sin(t * 0.17 * a.drift + a.bob * 2) * 0.78;
+        const az = a.z + Math.cos(t * 0.09 * a.drift + a.bob) * 0.75;
+        const ambientMix = ambient * (0.55 + ge * 0.45);
+        this._free.lerp(this._target.set(ax, ay, az), ambientMix);
+        opacity = fade * Math.max(opacity / fade || 0, 0.44 * ambientMix);
+        scale = Math.max(scale, c.baseScale * 1.45 * ambientMix);
       }
 
       h.position.copy(this._free);

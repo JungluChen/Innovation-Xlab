@@ -7,9 +7,9 @@ const NAVY = new THREE.Color(1 / 255, 61 / 255, 124 / 255);
 const GOLD = new THREE.Color(1, 192 / 255, 0);
 
 // ---- tuning knobs for the particle field ----
-const COUNT = 150; // number of particles (kept modest for perf)
-const MAX_LINKS = 320; // hard cap on constellation links drawn per frame
-const LINK_DIST = 5.4; // world-space distance under which two particles link
+const COUNT = 230; // number of particles (kept modest for perf)
+const MAX_LINKS = 560; // hard cap on constellation links drawn per frame
+const LINK_DIST = 5.9; // world-space distance under which two particles link
 const LINK_DIST2 = LINK_DIST * LINK_DIST;
 const FIELD_Z = -11; // depth plane the field is centred on (behind the figure at z≈0)
 const CURSOR_R = 6.0; // world-space radius of mouse influence
@@ -19,6 +19,25 @@ const DAMP = 0.9; // velocity damping per frame
 const PR = Math.min(window.devicePixelRatio || 1, 1.75); // match renderer pixelRatio cap
 
 const _ndc = new THREE.Vector3();
+
+function shockRingTexture() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 256;
+  const g = c.getContext('2d');
+  g.clearRect(0, 0, 256, 256);
+  const grad = g.createRadialGradient(128, 128, 52, 128, 128, 118);
+  grad.addColorStop(0, 'rgba(255,255,255,0)');
+  grad.addColorStop(0.54, 'rgba(98,188,241,0.0)');
+  grad.addColorStop(0.68, 'rgba(98,188,241,0.9)');
+  grad.addColorStop(0.78, 'rgba(255,192,0,0.96)');
+  grad.addColorStop(0.88, 'rgba(98,188,241,0.32)');
+  grad.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 256, 256);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
 
 /**
  * Interactive "quantum" particle constellation behind the entire scene.
@@ -142,6 +161,50 @@ export class Ambient {
     this.links = new THREE.LineSegments(this.linkGeo, this.linkMat);
     this.links.frustumCulled = false;
     this.group.add(this.links);
+
+    // --- large quantum orbit rings: slow rotating energy contours behind the product graph ---
+    this.quantumRings = [];
+    const ringGeo = new THREE.TorusGeometry(1, 0.012, 8, 192);
+    const ringDefs = [
+      { s: [14.5, 5.1, 1], r: [0.2, 0.08, 0.2], c: SKY, a: 0.28, z: FIELD_Z + 1.8 },
+      { s: [10.8, 8.6, 1], r: [-0.24, 0.12, 0.9], c: GOLD, a: 0.2, z: FIELD_Z + 2.6 },
+      { s: [18.2, 7.2, 1], r: [0.18, -0.22, -0.55], c: SKY_DEEP, a: 0.18, z: FIELD_Z - 0.4 },
+    ];
+    for (const def of ringDefs) {
+      const ring = new THREE.Mesh(
+        ringGeo,
+        new THREE.MeshBasicMaterial({
+          color: def.c.clone(),
+          transparent: true,
+          opacity: def.a,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        }),
+      );
+      ring.position.set(0, 0.5, def.z);
+      ring.rotation.set(def.r[0], def.r[1], def.r[2]);
+      ring.scale.set(def.s[0], def.s[1], def.s[2]);
+      ring.frustumCulled = false;
+      this.group.add(ring);
+      this.quantumRings.push({ ring, base: def });
+    }
+
+    const waveTexture = shockRingTexture();
+    this.waveSprites = Array.from({ length: 4 }, () => {
+      const sprite = new THREE.Sprite(
+        new THREE.SpriteMaterial({
+          map: waveTexture,
+          transparent: true,
+          opacity: 0,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+        }),
+      );
+      sprite.scale.setScalar(0.001);
+      sprite.frustumCulled = false;
+      this.group.add(sprite);
+      return sprite;
+    });
 
     // --- interaction state ---
     this.ptr = { x: 0, y: 0, active: false };
@@ -301,5 +364,28 @@ export class Ambient {
     }
     this.linkGeo.setDrawRange(0, k / 3);
     this.linkGeo.attributes.position.needsUpdate = true;
+
+    for (let i = 0; i < this.quantumRings.length; i++) {
+      const item = this.quantumRings[i];
+      const pulse = 1 + Math.sin(t * (0.55 + i * 0.11) + i * 1.8) * 0.045;
+      item.ring.rotation.z += d * (0.055 + i * 0.028);
+      item.ring.rotation.x = item.base.r[0] + Math.sin(t * 0.18 + i) * 0.04;
+      item.ring.scale.set(item.base.s[0] * pulse, item.base.s[1] * pulse, item.base.s[2]);
+      item.ring.material.opacity = item.base.a * (0.78 + Math.sin(t * 0.9 + i) * 0.22);
+    }
+
+    for (let i = 0; i < this.waveSprites.length; i++) {
+      const sprite = this.waveSprites[i];
+      const w = this.waves[i];
+      if (!w) {
+        sprite.material.opacity = 0;
+        continue;
+      }
+      const life = 1 - w.t / 1.3;
+      const size = 1.2 + w.t * 18;
+      sprite.position.set(w.x, w.y, FIELD_Z + 2.4);
+      sprite.scale.set(size, size, 1);
+      sprite.material.opacity = Math.max(0, life) * 0.48;
+    }
   }
 }
